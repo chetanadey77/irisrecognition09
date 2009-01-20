@@ -1,5 +1,3 @@
-#Links to project related material
-
 = Interesting links =
 
 -John Daugman's website (the man who invented the most widely used iris recognition algorithm).
