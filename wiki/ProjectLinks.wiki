@@ -11,3 +11,7 @@
 - The homepage of Ashok Argent-Katwala, our "client"
 
 [http://www.doc.ic.ac.uk/~ashok/]
+
+- Computer Vision course homepage (Prof Guang-Zhong Yang)
+
+[http://ubimon.doc.ic.ac.uk/gzy/m371.html]
