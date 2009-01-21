@@ -16,6 +16,6 @@
 
 [http://ubimon.doc.ic.ac.uk/gzy/m371.html]
 
-- Opensource Iris recognition program written in Java (all code available)
+- OpenSource Iris recognition program download - written in Java (all code available)
 
 [http://mac.softpedia.com/get/Math-Scientific/JIRRM.shtml]
