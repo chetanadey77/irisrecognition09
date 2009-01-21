@@ -15,3 +15,7 @@
 - Computer Vision course homepage (Prof Guang-Zhong Yang)
 
 [http://ubimon.doc.ic.ac.uk/gzy/m371.html]
+
+- OpenSource Iris recognition program written in Java (all code available)
+
+[http://mac.softpedia.com/get/Math-Scientific/JIRRM.shtml]
