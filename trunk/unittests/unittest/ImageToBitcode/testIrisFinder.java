@@ -2,6 +2,12 @@ package unittest.ImageToBitcode;
 
 import static org.junit.Assert.*;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import org.junit.Test;
 
 import com.sun.net.httpserver.Authenticator.Success;
@@ -9,10 +15,22 @@ import com.sun.net.httpserver.Authenticator.Success;
 import iris.imageToBitcode.*;
 
 public class testIrisFinder {
-
+	
+	BufferedImage bimg;
+	
+	void setUp()
+	{
+		try { 
+			File f = new File("c:\\bla.jpg");
+			bimg = ImageIO.read(f);  
+		} catch (Exception e) {  
+			e.printStackTrace();  
+		} 
+	}
+	
 	@Test
 	public void testIrisFinder() {
-		IrisFinder i = new IrisFinder();
+		IrisFinder i = new IrisFinder(bimg);
 		assertTrue(true);
 	}
 
@@ -25,5 +43,14 @@ public class testIrisFinder {
 	public void testSaveImage() {
 		fail("Not yet implemented");
 	}
-
+	
+   void saveImage(String filename)
+   {
+	   File outputFile = new File(filename);
+	   try {
+		   ImageIO.write(bimg, "JPG", outputFile);
+	   } catch (IOException e) {
+		   e.printStackTrace();
+	   }
+   }
 }
