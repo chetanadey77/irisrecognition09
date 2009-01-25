@@ -1,6 +1,12 @@
+/**
+ * A class that takes as input an image and extracts the 
+ * parameters which constrain the iris
+ * 
+ * @author Arnar B. Jonsson
+ * @version 1.0
+ */
 package iris.imageToBitcode;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,32 +16,25 @@ import javax.imageio.ImageIO;
 public class IrisFinder {
 	
 	BufferedImage eye;
+	int x,y,r1,r2;
 	
-	public IrisFinder()
+	/**	@param bimg		image of a human eye */
+	public IrisFinder(BufferedImage bimg)
 	{	
-		eye = loadImage("C:\\bla.jpg");
-		saveImage("C:\\bla2.jpg");
+		eye = bimg;
 	}
 	
-   BufferedImage loadImage(String filename) {  
-	   BufferedImage bimg = null;  
-       try { 
-    	   File f = new File(filename);
-    	   bimg = ImageIO.read(f);  
-       } catch (Exception e) {  
-    	   e.printStackTrace();  
-       }  
-       return bimg;  
-   }  
+	/** @return			the x value of eyeball center */
+	public int getX()	{ return x; }
+	
+	/** @return			the y value of eyeball center */
+	public int getY()	{ return y;	}
+	
+	/** @return			the radius of iris inner boundary (pupil) */
+	public int getR1()	{ return r1; }
+	
+	/** @return			the radius of iris outer boundary (???) */
+	public int getR2()	{ return r2; }
 
-   void saveImage(String filename)
-   {
-	   File outputFile = new File(filename);
-	   try {
-		   ImageIO.write(eye, "JPG", outputFile);
-	   } catch (IOException e) {
-		   e.printStackTrace();
-	   }
 
-   }
 }
