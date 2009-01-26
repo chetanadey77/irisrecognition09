@@ -9,6 +9,8 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.sun.net.httpserver.Authenticator.Success;
@@ -16,50 +18,51 @@ import com.sun.net.httpserver.Authenticator.Success;
 import iris.imageToBitcode.*;
 
 public class testIrisFinder {
-	
-	BufferedImage bimg;
-	
-	void setUp()
+
+	BufferedImage eyeImage;
+	String testDir;
+	IrisFinder irf;
+
+	@Before
+	public void setUp() throws Exception
+	{
+		
+		loadImage(testDir + "eyeball.jpg");
+		irf = new IrisFinder(eyeImage);
+
+	}
+
+	@After
+	public void tearDown()
+	{
+		saveImage(testDir + "eyeball2.jpg");
+	}
+
+	@Test
+	public void testIrisFinder() {
+		IrisFinder i = new IrisFinder(eyeImage);
+		assertTrue(true);
+	}
+
+	//Utility functions
+	void saveImage(String filename)
+	{
+		File outputFile = new File(filename);
+		try {
+			ImageIO.write(eyeImage, "JPG", outputFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	void loadImage(String filename)
 	{
 		try { 
-			File f = new File("c:\\bla.jpg");
-			bimg = ImageIO.read(f);  
+			File f = new File(filename);
+			eyeImage = ImageIO.read(f);  
 		} catch (Exception e) {  
 			e.printStackTrace();  
 		} 
 	}
-	
-	@Test
-	public void testIrisFinder() {
-		IrisFinder i = new IrisFinder(bimg);
-		assertTrue(true);
-	}
-
-	@Test
-	public void testLoadImage() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSaveImage() {
-		fail("Not yet implemented");
-	}
-	@Test
-   	public void testCirclePoints()
-	{
-		BufferedImage b = null;
-	    IrisFinder i = new IrisFinder(b);
-	    Vector<int[]> bla = i.circlePoints(0, 0, 5);   
-	}
-	   
-   void saveImage(String filename)
-   {
-	   File outputFile = new File(filename);
-	   try {
-		   ImageIO.write(bimg, "JPG", outputFile);
-	   } catch (IOException e) {
-		   e.printStackTrace();
-	   }
-   }
 
 }

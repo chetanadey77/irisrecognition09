@@ -1,10 +1,3 @@
-/**
- * A class that takes as input an image and extracts the 
- * parameters which constrain the iris
- * 
- * @author Arnar B. Jonsson
- * @version 1.0
- */
 package iris.imageToBitcode;
 
 import java.awt.image.BufferedImage;
@@ -14,9 +7,16 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
+/**
+ * A class that takes as input an image and extracts the 
+ * parameters which constrain the iris
+ * 
+ * @author Arnar B. Jonsson
+ * @version 1.0
+ */
 public class IrisFinder {
 	
-	BufferedImage eye;
+	BufferedImage eye, blurredEye;
 	int xPupil,yPupil,rPupil;
 	int xIris,yIris,rIris;
 	
@@ -58,63 +58,13 @@ public class IrisFinder {
 		
 	}
 	
-	/** Returns an array of points lying on a circle with the given center and radius */
-    public Vector<int[]> circlePoints(int xCenter, int yCenter, int radius)
-    {
-    	Vector<int[]> v = new Vector<int[]>();
-        int x = 0;
-        int y = radius;
-        int p = (5 - radius*4)/4;
-        v.addAll(circleSymmetricPoints(xCenter, yCenter, x, y));
-        
-        while (x < y) {
-            x++;
-            if (p < 0) {
-                p += 2*x+1;
-            } else {
-                y--;
-                p += 2*(x-y)+1;
-            }
-            v.addAll(circleSymmetricPoints(xCenter, yCenter, x, y));
-        }
-        
-        return v;
-    }
-
-    private Vector<int[]> circleSymmetricPoints(int cx, int cy, int x, int y)
-    {      
-    	
-    	Vector<int[]> v = new Vector<int[]>();
-    	
-        if (x == 0) { 
-            v.add(new int[] {cx,cy+y} );
-            v.add(new int[] {cx, cy - y} );
-            v.add(new int[] {cx + y, cy} );
-            v.add(new int[] {cx - y, cy} );
-        } else 
-        if (x == y) {
-            v.add(new int[] {cx + x, cy + y} );
-            v.add(new int[] {cx - x, cy + y} );
-            v.add(new int[] {cx + x, cy - y} );
-            v.add(new int[] {cx - x, cy - y} );
-        } else 
-        if (x < y) {
-            v.add(new int[] {cx + x, cy + y} );
-            v.add(new int[] {cx - x, cy + y} );
-            v.add(new int[] {cx + x, cy - y} );
-            v.add(new int[] {cx - x, cy - y} );
-            v.add(new int[] {cx + y, cy + x} );
-            v.add(new int[] {cx - y, cy + x} );
-            v.add(new int[] {cx + y, cy - x} );
-            v.add(new int[] {cx - y, cy - x} );
-        }
-        
-        return v;
-    }
-
-
+	/** Finds and sets the centerpoint and radius of pupil */
+	private BufferedImage getBlurredEyeImage(BufferedImage bimg)
+	{
+		
+		return bimg;
+	}
 	
-
 
 }
  
