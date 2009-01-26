@@ -19,3 +19,7 @@
 - Opensource Iris recognition program download - written in Java (all code available)
 
 [http://mac.softpedia.com/get/Math-Scientific/JIRRM.shtml]
+
+- Circle drawing algorithms
+
+[http://cs.unc.edu/~mcmillan/comp136/Lecture7/circle.html]
