@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
@@ -43,7 +44,14 @@ public class testIrisFinder {
 	public void testSaveImage() {
 		fail("Not yet implemented");
 	}
-	
+	@Test
+   	public void testCirclePoints()
+	{
+		BufferedImage b = null;
+	    IrisFinder i = new IrisFinder(b);
+	    Vector<int[]> bla = i.circlePoints(0, 0, 5);   
+	}
+	   
    void saveImage(String filename)
    {
 	   File outputFile = new File(filename);
@@ -53,4 +61,5 @@ public class testIrisFinder {
 		   e.printStackTrace();
 	   }
    }
+
 }
