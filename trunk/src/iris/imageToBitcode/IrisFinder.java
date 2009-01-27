@@ -1,11 +1,6 @@
 package iris.imageToBitcode;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Vector;
-
-import javax.imageio.ImageIO;
 
 /**
  * A class that takes as input an image and extracts the 
@@ -61,7 +56,6 @@ public class IrisFinder {
 	/** Finds and sets the centerpoint and radius of pupil */
 	private BufferedImage getBlurredEyeImage(BufferedImage bimg)
 	{
-		
 		return bimg;
 	}
 	

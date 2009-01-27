@@ -21,17 +21,18 @@ public class testCirclePointGenerator {
 	CirclePointGenerator cg;
 	BufferedImage testImage;
 	String testDir;
+	imageSaverLoader isl;
 	
 	@Before
 	public void setUp() throws Exception {
-		cg = new CirclePointGenerator(50,50,40);
+		cg = new CirclePointGenerator(50,50,20);
 		testImage = new BufferedImage(100,100,BufferedImage.TYPE_BYTE_GRAY);
 		testDir = System.getProperty("user.dir") + "/unittests/testImages/";
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		saveImage(testImage, testDir + "circle.jpg");
+		isl.saveImage(testImage, testDir + "circle.jpg");
 	}
 
 	@Test
@@ -42,7 +43,7 @@ public class testCirclePointGenerator {
 	@Test
 	public void testGetCirclePoints() {
 		Vector<int[]> points = cg.getCirclePoints();
-		for (int i = 1; i < points.size()-1; i++)
+		for (int i = 0; i < points.size(); i++)
 		{
 			int[] point = points.get(i);
 			int x = point[0];
@@ -55,27 +56,5 @@ public class testCirclePointGenerator {
 		assertEquals(20, points.size());	
 	}
 
-	//Utility functions
-	void saveImage(BufferedImage bimg, String filename)
-	{
-		File outputFile = new File(filename);
-		try {
-			ImageIO.write(bimg, "JPG", outputFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	BufferedImage loadImage(String filename)
-	{
-		BufferedImage bimg = null;
-		try { 
-			File f = new File(filename);
-			bimg = ImageIO.read(f);  
-		} catch (Exception e) {  
-			e.printStackTrace();  
-		} 
-		return bimg;
-	}
 
 }
