@@ -14,9 +14,9 @@ import java.awt.image.Kernel;
  * @author Arnar B. Jónsson
  * @version 1.0
  */
-public class ImageFilterer {
+public class ImageProcessor {
 
-	public ImageFilterer()
+	public ImageProcessor()
 	{
 		
 	}
