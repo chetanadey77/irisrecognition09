@@ -2,7 +2,7 @@ package unittest.ImageToBitcode;
 
 import static org.junit.Assert.*;
 
-import iris.imageToBitcode.ImageFilterer;
+import iris.imageToBitcode.ImageProcessor;
 
 import java.awt.image.BufferedImage;
 
@@ -13,14 +13,14 @@ public class testImageFilterer {
 	
 	imageSaverLoader isl;
 	BufferedImage eyeball;
-	ImageFilterer filt;
+	ImageProcessor filt;
 	
 	@Before
 	public void setUp() throws Exception 
 	{
 		isl = new imageSaverLoader();
 		eyeball = isl.loadImage("eyeball.jpg");
-		filt = new ImageFilterer();
+		filt = new ImageProcessor();
 	}
 	
 	@Test

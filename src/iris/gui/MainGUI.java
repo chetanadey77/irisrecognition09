@@ -25,7 +25,6 @@ public class MainGUI {
          //frame.getContentPane().add(textfield);
          //frame.getContentPane().add(new JButton("blah"));
 
-
          //textfield.setEnabled(true);
          editimage.setEnabled(false);
          //image.setVisible(true);

@@ -1,6 +1,7 @@
 package iris.imageToBitcode;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageFilter;
 
 /**
  * A class that takes as input an image and extracts the 
@@ -14,6 +15,10 @@ public class IrisFinder {
 	BufferedImage eye, blurredEye;
 	int xPupil,yPupil,rPupil;
 	int xIris,yIris,rIris;
+	GaussianFilter g = new GaussianFilter(10);
+	
+	ImageFilter i = new ImageFilter();
+	
 	
 	/**	@param eyeImage	image of a human eye */
 	public IrisFinder(BufferedImage eyeImage)
@@ -21,6 +26,7 @@ public class IrisFinder {
 		eye = eyeImage;
 		this.findIrisCenterAndRadius();
 		this.findPupilCenterAndRadius();
+		
 	}
 	
 	/** @return			the x value of pupil center */
