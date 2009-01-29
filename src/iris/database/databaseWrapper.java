@@ -19,8 +19,7 @@ public class databaseWrapper {
 	        try {
 	            Connection conn = DriverManager.getConnection ("jdbc:postgresql://db.doc.ic.ac.uk/",
 	                                                           "ad108","CV6sDl7jxq");
-	            //This will be substituted for our group id and password once CSG have set up our gr\
-	oup database                                                                                     
+	            //This will be substituted for our group id and password once CSG have set up our group database                                                                                     
 
 	            Statement stmt = conn.createStatement();
 
