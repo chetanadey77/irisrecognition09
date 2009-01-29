@@ -16,9 +16,7 @@ public class IrisFinder {
 	int xPupil,yPupil,rPupil;
 	int xIris,yIris,rIris;
 	GaussianFilter g = new GaussianFilter(10);
-	
 	ImageFilter i = new ImageFilter();
-	
 	
 	/**	@param eyeImage	image of a human eye */
 	public IrisFinder(BufferedImage eyeImage)
@@ -26,7 +24,6 @@ public class IrisFinder {
 		eye = eyeImage;
 		this.findIrisCenterAndRadius();
 		this.findPupilCenterAndRadius();
-		
 	}
 	
 	/** @return			the x value of pupil center */
