@@ -18,7 +18,8 @@ public class Gabor {
 	{
 		rectI = _rectI;
 		numCols = _numCols;
-		numRows = _numRows;
+		numRows = _numRows;		
+		
 	}
 
 	
