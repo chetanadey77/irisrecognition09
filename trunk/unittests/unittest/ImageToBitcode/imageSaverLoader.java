@@ -18,7 +18,7 @@ public class imageSaverLoader {
 	{
 		File outputFile = new File(currentPath + filename);
 		try {
-			ImageIO.write(bimg, "JPG", outputFile);
+			ImageIO.write(bimg, "GIF", outputFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
