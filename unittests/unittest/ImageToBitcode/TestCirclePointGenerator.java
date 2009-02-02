@@ -16,12 +16,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class testCirclePointGenerator {
+public class TestCirclePointGenerator {
 
 	CirclePointGenerator cg;
 	BufferedImage testImage;
 	String testDir;
-	imageSaverLoader isl;
+	ImageSaverLoader isl;
 	
 	@Before
 	public void setUp() throws Exception {

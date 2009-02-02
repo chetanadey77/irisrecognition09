@@ -9,16 +9,16 @@ import java.awt.image.BufferedImage;
 import org.junit.Before;
 import org.junit.Test;
 
-public class testImageFilterer {
+public class TestImageFilterer {
 	
-	imageSaverLoader isl;
+	ImageSaverLoader isl;
 	BufferedImage eyeball;
 	ImageProcessor filt;
 	
 	@Before
 	public void setUp() throws Exception 
 	{
-		isl = new imageSaverLoader();
+		isl = new ImageSaverLoader();
 		eyeball = isl.loadImage("eyeball.jpg");
 		filt = new ImageProcessor();
 	}

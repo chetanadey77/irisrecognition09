@@ -22,24 +22,12 @@ public class TestBitCodeGenerator {
 
 	@Test
 	public void testGetBitcode() {
-		imageSaverLoader isl = new imageSaverLoader();
+		ImageSaverLoader isl = new ImageSaverLoader();
 		BufferedImage eyeball = isl.loadImage("eye.bmp");
 		BitcodeGenerator b = new BitcodeGenerator();
 		int[] i = b.getBitcode(eyeball);
 		assertEquals(0, i[0]);
 		
-	}
-	
-	void main()
-	{
-		imageSaverLoader isl = new imageSaverLoader();
-		BufferedImage eyeball = isl.loadImage("eye.bmp");
-		BitcodeGenerator b = new BitcodeGenerator();
-		int[] i = b.getBitcode(eyeball);
-		assertEquals(0, i[0]);
-		assertEquals(0, i[1]);
-		assertEquals(0, i[2]);
-		assertEquals(0, i[3]);
 	}
 
 }

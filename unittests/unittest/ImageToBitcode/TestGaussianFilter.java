@@ -13,7 +13,7 @@ public class TestGaussianFilter {
 	@Test
 	public void testFilter() {
 		GaussianFilter g = new GaussianFilter(20);
-		imageSaverLoader isl = new imageSaverLoader();
+		ImageSaverLoader isl = new ImageSaverLoader();
 		BufferedImage eyeball = isl.loadImage("eye.bmp");
 		BufferedImage output = g.filter(eyeball, null);
 		isl.saveImage(output, "blurred.jpg");
