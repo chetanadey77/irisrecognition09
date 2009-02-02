@@ -26,13 +26,12 @@ public class TestCirclePointGenerator {
 	@Before
 	public void setUp() throws Exception {
 		cg = new CirclePointGenerator(50,50,20);
-		testImage = new BufferedImage(100,100,BufferedImage.TYPE_BYTE_GRAY);
-		testDir = System.getProperty("user.dir") + "/unittests/testImages/";
+		testImage = isl.loadImage("eye.bmp");
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		isl.saveImage(testImage, testDir + "circle.jpg");
+		isl.saveImage(testImage, "circle.jpg");
 	}
 
 	@Test
