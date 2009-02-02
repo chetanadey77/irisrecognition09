@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.JSpinner.NumberEditor;
+//import javax.swing.JSpinner.NumberEditor;
 
 public class EditEye {
 
@@ -39,24 +39,28 @@ class EditFrame extends JFrame
         static int ox = 180;
         static int oy = 160;
         static int orad = 50;
-        static SpinnerNumberModel modelx = new SpinnerNumberModel(ix,0,319,1);
-        static SpinnerNumberModel modely = new SpinnerNumberModel(iy,0,279,1);
+        static SpinnerNumberModel modelix = new SpinnerNumberModel(ix,0,319,1);
+        static SpinnerNumberModel modeliy = new SpinnerNumberModel(iy,0,279,1);
+        static SpinnerNumberModel modelox = new SpinnerNumberModel(ix,0,319,1);
+        static SpinnerNumberModel modeloy = new SpinnerNumberModel(iy,0,279,1);
         static SpinnerNumberModel modelir = new SpinnerNumberModel(irad,0,159,1);
         static SpinnerNumberModel modelor = new SpinnerNumberModel(orad,0,139,1);
-        static JSpinner innerx = new JSpinner(modelx);
-        static JSpinner innery = new JSpinner(modely);
+        static JSpinner innerx = new JSpinner(modelix);
+        static JSpinner innery = new JSpinner(modeliy);
         static JSpinner innerr = new JSpinner(modelir);
-        static JSpinner outerx = new JSpinner(modelx);
-        static JSpinner outery = new JSpinner(modely);
+        static JSpinner outerx = new JSpinner(modelox);
+        static JSpinner outery = new JSpinner(modeloy);
         static JSpinner outerr = new JSpinner(modelor);
         
         
         static BufferedImage sbi;
+        static BufferedImage fixedsbi; //holds initial copy
         //static JButton editimageone = new JButton("Edit image");
         //static Icon icon;
-        public EditFrame(BufferedImage bi)
+        public EditFrame(BufferedImage bi,BufferedImage bi2)
         
         {       sbi = bi;
+        		fixedsbi = bi2;
                 setTitle("Centre Pupil and Iris");
                 setSize(500,600);
                 setLayout(new FlowLayout());
@@ -80,11 +84,57 @@ class EditFrame extends JFrame
                 getContentPane().add(inner);
                 getContentPane().add(outer);
                 getContentPane().add(setimage);
+                class DrawCircleAction implements ChangeListener
+                {	
+                	private boolean isinner;
+                	public DrawCircleAction(boolean inner)
+                	{
+                		isinner = inner;
+                	}
+                	public void stateChanged(ChangeEvent e) {
+                		int x,y,r;
+                         // TODO Auto-generated method stub
+                    //     System.out.println("innerx button is pressed");
+                		if (isinner) { 
+                			x= ((Integer)innerx.getValue()).intValue();
+                			y= ((Integer)innery.getValue()).intValue();
+                			r= ((Integer)innerr.getValue()).intValue();
+                		}else{
+                			x= ((Integer)outerx.getValue()).intValue();
+                			y= ((Integer)outery.getValue()).intValue();
+                			r= ((Integer)outerr.getValue()).intValue();
+                		}
+                		sbi=fixedsbi;
+                         Graphics g  = sbi.createGraphics();
+                         g.drawOval(x- r, y -r, r*2, r*2);
+                         icon.setImage(sbi);
+                         image.setIcon(icon);
+                         image.repaint();
+                         
+                         
+                 }
+                }
+                
+                DrawCircleAction innerAction = new DrawCircleAction(true);
+                DrawCircleAction outerAction = new DrawCircleAction(false);
+                innerx.addChangeListener(innerAction);
+                innery.addChangeListener(innerAction);
+                innerr.addChangeListener(innerAction);
+                
+                outerx.addChangeListener(outerAction);
+                outery.addChangeListener(outerAction);
+                outerr.addChangeListener(outerAction);
+                
+                inner.add(innery);
+                inner.add(innerr);
+                outer.add(new JLabel("Outer Circle"));
+                outer.add(outerx);
+                outer.add(outery);
+                outer.add(outerr);
                 
                 
 
-
-                
+                /*
                 innerx.addChangeListener(new ChangeListener() {
                         
 
@@ -106,7 +156,7 @@ class EditFrame extends JFrame
                 
                 });
                 
-                
+                */
                         
         }
 }
