@@ -14,7 +14,7 @@ public class ImageSaverLoader {
 		currentPath = System.getProperty("user.dir") + "/unittests/testImages/";
 	}
 	
-	void saveImage(BufferedImage bimg, String filename)
+	public void saveImage(BufferedImage bimg, String filename)
 	{
 		File outputFile = new File(currentPath + filename);
 		try {
@@ -24,7 +24,7 @@ public class ImageSaverLoader {
 		}
 	}
 
-	BufferedImage loadImage(String filename)
+	public BufferedImage loadImage(String filename)
 	{
 		BufferedImage bimg = null;
 		try { 

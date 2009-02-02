@@ -19,9 +19,9 @@ public class BitCode {
 	
 	public void addBit(int val)
 	{
-		bitArray[currentByte] += val;
 		bitArray[currentByte] = bitArray[currentByte] << 1;
 		bitCount += 1;
+		bitArray[currentByte] += val;
 		if (bitCount == 32)
 		{
 			currentByte += 1;

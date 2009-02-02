@@ -12,12 +12,12 @@ import org.junit.Test;
 
 public class TestCoordConverter {
 
-	CoordConverter cc = new CoordConverter(500,500,100,600,600,300);
+	CoordConverter cc = new CoordConverter(182,134,37,182,134,100);
 	ImageSaverLoader isl = new ImageSaverLoader();
 
 	@Test
 	public void testCoordConverter() {
-		BufferedImage img = new BufferedImage(1000,1000,BufferedImage.TYPE_BYTE_GRAY);
+		BufferedImage img = isl.loadImage("eye.bmp");
 		int x,y;
 		for (double r = 0; r <= 1; r += 0.1)
 		{
@@ -30,7 +30,7 @@ public class TestCoordConverter {
 			}
 		}
 		
-		isl.saveImage(img, "coordConv.gif");
+		isl.saveImage(img, "coordConv.jpg");
 	}
 
 }
