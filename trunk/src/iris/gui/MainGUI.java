@@ -1,93 +1,108 @@
 package iris.gui;
-import iris.gui.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.Image;
-import java.awt.event.*;
-import iris.*;
-//import iris.gui.findcentre;
+import iris.gui.*;/**
+ * 
+ */
 
+import java.awt.*;
+import javax.swing.*;
+
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+
+/**
+ * @author en108
+ *
+ */
 public class MainGUI {
 
-    //public static JTextField textfield = new JTextField("/home/user1/Pictures/Iris/017/1/017_1_1.bmp");
-    public static JFrame frame = new JFrame("Iris Recognition");
-    public static Container content = frame.getContentPane();
-   // public static Icon icon = new ImageIcon("017_1_1.gif");
-    public static JLabel image = new JLabel("Image will go here");
-    //public static JFileChooser filedialog = new JFileChooser();
-    public static JButton getimageone = new JButton("Click to get image");
-    public static JButton editimage = new JButton("Edit image");
-    public static Icon icon;
-    public static void main(String[] args) {
-         content.setLayout(new FlowLayout());
-         frame.setSize(500,500);
-         //System.out.println(icon.getIconWidth());
-         //frame.getContentPane().add(textfield);
-         //frame.getContentPane().add(new JButton("blah"));
+        /**
+         * @param args
+         */
+        public static void main(String[] args) {
+                // TODO Auto-generated method stub
+                EventQueue.invokeLater(new Runnable()
+                {
+                                public void run()
+                                {
+                                        MainFrame frame = new MainFrame();
+                                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                                        frame.setVisible(true);
+                                }
+                });
 
-         //textfield.setEnabled(true);
-         editimage.setEnabled(false);
-         //image.setVisible(true);
-        image.setPreferredSize(new Dimension(320,280));
-         //image.setBounds(0,0,320,280);
-         
-                 
+        }
 
-        
-         //image = new JLabel(icon);
-         //image.setEnabled(true);
-         //image.setVisible(true);
-         frame.getContentPane().add(getimageone);
-         frame.getContentPane().add(image);
-         frame.getContentPane().add(editimage);
-         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-         frame.setVisible(true);
-         /*
-         textfield.addActionListener(new ActionListener() {
-                 public void actionPerformed(ActionEvent ae){
-                         System.out.println(NewGUI.textfield.getText());
-                         Icon icon = new 
-ImageIcon(NewGUI.textfield.getText());
-                         JButton button2 = new JButton(icon);
-                         content.add(button2);
-                 }
-         });
-*/
-         getimageone.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent ae){
-                     System.out.println("Button is pressed");
-                     icon =  gtImage();
-                     
-                     image.setIcon(icon);
-                     image.setEnabled(true);
-                     image.setVisible(true);
-                     System.out.println(image.getWidth());
-                    // image.setSize(240,240);
-                     //frame.getContentPane().add(image);
-                     editimage.setEnabled(true);
-                    // 
-                     //frame.setVisible(false);
-                     //frame.getContentPane().add(new JButton("NEW"));
-                    // frame.setVisible(true);
-                     //frame.repaint();
-             }
-         });
-         editimage.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent ae){
-                     System.out.println("Edit Button is pressed");
-                     //CircleType c = findcentre((Image) icon);
-                     //System.out.println(c.x + c.y + c.radius);
-             }
-         });
-    }   
-    public static ImageIcon gtImage() {
-    	JFileChooser filedialog = new JFileChooser();
-    	filedialog.showOpenDialog(content);
-    	System.out.println(filedialog.getSelectedFile().getPath());
-        ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
-        
-        return icon;
-    }      
-  
 }
 
+class MainFrame extends JFrame
+{
+        static JLabel image = new JLabel("Image will go here");
+        static JButton getimageone = new JButton("Click to get image");
+        static JButton editimageone = new JButton("Edit image");
+        static ImageIcon icon;
+        public MainFrame()
+        
+        {       
+                setTitle("Iris Recognition");
+                setSize(500,600);
+                setLayout(new FlowLayout());
+                editimageone.setEnabled(false);
+                image.setPreferredSize(new Dimension(320,280));
+                getContentPane().add(getimageone);
+                getContentPane().add(image);
+                getContentPane().add(editimageone);
+                
+                getimageone.addActionListener(new ActionListener() {
+                        
+
+                  
+                        public void actionPerformed(ActionEvent arg0) {
+                                // TODO Auto-generated method stub
+                                System.out.println("get image button is pressed");
+                                icon = gtImage();
+                                image.setIcon(icon);
+                                image.setEnabled(true);
+                                image.setVisible(true);
+                                
+                                editimageone.setEnabled(true);
+                        }
+                });
+                editimageone.addActionListener(new ActionListener() {
+                        
+
+                    
+                        public void actionPerformed(ActionEvent arg0) {
+                                // TODO Auto-generated method stub
+                                System.out.println("edit image button is pressed");
+                                final BufferedImage eye = new BufferedImage(image.getWidth(),image.getHeight(),BufferedImage.TYPE_BYTE_GRAY) ; //= new BufferedImage(null, null, rootPaneCheckingEnabled, null);
+                                //Image tempimage = image;
+                                eye.getGraphics().drawImage( icon.getImage(),0,0,null);
+                                
+                                
+                                EventQueue.invokeLater(new Runnable()
+                                {
+                                                public void run()
+                                                {
+                                                        EditFrame editframe = new EditFrame(eye);
+                                                        //editframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                                                        editframe.setVisible(true);
+                                                }
+                                });                     }
+                });
+                
+                        
+        }
+        public ImageIcon gtImage() {
+                JFileChooser filedialog = new JFileChooser();
+                filedialog.showOpenDialog(this.getContentPane());
+                System.out.println(filedialog.getSelectedFile().getPath());
+                ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
+                return icon;    
+        }
+                
+                
+                
+        
+}
