@@ -4,6 +4,8 @@ import java.awt.*;
 //import java.awt.Event.*;
 //import java.awt.Dimension;
 //import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.*;
 //import java.awt.event.ActionEvent;
 //import java.awt.event.ActionListener;
@@ -26,21 +28,7 @@ import javax.swing.event.ChangeListener;
 //public class EditEye {
 
 //}
-/*
-class EyewithCircle extends JComponent
-{
-	public EyewithCircle(BufferedImage bi, int x, int y, int r)
-	{
-		
-	}
-	public void paintComponent(Graphics g) 
-	{
-		if (image == null) return;
-		g.drawImage(image,0,0,null);
-		g.drawOval(x- r, y -r, r*2, r*2);
-	}
-	private Image image
-}*/
+
 class EditFrame extends JFrame
 {
         static JLabel image = new JLabel();
@@ -72,7 +60,7 @@ class EditFrame extends JFrame
         static BufferedImage fixedsbi; //holds initial copy
         //static JButton editimageone = new JButton("Edit image");
         //static Icon icon;
-        public EditFrame(BufferedImage bi,BufferedImage bi2)
+        public EditFrame(BufferedImage bi)
         
         {       sbi = bi;
         		
@@ -89,12 +77,13 @@ class EditFrame extends JFrame
                 setTitle("Centre Pupil and Iris");
                 setSize(500,600);
                 setLayout(new FlowLayout());
-                inner.add(new JLabel("Inner Circle"));
                 
+                inner.add(new JLabel("Inner Circle"));
                 inner.add(innerx);
                 inner.add(innery);
                 inner.add(innerr);
-                outer.add(new JLabel("Outer Circle"));
+                
+                //outer.add(new JLabel("Outer Circle"));
                 outer.add(outerx);
                 outer.add(outery);
                 outer.add(outerr);
@@ -171,42 +160,19 @@ class EditFrame extends JFrame
                 outer.add(outery);
                 outer.add(outerr);
                 
-                
+                setimage.addActionListener(new ActionListener() {
+                    
 
-                /*
-                innerx.addChangeListener(new ChangeListener() {
-                        
-
-             
-                        public void stateChanged(ChangeEvent e) {
-                                // TODO Auto-generated method stub
-                                System.out.println("innerx button is pressed");
-                                ix= ((Integer)innerx.getValue()).intValue();
-                                Graphics g  = sbi.createGraphics();
-                                g.drawOval(ix- irad, iy - irad, irad*2, irad*2);
-                                icon.setImage(sbi);
-                                image.setIcon(icon);
-                                image.repaint();
-                                
-                                
-                        }
-
-                
-                
-                });
-                
-                */
+                    
+                    public void actionPerformed(ActionEvent arg0) {
+                            // TODO Auto-generated method stub
+                            System.out.println("set image button is pressed");
+                            MainFrame.setEyePos(ix,iy,irad,ox,oy,orad);
+                            EditFrame.this.setVisible(false);
+                          
+                    }
+            });
                         
         }
 }
-        /*
-        public ImageIcon gtImage() {
-                JFileChooser filedialog = new JFileChooser();
-                filedialog.showOpenDialog(this.getContentPane());
-                System.out.println(filedialog.getSelectedFile().getPath());
-                ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
-                return icon;    
-        }
-                
-                
-*/
+       

@@ -87,7 +87,7 @@ class MainFrame extends JFrame
                                 {
                                                 public void run()
                                                 {
-                                                        EditFrame editframe = new EditFrame(eye,eye);
+                                                        EditFrame editframe = new EditFrame(eye);
                                                         //editframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                                                         editframe.setVisible(true);
                                                 }
@@ -103,12 +103,12 @@ class MainFrame extends JFrame
                 ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
                 return icon;    
         }
-        public void setEyePos(EyeData ed) {
+        public static void setEyePos(EyeData ed) {
         	topeye = ed;
         	
         	
         }   
-        public void setEyePos(int ix,int iy, int irad, int ox,int oy, int orad){
+        public static void setEyePos(int ix,int iy, int irad, int ox,int oy, int orad){
         	topeye.inner.x = ix;
         	topeye.inner.y = iy;
         	topeye.inner.radius = irad;
