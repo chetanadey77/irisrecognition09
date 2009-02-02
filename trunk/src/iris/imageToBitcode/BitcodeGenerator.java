@@ -1,5 +1,6 @@
 package iris.imageToBitcode;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import iris.bitcodeMatcher.BitCode;
@@ -57,21 +58,24 @@ public class BitcodeGenerator {
 	
 	private boolean imIntegral(BufferedImage eyeImage, double a, double b, double w)
 	{
+		BufferedImage bImg = new BufferedImage(eyeImage.getWidth(),eyeImage.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+		Graphics g = bImg.getGraphics();
+		g.drawImage(eyeImage,0,0,null);
 		double sum = 0;
 		double theta_0 = 0;
 		double r_0 = 0;
 		double a2 = a*a;
 		double b2 = b*b; 
 		
-		coordConverter c = new coordConverter(160,160,80,140,140,120);
+		CoordConverter c = new CoordConverter(160,160,80,140,140,120);
 		
 		for(double r=0; r<1; r+= 0.1)
 		{
 			for(double theta=0; theta < 360; theta += 1)
 			{
-				int rgb = eyeImage.getRGB(c.getX(r,theta), c.getY(r,theta));
-				double k = rgb * Math.exp(-Math.pow(r - r_0, 2) / a2 ) * Math.exp(-Math.pow(theta-theta_0,2) / b2 );
-				sum += k*Math.cos(-w*(theta-theta_0)); 
+				int rgb = -(byte)bImg.getRGB(c.getX(r,theta), c.getY(r,theta));
+				double k = rgb * Math.exp(-Math.pow(r - r_0, 2) / a2 ) * Math.exp(-Math.pow(Math.toRadians(theta)-theta_0,2) / b2 );
+				sum += k*Math.cos(-w*(Math.toRadians(theta)-theta_0)); 
 			}
 		}
 		

@@ -17,7 +17,7 @@ import com.sun.net.httpserver.Authenticator.Success;
 
 import iris.imageToBitcode.*;
 
-public class testIrisFinder {
+public class TestIrisFinder {
 
 	BufferedImage eyeImage;
 	String testDir;

@@ -14,10 +14,10 @@ package iris.imageToBitcode;
  * position along (r goes from 0 to 1, 0 at iris inner boundary and 
  * 1 at iris outer boundary), and similarly for the iris (xi,yi).
  * 
- * @author Arnar B. Jónsson, Mark Howe
+ * @author Arnar B. Jï¿½nsson, Mark Howe
  * @version 1.0
  */
-public class coordConverter {
+public class CoordConverter {
 	
 	double xp, yp, rp, xi, yi, ri;
 	
@@ -29,7 +29,7 @@ public class coordConverter {
 	 * @param yIris center point of iris (y)
 	 * @param rIris radius of iris
 	 */
-	public coordConverter(int xPup, int yPup, int rPup, int xIris, int yIris, int rIris)
+	public CoordConverter(int xPup, int yPup, int rPup, int xIris, int yIris, int rIris)
 	{
 		xp = xPup;
 		yp = yPup;

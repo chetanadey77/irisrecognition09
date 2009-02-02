@@ -5,15 +5,15 @@ import static org.junit.Assert.*;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import iris.imageToBitcode.coordConverter;
+import iris.imageToBitcode.CoordConverter;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class testCoordConverter {
+public class TestCoordConverter {
 
-	coordConverter cc = new coordConverter(500,500,100,600,600,300);
-	imageSaverLoader isl = new imageSaverLoader();
+	CoordConverter cc = new CoordConverter(500,500,100,600,600,300);
+	ImageSaverLoader isl = new ImageSaverLoader();
 
 	@Test
 	public void testCoordConverter() {

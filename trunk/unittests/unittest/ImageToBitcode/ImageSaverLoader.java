@@ -6,10 +6,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class imageSaverLoader {
+public class ImageSaverLoader {
 	
 	String currentPath;
-	public imageSaverLoader()
+	public ImageSaverLoader()
 	{
 		currentPath = System.getProperty("user.dir") + "/unittests/testImages/";
 	}
