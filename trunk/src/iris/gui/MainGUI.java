@@ -20,7 +20,7 @@ public class MainGUI {
         /**
          * @param args
          */
-        public static void main(String[] args) {
+        public static void notmain(String[] args) {
                 // TODO Auto-generated method stub
                 EventQueue.invokeLater(new Runnable()
                 {
@@ -39,11 +39,12 @@ public class MainGUI {
 
 class MainFrame extends JFrame
 {
-        static JLabel image = new JLabel("Image will go here");
+        static JLabel image = new JLabel("Image one will go here");
         static JButton getimageone = new JButton("Click to get image");
         static JButton editimageone = new JButton("Edit image");
         static ImageIcon icon;
         static EyeData topeye;
+        static MainFrame mf;
         public MainFrame()
         
         {       
@@ -55,7 +56,7 @@ class MainFrame extends JFrame
                 getContentPane().add(getimageone);
                 getContentPane().add(image);
                 getContentPane().add(editimageone);
-                
+                mf = this;
                 getimageone.addActionListener(new ActionListener() {
                         
 
@@ -81,17 +82,21 @@ class MainFrame extends JFrame
                                 final BufferedImage eye = new BufferedImage(image.getWidth(),image.getHeight(),BufferedImage.TYPE_BYTE_GRAY) ; //= new BufferedImage(null, null, rootPaneCheckingEnabled, null);
                                 //Image tempimage = image;
                                 eye.getGraphics().drawImage( icon.getImage(),0,0,null);
-                                
-                                
+                                /*
                                 EventQueue.invokeLater(new Runnable()
                                 {
                                                 public void run()
                                                 {
-                                                        EditFrame editframe = new EditFrame(eye);
+                                                        EditFrame editframe = new EditFrame(eye,mf);
                                                         //editframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                                                         editframe.setVisible(true);
                                                 }
-                                });                     }
+                                }); */
+                                EditFrame editframe = new EditFrame(eye,mf);
+                                
+                                editframe.setVisible(true);
+                                
+                                }
                 });
                 
                         
@@ -103,12 +108,12 @@ class MainFrame extends JFrame
                 ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
                 return icon;    
         }
-        public static void setEyePos(EyeData ed) {
+        public void setEyePos(EyeData ed) {
         	topeye = ed;
         	
         	
         }   
-        public static void setEyePos(int ix,int iy, int irad, int ox,int oy, int orad){
+        public void setEyePos(int ix,int iy, int irad, int ox,int oy, int orad){
         	topeye.inner.x = ix;
         	topeye.inner.y = iy;
         	topeye.inner.radius = irad;
