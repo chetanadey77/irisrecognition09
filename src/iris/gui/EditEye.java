@@ -166,7 +166,7 @@ class EditDialog extends JDialog
                 setimage.addActionListener(new ActionListener() {
                    public void actionPerformed(ActionEvent arg0) {
                             // TODO Auto-generated method stub
-                            System.out.println("set image button is pressed");
+                            //System.out.println("set image button is pressed");
                             ix= ((Integer)innerx.getValue()).intValue();
                 			iy= ((Integer)innery.getValue()).intValue();
                 			irad= ((Integer)innerr.getValue()).intValue();
