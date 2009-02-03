@@ -29,40 +29,42 @@ import javax.swing.event.ChangeListener;
 
 //}
 
-class EditFrame extends JFrame
+class EditDialog extends JDialog
 {
-        static JLabel image = new JLabel();
-        static ImageIcon icon = new ImageIcon();
-        static JButton setimage = new JButton("Click to send");
-        static JPanel inner = new JPanel();
-        static JPanel outer = new JPanel();
-        static int ix = 159;
-        static int iy = 141;
-        static int irad = 45;
-        static int ox = 167;
-        static int oy = 144;
-        static int orad = 99;
-        static SpinnerNumberModel modelix = new SpinnerNumberModel(ix,0,319,1);
-        static SpinnerNumberModel modeliy = new SpinnerNumberModel(iy,0,279,1);
-        static SpinnerNumberModel modelox = new SpinnerNumberModel(ix,0,319,1);
-        static SpinnerNumberModel modeloy = new SpinnerNumberModel(iy,0,279,1);
-        static SpinnerNumberModel modelir = new SpinnerNumberModel(irad,0,159,1);
-        static SpinnerNumberModel modelor = new SpinnerNumberModel(orad,0,139,1);
-        static JSpinner innerx = new JSpinner(modelix);
-        static JSpinner innery = new JSpinner(modeliy);
-        static JSpinner innerr = new JSpinner(modelir);
-        static JSpinner outerx = new JSpinner(modelox);
-        static JSpinner outery = new JSpinner(modeloy);
-        static JSpinner outerr = new JSpinner(modelor);
+        JLabel image = new JLabel();
+         ImageIcon icon = new ImageIcon();
+         JButton setimage = new JButton("Click to send");
+         JPanel inner = new JPanel();
+         JPanel outer = new JPanel();
+         int ix = 159;
+         int iy = 141;
+         int irad = 45;
+         int ox = 167;
+         int oy = 144;
+         int orad = 99;
+         SpinnerNumberModel modelix = new SpinnerNumberModel(ix,0,319,1);
+         SpinnerNumberModel modeliy = new SpinnerNumberModel(iy,0,279,-1);
+         SpinnerNumberModel modelox = new SpinnerNumberModel(ix,0,319,1);
+         SpinnerNumberModel modeloy = new SpinnerNumberModel(iy,0,279,-1);
+         SpinnerNumberModel modelir = new SpinnerNumberModel(irad,0,159,1);
+         SpinnerNumberModel modelor = new SpinnerNumberModel(orad,0,139,1);
+         JSpinner innerx = new JSpinner(modelix);
+         JSpinner innery = new JSpinner(modeliy);
+         JSpinner innerr = new JSpinner(modelir);
+         JSpinner outerx = new JSpinner(modelox);
+         JSpinner outery = new JSpinner(modeloy);
+         JSpinner outerr = new JSpinner(modelor);
         
+        //static MainFrame callingFrame;
+         BufferedImage sbi;
+         BufferedImage fixedsbi; //holds initial copy
+    
+        public EditDialog(JFrame owner, BufferedImage bi)
         
-        static BufferedImage sbi;
-        static BufferedImage fixedsbi; //holds initial copy
-        //static JButton editimageone = new JButton("Edit image");
-        //static Icon icon;
-        public EditFrame(BufferedImage bi)
-        
-        {       sbi = bi;
+        {      
+        	super(owner, "Find the pupil and iris",true);
+        	
+        		sbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
         		
         		fixedsbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
         		for(int ty=0;ty<bi.getHeight();ty++)
@@ -71,6 +73,7 @@ class EditFrame extends JFrame
         			{
         				int black = bi.getRGB(tx,ty);
         				fixedsbi.setRGB(tx,ty,black);
+        				sbi.setRGB(tx,ty,black);
         			}
                 			
         		}
@@ -161,19 +164,27 @@ class EditFrame extends JFrame
                 outer.add(outerr);
                 
                 setimage.addActionListener(new ActionListener() {
-                    
-
-                    
-                    public void actionPerformed(ActionEvent arg0) {
+                   public void actionPerformed(ActionEvent arg0) {
                             // TODO Auto-generated method stub
                             System.out.println("set image button is pressed");
-                            EditFrame.this.setVisible(false);
-                            MainFrame.setEyePos(ix,iy,irad,ox,oy,orad);
+                            ix= ((Integer)innerx.getValue()).intValue();
+                			iy= ((Integer)innery.getValue()).intValue();
+                			irad= ((Integer)innerr.getValue()).intValue();
+                			ox= ((Integer)outerx.getValue()).intValue();
+                			oy= ((Integer)outery.getValue()).intValue();
+                			orad= ((Integer)outerr.getValue()).intValue();
+                            setVisible(false);
+                           
                             
                           
                     }
             });
                         
+        }
+        public EyeData getEyeData()
+        {
+        	EyeData ed = new EyeData(ix,iy,irad,ox,oy,orad);
+        	return ed;
         }
 }
        
