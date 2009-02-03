@@ -39,6 +39,22 @@ public class UnWrapper {
 		}
 		return retImg;
 	}
+	
+	public int[][] unWrapByteArr(BufferedImage eyeImage, int xp, int yp, int rp, int xi, int yi, int ri, int r_pixels, int th_pixels)
+	{
+		BufferedImage img = this.unWrap(eyeImage, xp, yp, rp, xi, yi, ri, r_pixels, th_pixels);
+		int[][] retvals = new int[img.getWidth()][img.getHeight()];
+		Color c;
+		for (int i=0; i<img.getWidth()-1; i++)
+		{
+			for (int j=0; j<img.getHeight()-1; j++)
+			{
+				c = new Color(img.getRGB(i,j));
+				retvals[i][j] = (c.getRed() + c.getGreen() + c.getBlue())/3;
+			}
+		}
+		return retvals;
+	}
 
 	public BufferedImage unWrapWithGuides(BufferedImage eyeImage, int xp, int yp, int rp, int xi, int yi, int ri, int r_pixels, int th_pixels)
 	{
