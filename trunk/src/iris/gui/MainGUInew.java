@@ -27,7 +27,7 @@ public class MainGUInew {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void notmain(String[] args) {
 		// TODO Auto-generated method stub
 		 EventQueue.invokeLater(new Runnable()
          {
