@@ -15,7 +15,7 @@ public class TestBitCodeGenerator {
 	public void testGetBitcode() {
 		ImageSaverLoader isl = new ImageSaverLoader();
 		BufferedImage eyeball = isl.loadImage("eye.bmp");
-		BitcodeGenerator b = new BitcodeGenerator();
+		BitcodeGenerator b = new BitcodeGenerator(182,134,37,182,134,100);
 		int[] i = b.getBitcode(eyeball);
 		assertEquals(0, i[0]);
 

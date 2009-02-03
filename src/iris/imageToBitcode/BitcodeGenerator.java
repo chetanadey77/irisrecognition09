@@ -18,9 +18,14 @@ import iris.bitcodeMatcher.BitCode;
  */
 public class BitcodeGenerator {
 
-	BufferedImage eImage;
+	BufferedImage eImage, unWrapped;
 	BitCode bitcode;
 	CoordConverter c;
+	UnWrapper uw;
+	int[][] intensityArr;
+	
+	int xp, yp, rp, xi, yi, ri;
+	
 	double a,b,w;	// alpha, beta and omega
 	double ab_lowLim; // alpha and beta lower limit
 	double ab_upLim; // alpha and beta upper limit
@@ -34,11 +39,16 @@ public class BitcodeGenerator {
 	
 	double a2, b2, theta_0, r_0;
 	
-	public BitcodeGenerator()
+	public BitcodeGenerator(int xPup, int yPup, int rPup, int xIris, int yIris, int rIris)
 	{	
+		xp = xPup; yp = yPup; rp = rPup;
+		xi = xIris; yi = yIris; ri = rIris;
+		
 		bitcode = new BitCode(2048);
-		c = new CoordConverter(182,134,37,182,134,100);
-		double divider = 50;
+		c = new CoordConverter(xp,yp,rp,xi,yi,ri);
+		uw = new UnWrapper();
+		
+		double divider = 100;
 		double divider2 = 50;
 		
 		ab_lowLim = 0.15/divider;
@@ -55,22 +65,19 @@ public class BitcodeGenerator {
 	
 	public int[] getBitcode(BufferedImage eyeImage)
 	{
-		eImage = new BufferedImage(eyeImage.getWidth(),eyeImage.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
-		Graphics g = eImage.getGraphics();
-		g.drawImage(eyeImage,0,0,null);
+		//unWrapped = uw.unWrap(eyeImage,xp,yp,rp,xi,yi,ri,50,180);
+		intensityArr = uw.unWrapByteArr(eyeImage, xp, yp, rp, xi, yi, ri, 8, 128);
 		
-		for (double i=0; i<ab_numSteps; i++)
+		for (float i=0; i<ab_numSteps; i++)
 		{
-			for (double j=0; j<ab_numSteps; j++ )
+			for (float j=0; j<ab_numSteps; j++ )
 			{
-				for (double k=0; k<w_numSteps; k++)
+				for (float k=0; k<w_numSteps; k++)
 				{
 					a = ab_lowLim + i*ab_step;
 					b = ab_lowLim + j*ab_step;
 					w = w_lowLim + k*w_step;
 					this.integrate();
-					
-					//System.out.println(a + "-" + b + "-" + w);
 				}
 			}
 		}
@@ -84,33 +91,31 @@ public class BitcodeGenerator {
 		r_0 = 0;
 		a2 = a*a;
 		b2 = b*b; 
-		
+		double k1,k2,imPart,rePart;
 		double sumRe = 0;
-		double sumIm = 0;
-		double r_step = 0.1;
-		double th_step = 2;
-		Color col;
+		double sumIm = 0;		
+		double theta, r;
 		
-		for(double r=0; r<1; r+= r_step)
+		int numThetaPixels = intensityArr.length;
+		int numRpixels = intensityArr[0].length;
+		
+		for(int i = 0; i < numThetaPixels-1; i++)
 		{
-			for(double theta=0; theta < 360; theta += th_step)
+			for(int j=0; j < numRpixels-1; j++)
 			{
-				double th = Math.toRadians(theta);
-				int rgb = eImage.getRGB(c.getX(r,theta), c.getY(r,theta));
+				r = j/(double)numRpixels;
+				theta = Math.toRadians(360*i/(double)numThetaPixels);
 				
-				col = new Color(rgb);
-				double intensity = (col.getBlue() + col.getGreen() + col.getRed()) / 3;
+				k1 = Math.exp( -Math.pow( r - r_0, 2) / a2 );
+				k2 = Math.exp( -Math.pow( theta - theta_0, 2) / b2 );
+				imPart = Math.sin( -w * ( theta - theta_0) );
+				rePart = Math.cos( -w * ( theta - theta_0) );
 				
-				double k1 = Math.exp( -Math.pow( r - r_0, 2) / a2 );
-				double k2 = Math.exp( -Math.pow( th - theta_0, 2) / b2 );
-				double imPart = Math.sin( -w * ( th - theta_0) );
-				double rePart = Math.cos( -w * ( th - theta_0) );
-				
-				sumRe += r_step * th_step * intensity * k1 * k2 * imPart;
-				sumIm += r_step * th_step * intensity * k1 * k2 * rePart; 
+				sumRe += (double)intensityArr[i][j] * k1 * k2 * imPart;
+				sumIm += (double)intensityArr[i][j] * k1 * k2 * rePart; 
 			}
 		}
-		
+		System.out.println((float)sumRe + " ::: " + (float)sumIm);
 		bitcode.addBit(sumRe >= 0);
 		bitcode.addBit(sumIm >= 0);
 	}

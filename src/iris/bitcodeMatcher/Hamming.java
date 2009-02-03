@@ -1,4 +1,4 @@
-package analysis;
+package iris.bitcodeMatcher;
 
 public class Hamming {
 
