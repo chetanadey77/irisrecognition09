@@ -167,8 +167,9 @@ class EditFrame extends JFrame
                     public void actionPerformed(ActionEvent arg0) {
                             // TODO Auto-generated method stub
                             System.out.println("set image button is pressed");
-                            MainFrame.setEyePos(ix,iy,irad,ox,oy,orad);
                             EditFrame.this.setVisible(false);
+                            MainFrame.setEyePos(ix,iy,irad,ox,oy,orad);
+                            
                           
                     }
             });
