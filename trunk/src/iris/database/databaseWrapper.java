@@ -1,10 +1,12 @@
 package iris.database;
 
 import java.sql.*;
+import java.util.Arrays;
 import java.util.Collection;
 import org.junit.*;
 import java.io.*;
-
+import java.util.Arrays.*;
+import iris.database.*;
 
 /**
  * A class that allows access and manipulation of the central database
@@ -14,7 +16,23 @@ import java.io.*;
 
 public class databaseWrapper {
 
-	public static void main(String [] args){}
+	
+
+	public static void main(String [] args)throws SQLException, DbException{
+	
+		Integer one = 32;
+		String test = Integer.toBinaryString(one);
+		int length = 32-(test.length());
+		System.out.println(length);
+		String result = new String();
+		for(;length>0; length--){
+			result.concat("0");
+			}
+		System.out.println(result);
+		result.concat(test);
+		System.out.println(result);
+	}
+	
 	
 	/**
 	 * A class that sets up an access node to the database
@@ -22,10 +40,9 @@ public class databaseWrapper {
 	 * @version 1.0
 	 */
 	
-	   public class dbAccess {
+	     
 		   
-		   
-		   public dbAccess() throws DbException{
+		   public databaseWrapper() throws DbException{
 	        
 			   System.out.println( "Setting up access point for Iris project\n" );
 
@@ -57,51 +74,41 @@ public class databaseWrapper {
 		        
 	       
 	       
-	        private void addRight(String id, Collection code) throws SQLException{
+	        private void addRight(String id, int[] code) throws SQLException{
 	        
-	        	String holder = code.toString();
-	        	String strFilePath = new String(); 
-	        	//strFilePath = //RAM memory to save file
-	        		
+	        	String holder = Arrays.toString(code);
+	        	
+	        	
 	        	try
 	        	{
-	        	FileOutputStream fos = new FileOutputStream(strFilePath);
-	        	String strContent = holder;
-	        
+	        	
 	        	  /*
 	        	  * This method writes given byte array to a file.
 	        	  */
-	        	
-	        	fos.write(strContent.getBytes());
 	        	
 	        	  /*
 	        	  * Close FileOutputStream using,
 	        	  * void close() method of Java FileOutputStream class.
 	        	  */
-	        	fos.close(); 
+	        	 
 	        }
 		        	      
 	        catch(FileNotFoundException ex)
 	        {
-	        
-	        System.out.println("FileNotFoundException : " + ex);
+	        	System.out.println("FileNotFoundException : " + ex);
 	        }
 	        
 	        catch(IOException ioe)
-	        
 	        {
-	       
-	        System.out.println("IOException : " + ioe);
-	        
-	        	stmt.executeUpdate("UPDATE iris SET r ='" + /*filename*/ +"' WHERE id ='" + id + "';" );
+	        	System.out.println("IOException : " + ioe);
+	        }
+	        	stmt.executeUpdate("UPDATE iris SET r ='output.txt' WHERE id ='" + id + "';" );
 	        
 	        }
 	        
 	        
 	        
-	        
-	        
-	        private void addId(String id) throws SQLException{
+	         private void addId(String id) throws SQLException{
 	        	
 	        	stmt.executeUpdate("INSERT into iris (id) VALUES('" + id + "');");
 	        }
@@ -138,7 +145,7 @@ public class databaseWrapper {
 	        
 	        private Connection conn;
 	        private Statement stmt;
-	   }
+	   
 	        
 	            
 	            
