@@ -25,7 +25,7 @@ public class BitCode {
 		if (bitCount == 32)
 		{
 			currentByte += 1;
-			bitCount = 0;
+			bitCount = 0;			
 		}
 	}
 	

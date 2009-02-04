@@ -25,8 +25,4 @@ public class TestBitcode {
 		}
 		System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
 	}
-	
-
-	
-
 }

@@ -77,7 +77,7 @@ public class Normalize {
 			
 			for(int r=0;r<numR;r++)
 			{
-				double rfrac = r/numR;
+				double rfrac = rPrime*r/numR;
 				int x = (int)(((1-rfrac)*(pupilX+pupilR*cos)) + rfrac*(irisX+irisR*cos));
 				int y = (int)(((1-rfrac)*(pupilY+pupilR*sin)) + rfrac*(irisY+irisR*sin));		
 				rectImage[r][theta] = image[x][y];

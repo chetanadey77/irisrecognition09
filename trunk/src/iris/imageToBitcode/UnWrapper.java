@@ -24,7 +24,7 @@ public class UnWrapper {
 			for(int r=0; r < r_pixels; r++)
 			{
 				double fTh = 360/th_pixels*th;
-				double fR = 1.0/r_pixels*r;
+				double fR = r * 1.0 / r_pixels;
 				int rgb = 0;
 				try{
 					rgb = eyeImage.getRGB(cc.getX(fR, fTh), cc.getY(fR, fTh));
