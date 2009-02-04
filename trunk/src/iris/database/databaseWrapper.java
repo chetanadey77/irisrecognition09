@@ -3,6 +3,7 @@ package iris.database;
 import java.sql.*;
 import java.util.Collection;
 import org.junit.*;
+import java.io.*;
 
 /**
  * A class that allows access and manipulation of the central database
@@ -41,19 +42,62 @@ public class databaseWrapper {
 	               System.err.println("Exception: " + e + "\n" + e.getMessage() );
 	        }}
 
+		   
+		   
+		   
+		   
 	       private void addLeft(String id, int[]code) throws SQLException{
 	        
 	        	String holder = code.toString();
 	        	stmt.executeUpdate("UPDATE iris SET l ='" + holder +"' WHERE id ='" + id + "';" );
-	        
 	        }
 	 
+	       
+	       
 	        private void addRight(String id, Collection code) throws SQLException{
-		        
+	        
 	        	String holder = code.toString();
-	        	stmt.executeUpdate("UPDATE iris SET r ='" + holder +"' WHERE id ='" + id + "';" );
+	        	String strFilePath = new String; 
+	        	strFilePath = //RAM memory to save file
+	        		
+	        	try
+	        	{
+	        	FileOutputStream fos = new FileOutputStream(strFilePath);
+	        	String strContent = holder;
+	        
+	        	  /*
+	        	  * This method writes given byte array to a file.
+	        	  */
+	        	
+	        	fos.write(strContent.getBytes());
+	        	
+	        	  /*
+	        	  * Close FileOutputStream using,
+	        	  * void close() method of Java FileOutputStream class.
+	        	  */
+	        	fos.close(); 
+	        }
+		        	      
+	        catch(FileNotFoundException ex)
+	        {
+	        
+	        System.out.println("FileNotFoundException : " + ex);
+	        }
+	        
+	        catch(IOException ioe)
+	        
+	        {
+	       
+	        System.out.println("IOException : " + ioe);
+	        
+	        	stmt.executeUpdate("UPDATE iris SET r ='" + /*filename*/ +"' WHERE id ='" + id + "';" );
 	        
 	        }
+	        
+	        
+	        
+	        
+	        
 	        private void addId(String id) throws SQLException{
 	        	
 	        	stmt.executeUpdate("INSERT into iris (id) VALUES('" + id + "');");
