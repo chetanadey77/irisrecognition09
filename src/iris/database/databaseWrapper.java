@@ -8,6 +8,8 @@ import java.io.*;
 import java.util.Arrays.*;
 import iris.database.*;
 
+
+
 /**
  * A class that allows access and manipulation of the central database
  * @author Seb Smith & Andrew Durnin
@@ -20,11 +22,11 @@ public class databaseWrapper {
 
 	public static void main(String [] args)throws SQLException, DbException{
 	
+		
+	    //testing the binary bitcode generation
 		Integer one = 32;
 		String test = Integer.toBinaryString(one);
 		int length = 32-(test.length());
-		//System.out.println(length);
-		//System.out.println(test);
 		String outcome = new String();
 		for(;length>0; length--){
 			outcome = outcome + "0";
@@ -64,34 +66,28 @@ public class databaseWrapper {
 		   
 		   
 		   
-	       private void addLeft(String id, int[]code) throws SQLException{
+	       private void addLeft(String id, int code) throws SQLException{
 	        
-	        	String holder = code.toString();
-	        	stmt.executeUpdate("UPDATE iris SET l ='" + holder +"' WHERE id ='" + id + "';" );
-	        }
-	        
-	        
-		        
-	       
-	       
-	        private void addRight(String id, int[] code) throws SQLException{
-	        
-	        	String holder = Arrays.toString(code);
+	    	 //(at the moment this is assuming that only a single integer is being passed in)
 	        	
+	    		String test = Integer.toBinaryString(code);
+	    		int length = 32-(test.length());
+	    		String outcome = new String();
+	    		
+	    		for(;length>0; length--){
+	    			//ensuring that the leading 0s are included
+	    			outcome = outcome + "0";
+	    			}
+	    		
+	    		outcome = test + outcome;
+	    		System.out.println(outcome);
 	        	
-	        	try
-	        	{
-	        	
-	        	  /*
-	        	  * This method writes given byte array to a file.
-	        	  */
-	        	
-	        	  /*
-	        	  * Close FileOutputStream using,
-	        	  * void close() method of Java FileOutputStream class.
-	        	  */
-	        	 
-	        }
+	        try{
+	        		//writing the 32 bit string to file
+	        		BufferedWriter out = new BufferedWriter(new FileWriter("test.txt"));
+	    			out.write("outcome");
+	    			out.close();
+	        	}
 		        	      
 	        catch(FileNotFoundException ex)
 	        {
@@ -102,9 +98,49 @@ public class databaseWrapper {
 	        {
 	        	System.out.println("IOException : " + ioe);
 	        }
-	        	stmt.executeUpdate("UPDATE iris SET r ='output.txt' WHERE id ='" + id + "';" );
-	        
+	        	stmt.executeUpdate("UPDATE iris SET l ='output.txt' WHERE id ='" + id + "';" ); 
 	        }
+	        
+		        
+	       
+	       
+	        private void addRight(String id, int code) throws SQLException{
+	        	
+	        	//(at the moment this is assuming that only a single integer is being passed in)
+	        	
+	    		String test = Integer.toBinaryString(code);
+	    		int length = 32-(test.length());
+	    		String outcome = new String();
+	    		
+	    		for(;length>0; length--){
+	    			//ensuring that the leading 0s are included
+	    			outcome = outcome + "0";
+	    			}
+	    		
+	    		outcome = test + outcome;
+	    		System.out.println(outcome);
+	        	
+	        try{
+	        		//writing the 32 bit string to file
+	        		BufferedWriter out = new BufferedWriter(new FileWriter("test.txt"));
+	    			out.write("outcome");
+	    			out.close();
+	        	}
+		        	      
+	        catch(FileNotFoundException ex)
+	        {
+	        	System.out.println("FileNotFoundException : " + ex);
+	        }
+	        
+	        catch(IOException ioe)
+	        {
+	        	System.out.println("IOException : " + ioe);
+	        }
+	        	stmt.executeUpdate("UPDATE iris SET r ='output.txt' WHERE id ='" + id + "';" ); 
+	        }
+	        
+	        
+	     
 	        
 	        
 	        
