@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.junit.*;
 import java.io.*;
 
+
 /**
  * A class that allows access and manipulation of the central database
  * @author Seb Smith
@@ -51,14 +52,16 @@ public class databaseWrapper {
 	        	String holder = code.toString();
 	        	stmt.executeUpdate("UPDATE iris SET l ='" + holder +"' WHERE id ='" + id + "';" );
 	        }
-	 
+	        
+	        
+		        
 	       
 	       
 	        private void addRight(String id, Collection code) throws SQLException{
 	        
 	        	String holder = code.toString();
-	        	String strFilePath = new String; 
-	        	strFilePath = //RAM memory to save file
+	        	String strFilePath = new String(); 
+	        	//strFilePath = //RAM memory to save file
 	        		
 	        	try
 	        	{
