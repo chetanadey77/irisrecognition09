@@ -2,12 +2,23 @@ package iris.database;
 
 import java.sql.*;
 import java.util.Collection;
+import org.junit.*;
 
-
+/**
+ * A class that allows access and manipulation of the central database
+ * @author Seb Smith
+ * @version 1.0
+ */
 
 public class databaseWrapper {
 
 	public static void main(String [] args){}
+	
+	/**
+	 * A class that sets up an access node to the database
+	 * @author Seb Smith
+	 * @version 1.0
+	 */
 	
 	   public class dbAccess {
 		   
@@ -30,7 +41,7 @@ public class databaseWrapper {
 	               System.err.println("Exception: " + e + "\n" + e.getMessage() );
 	        }}
 
-	        private void addLeft(String id, Collection code) throws SQLException{
+	       private void addLeft(String id, int[]code) throws SQLException{
 	        
 	        	String holder = code.toString();
 	        	stmt.executeUpdate("UPDATE iris SET l ='" + holder +"' WHERE id ='" + id + "';" );
@@ -69,7 +80,7 @@ public class databaseWrapper {
 	        		}
 	        		
 	        		//code to transfer bitstring to ArrayList or some such
-	        		
+	        		//32 bit integers = 64 index array?
 	        	}
 	        	
 	        	private ResultSet rs;
