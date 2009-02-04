@@ -10,7 +10,7 @@ import iris.database.*;
 
 /**
  * A class that allows access and manipulation of the central database
- * @author Seb Smith
+ * @author Seb Smith & Andrew Durnin
  * @version 1.0
  */
 
@@ -23,20 +23,20 @@ public class databaseWrapper {
 		Integer one = 32;
 		String test = Integer.toBinaryString(one);
 		int length = 32-(test.length());
-		System.out.println(length);
-		String result = new String();
+		//System.out.println(length);
+		//System.out.println(test);
+		String outcome = new String();
 		for(;length>0; length--){
-			result.concat("0");
+			outcome = outcome + "0";
 			}
-		System.out.println(result);
-		result.concat(test);
-		System.out.println(result);
+		outcome = test + outcome;
+		System.out.println(outcome);
 	}
 	
 	
 	/**
 	 * A class that sets up an access node to the database
-	 * @author Seb Smith
+	 * @author Seb Smith and Andrew Durnin
 	 * @version 1.0
 	 */
 	
