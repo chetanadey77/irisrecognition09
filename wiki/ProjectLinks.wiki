@@ -21,6 +21,5 @@
 [http://cnx.org/content/m12488/latest/]
 
 - Libor Masek's website (open source iris recognition code, written in Matlab)
+
 [http://www.csse.uwa.edu.au/~pk/studentprojects/libor/sourcecode.html]
-
-
