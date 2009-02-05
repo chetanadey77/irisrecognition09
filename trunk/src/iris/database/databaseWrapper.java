@@ -20,19 +20,43 @@ public class databaseWrapper {
 
 	
 
-	public static void main(String [] args)throws SQLException, DbException{
+	public static void main(String [] args)throws SQLException, DbException, IOException{
 	
 		
 	    //testing the binary bitcode generation
-		Integer one = 32;
-		String test = Integer.toBinaryString(one);
-		int length = 32-(test.length());
+		Integer[] one = {32,45,34,53,56};
+		//String test = Integer.toBinaryString(one);
 		String outcome = new String();
+    	String iterates = new String();
+    	
+		for (int count = 0; count < one.length; count++){
+	   	 
+			iterates = Integer.toBinaryString(one[count]);
+			int length = 32-(iterates.length());
+		
 		for(;length>0; length--){
+			//ensuring that the leading 0s are included
 			outcome = outcome + "0";
 			}
-		outcome = test + outcome;
+		
+		outcome = outcome + iterates;
 		System.out.println(outcome);
+		}
+		
+		BufferedWriter out = new BufferedWriter(new FileWriter("test.txt"));
+		out.write(outcome);
+		out.close();
+		
+		File file = new File("test.txt");
+    	FileInputStream fis = new FileInputStream(file);
+    	PreparedStatement ps = conn.prepareStatement("UPDATE iris SET l = ? WHERE id = ?");
+    	ps.setString(2, "ss1008");
+    	ps.setBinaryStream(1, fis, (int)file.length());
+    	ps.executeUpdate();
+    	ps.close();
+    	fis.close();
+	
+	
 	}
 	
 	
@@ -66,26 +90,30 @@ public class databaseWrapper {
 		   
 		   
 		   
-	       private void addLeft(String id, int code) throws SQLException{
+	       private void addLeft(String id, int[] code) throws SQLException, IOException{
 	        
 	    	 //(at the moment this is assuming that only a single integer is being passed in)
+	        	String outcome = new String();
+	        	String iterates = new String();
 	        	
-	    		String test = Integer.toBinaryString(code);
-	    		int length = 32-(test.length());
-	    		String outcome = new String();
+	    		for (int count = 0; count < 65; count++){
+	    	   	 
+	    			iterates = Integer.toBinaryString(code[count]);
+	    			int length = 32-(iterates.length());
 	    		
 	    		for(;length>0; length--){
 	    			//ensuring that the leading 0s are included
 	    			outcome = outcome + "0";
 	    			}
 	    		
-	    		outcome = test + outcome;
+	    		outcome = outcome + iterates;
 	    		System.out.println(outcome);
-	        	
-	        try{
-	        		//writing the 32 bit string to file
+	    		}
+	        
+	    		try{
+	        		//writing the 2048 bit string to file
 	        		BufferedWriter out = new BufferedWriter(new FileWriter("test.txt"));
-	    			out.write("outcome");
+	    			out.write(outcome);
 	    			out.close();
 	        	}
 		        	      
@@ -98,8 +126,17 @@ public class databaseWrapper {
 	        {
 	        	System.out.println("IOException : " + ioe);
 	        }
-	        	stmt.executeUpdate("UPDATE iris SET l ='output.txt' WHERE id ='" + id + "';" ); 
-	        }
+	        	
+	        	File file = new File("test.txt");
+	        	FileInputStream fis = new FileInputStream(file);
+	        	PreparedStatement ps = conn.prepareStatement("UPDATE iris SET l = ? WHERE id = ?");
+	        	ps.setString(2, id);
+	        	ps.setBinaryStream(1, fis, (int)file.length());
+	        	ps.executeUpdate();
+	        	ps.close();
+	        	fis.close();
+	       
+	       }
 	        
 		        
 	       
@@ -158,19 +195,41 @@ public class databaseWrapper {
 	        	
 	        	}
 	        
-	        	private void Next(Collection left, Collection right, String Id) throws SQLException {
+	        	private String Next(Integer[] left, Integer[] right) throws SQLException, IOException {
+	        		BufferedInputStream leftin;
+	        		BufferedInputStream rightin;
+	        		String id = new String();
+	        		byte leftbyte[] = null;
+	        		byte rightbyte[] = null;
+	        		
+	        		//String l = new String();
+	        		//String r = new String();
+	        		//String id = new String();
 	        		
 	        		
 	        		if(rs.next()){
+	        			leftin = new BufferedInputStream(rs.getBinaryStream("l"));
+	        			leftin.read(leftbyte,0,32);
+	        			rightin = new BufferedInputStream(rs.getBinaryStream("r"));
+		                rightin.read(rightbyte, 0,32);
+	        			//r = rs.getString("r"); 
+	        			id = rs.getString("id");
 	        			
-	        			String L = rs.getString("l");
-		                String R = rs.getString("r"); 
-	        			Id = rs.getString("id");
-	        			
-	        		}
+	        			}
 	        		
-	        		//code to transfer bitstring to ArrayList or some such
-	        		//32 bit integers = 64 index array?
+	        		else return null;
+					int result = 0;
+					for(int count = 0; count<4; count++){
+					
+					int n = (leftbyte[count] < 0 ? (int)leftbyte[count] + 256 : (int)leftbyte[count]) << (8*count);
+					System.out.println(n);
+					result += n;
+					}
+	        		System.out.println(result);
+					return id;
+			        	 
+	        	
+					
 	        	}
 	        	
 	        	private ResultSet rs;
@@ -179,7 +238,7 @@ public class databaseWrapper {
 	        
 	        
 	        
-	        private Connection conn;
+	        private static Connection conn;
 	        private Statement stmt;
 	   
 	        
