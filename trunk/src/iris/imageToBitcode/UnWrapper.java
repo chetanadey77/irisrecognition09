@@ -4,27 +4,41 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-
+/**
+ * Extracts and unwraps an iris from an eye image, given the iris inner and outer boundaries
+ * @author Arnar B. Jonsson
+ * @version 1.0
+ */
 public class UnWrapper {
 
 	CoordConverter cc;
 
-	public UnWrapper()
+	public UnWrapper() { }
+	
+	/**
+	 * Unwrap an iris image
+	 * @param eyeImage original image of an eye
+	 * @param xPup center point of pupil (x)
+	 * @param yPup center point of pupil (y)
+	 * @param rPup radius of pupil
+	 * @param xIris center point of iris (x)
+	 * @param yIris center point of iris (y)
+	 * @param rIris radius of iris
+	 * @param unwrHeight the width (in pixels) of the unwrapped iris image
+	 * @param unwrWidth the height (in pixels) of the unwrapped iris image
+	 * @return the unwrapped iris as a BufferedImage
+	 */
+	public BufferedImage unWrap(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris, int unwrHeight, int unwrWidth)
 	{
-		
-	}
+		BufferedImage retImg = new BufferedImage(unwrWidth, unwrHeight, BufferedImage.TYPE_BYTE_GRAY);
+		cc = new CoordConverter(xPup,yPup,rPup,xIris,yIris,rIris);
 
-	public BufferedImage unWrap(BufferedImage eyeImage, int xp, int yp, int rp, int xi, int yi, int ri, int r_pixels, int th_pixels)
-	{
-		BufferedImage retImg = new BufferedImage(th_pixels, r_pixels, BufferedImage.TYPE_BYTE_GRAY);
-		cc = new CoordConverter(xp,yp,rp,xi,yi,ri);
-
-		for(int th=0; th < th_pixels; th++)
+		for(int th=0; th < unwrWidth; th++)
 		{
-			for(int r=0; r < r_pixels; r++)
+			for(int r=0; r < unwrHeight; r++)
 			{
-				double fTh = 360/th_pixels*th;
-				double fR = r * 1.0 / r_pixels;
+				double fTh = 360/unwrWidth*th;
+				double fR = r * 1.0 / unwrHeight;
 				int rgb = 0;
 				try{
 					rgb = eyeImage.getRGB(cc.getX(fR, fTh), cc.getY(fR, fTh));
@@ -34,15 +48,27 @@ public class UnWrapper {
 					System.out.println(fR + " : " + fTh);
 					System.out.println(cc.getX(fR, fTh) + " : " + cc.getY(fR, fTh));
 				}
-
 			}
 		}
 		return retImg;
 	}
 	
-	public int[][] unWrapByteArr(BufferedImage eyeImage, int xp, int yp, int rp, int xi, int yi, int ri, int r_pixels, int th_pixels)
+	/**
+	 * Returns an unwrapped iris as a two dimensional array of integers
+	 * @param eyeImage original image of an eye
+	 * @param xPup center point of pupil (x)
+	 * @param yPup center point of pupil (y)
+	 * @param rPup radius of pupil
+	 * @param xIris center point of iris (x)
+	 * @param yIris center point of iris (y)
+	 * @param rIris radius of iris
+	 * @param unwrHeight the width (in pixels) of the unwrapped iris image
+	 * @param unwrWidth the height (in pixels) of the unwrapped iris image
+	 * @return the unwrapped iris
+	 */
+	public int[][] unWrapByteArr(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris, int unwrHeight, int unwrWidth)
 	{
-		BufferedImage img = this.unWrap(eyeImage, xp, yp, rp, xi, yi, ri, r_pixels, th_pixels);
+		BufferedImage img = this.unWrap(eyeImage, xPup, yPup, rPup, xIris, yIris, rIris, unwrHeight, unwrWidth);
 		int[][] retvals = new int[img.getWidth()][img.getHeight()];
 		Color c;
 		for (int i=0; i<img.getWidth()-1; i++)
@@ -55,10 +81,23 @@ public class UnWrapper {
 		}
 		return retvals;
 	}
-
-	public BufferedImage unWrapWithGuides(BufferedImage eyeImage, int xp, int yp, int rp, int xi, int yi, int ri, int r_pixels, int th_pixels)
+	
+	/**
+	 * Returns an unwrapped iris as a BufferedImage with colored guides (for visual analysis in GUI) 
+	 * @param eyeImage original image of an eye
+	 * @param xPup center point of pupil (x)
+	 * @param yPup center point of pupil (y)
+	 * @param rPup radius of pupil
+	 * @param xIris center point of iris (x)
+	 * @param yIris center point of iris (y)
+	 * @param rIris radius of iris
+	 * @param unwrHeight the width (in pixels) of the unwrapped iris image
+	 * @param unwrWidth the height (in pixels) of the unwrapped iris image
+	 * @return the unwrapped iris
+	 */
+	public BufferedImage unWrapWithGuides(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris, int unwrHeight, int unwrWidth)
 	{
-		BufferedImage grayImage = this.unWrap(eyeImage, xp, yp, rp, xi, yi, ri, r_pixels, th_pixels);
+		BufferedImage grayImage = this.unWrap(eyeImage, xPup, yPup, rPup, xIris, yIris, rIris, unwrHeight, unwrWidth);
 		BufferedImage retImage = this.toColor(grayImage);
 
 		Graphics g = retImage.getGraphics();
@@ -70,11 +109,21 @@ public class UnWrapper {
 			g.setColor(c);
 			g.drawLine(0, y , retImage.getWidth()-1, y);
 		}
-
 		return retImage;
 	}
 
-	public BufferedImage originalWithGuides(BufferedImage eyeImage, int xp, int yp, int rp, int xi, int yi, int ri)
+	/**
+	 * Returns the original eye image with colored guides (for visual analysis in GUI) 
+	 * @param eyeImage original image of an eye
+	 * @param xPup center point of pupil (x)
+	 * @param yPup center point of pupil (y)
+	 * @param rPup radius of pupil
+	 * @param xIris center point of iris (x)
+	 * @param yIris center point of iris (y)
+	 * @param rIris radius of iris
+	 * @return the unwrapped iris
+	 */
+	public BufferedImage originalWithGuides(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris)
 	{
 		BufferedImage retImage = this.toColor(eyeImage);
 		int rad, x, y;
@@ -82,9 +131,9 @@ public class UnWrapper {
 		Color c;
 		for (float r = 0; r < 1; r += 0.1)
 		{
-			x = (int) ((1-r)*xp + r*xi);
-			y = (int) ((1-r)*yp + r*yi);
-			rad = (int) ((1-r)*rp + r*ri);
+			x = (int) ((1-r)*xPup + r*xIris);
+			y = (int) ((1-r)*yPup + r*yIris);
+			rad = (int) ((1-r)*rPup + r*rIris);
 			c = gradientColor(r);
 			Graphics g = retImage.getGraphics();
 			g.setColor(c);
