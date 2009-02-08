@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.junit.Test;
+
 
 
 /**
@@ -26,7 +28,7 @@ public class databaseWrapper {
 	 */
 	
 	     
-		   public databaseWrapper() throws DbException{
+			public databaseWrapper() throws DbException{
 	        
 			   System.out.println( "Setting up access point for Iris project\n" );
 
@@ -44,13 +46,18 @@ public class databaseWrapper {
 	               System.err.println("Exception: " + e + "\n" + e.getMessage() );
 	        }}
 
+			/**
+			 * A method that allows a user to add a bitcode to the database for the left iris.
+			 * @author Seb Smith & Andrew Durnin
+			 * @version 1.0
+			 */
 		   
-		   
-		   private void addLeft(String id, int[] code) throws SQLException, IOException{
+		   @Test private void addLeft(String id, int[] code) throws SQLException, IOException{
 	        
 	    	String insert = new String();
-
-            for(int count  =0; count < code.length; count++){
+	    	int count;
+	    	
+            for(count  =0; count < code.length; count++){
 
                 if(count == 0)
                     insert = insert + code[count];
@@ -59,16 +66,21 @@ public class databaseWrapper {
             }
 
             stmt.executeUpdate("UPDATE iris SET l = '{" + insert + "}' WHERE id = '" + id + "'");             
-	    	
+	    	org.junit.Assert.assertFalse(count==0);
 		   }
 		        
+		   /**
+			 * A method that allows a user to add a bitcode to the database for the right iris.
+			 * @author Seb Smith & Andrew Durnin
+			 * @version 1.0
+			 */
 	       
-	       
-	        private void addRight(String id, int[] code) throws SQLException{
+	        @Test private void addRight(String id, int[] code) throws SQLException{
 	        	
 	        	String insert = new String();
-
-	            for(int count  =0; count < code.length; count++){
+	        	int count;
+	        	
+	            for(count  =0; count < code.length; count++){
 
 	                if(count == 0)
 	                    insert = insert + code[count];
@@ -77,14 +89,28 @@ public class databaseWrapper {
 	            }
 
 	            stmt.executeUpdate("UPDATE iris SET r = '{" + insert + "}' WHERE id = '" + id + "'");             
-		    	
+		    	org.junit.Assert.assertFalse(count == 0);
 	        	
 	        }
+	        
+	        /**
+			 * A method that allows a user to add a new row to the database with Id as primary key.
+			 * @author Seb Smith & Andrew Durnin
+			 * @version 1.0
+			 */
+	        
 	        
 	         private void addId(String id) throws SQLException{
 	        	
 	        	stmt.executeUpdate("INSERT into iris (id) VALUES('" + id + "');");
 	        }
+	         
+	         /**
+				 * A method that returns the id and left and right bitcodes of the next database record.
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+				 */
+	         
 	        
 	         private String getNext(int[] left, int[] right) throws SQLException, IOException {
 	     		
