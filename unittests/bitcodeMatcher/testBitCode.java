@@ -14,6 +14,20 @@ public class testBitCode {
 	public void setUp() throws Exception {
 		
 	}
+	
+	@Test
+	public void testBitCode()
+	{
+		b = new BitCode(3000);
+		assertEquals(94, b.getSize());
+		
+		for (int bits=1;bits<10000; bits+=1)
+		{
+			b = new BitCode(bits);
+			assertEquals(Math.ceil((float)bits/32), b.getSize());
+		}
+		
+	}
 
 	@Test
 	public void testAddBit() {

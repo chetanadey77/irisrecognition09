@@ -1,25 +1,19 @@
 package unittest.ImageToBitcode;
 
-import static org.junit.Assert.assertEquals;
 import iris.imageToBitcode.BitcodeGenerator;
-
 import java.awt.image.BufferedImage;
-import java.io.Console;
 
 public class TestBitcode {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
-		long startTime=System.currentTimeMillis();
-		ImageSaverLoader isl = new ImageSaverLoader();
+		long startTime=System.currentTimeMillis(); //calculate runtime
+		ImageSaverLoader isl = new ImageSaverLoader(); 
 		BufferedImage eyeball = isl.loadImage("eye.bmp");
-		BitcodeGenerator b = new BitcodeGenerator(182,134,37,182,134,100);
+		BitcodeGenerator b = new BitcodeGenerator();
 		
-		int[] intarr = b.getBitcode(eyeball);
+		int[] intarr = b.getBitcode(eyeball,182,134,37,182,134,100).getBitCode();
 		
-		for (int i=0; i < 2048/32; i++)
+		for (int i=0; i < intarr.length; i++)
 		{
 			System.out.println(i + ".: " + Integer.toBinaryString(intarr[i]) + " :: " + intarr[i] );
 		}

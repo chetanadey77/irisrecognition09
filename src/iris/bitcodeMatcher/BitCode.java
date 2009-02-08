@@ -13,7 +13,7 @@ public class BitCode {
 	
 	public BitCode(int numBits)
 	{
-		bitArray = new int[(int)Math.ceil(numBits/32)];
+		bitArray = new int[(int)Math.ceil((float)numBits/32)];
 		currentByte = bitCount = 0;
 	}
 	
@@ -45,5 +45,10 @@ public class BitCode {
 	public int[] getBitCode()
 	{
 		return bitArray;
+	}
+	
+	public int getSize()
+	{
+		return bitArray.length;
 	}
 }
