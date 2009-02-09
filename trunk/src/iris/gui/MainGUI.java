@@ -253,7 +253,7 @@ class MainFrame extends JFrame
                 			System.out.println(i + ".: " + Integer.toBinaryString(intarr[i]) + " :: " + intarr[i] );
                 		}
                 		System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
-                		int bit=0;
+                		/*int bit=0;
                 		for (int i=0; i < intarr.length; i++)
                 		{
                 			System.out.print(i + ".: ");
@@ -265,7 +265,7 @@ class MainFrame extends JFrame
                 				bit++;
                 			}
                 			System.out.println();
-                		}
+                		}*/
                 	
                         }
             });
@@ -285,7 +285,7 @@ class MainFrame extends JFrame
             			System.out.println(i + ".: " + Integer.toBinaryString(intarr[i]) + " :: " + intarr[i] );
             		}
             		System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
-            		int bit=0;
+            		/*int bit=0;
             		for (int i=0; i < intarr.length; i++)
             		{
             			System.out.print(i + ".: ");
@@ -297,7 +297,7 @@ class MainFrame extends JFrame
             				bit++;
             			}
             			System.out.println();
-            		}
+            		}*/
             	
                     }
         });
