@@ -58,23 +58,25 @@ public class BitCode {
 	}
 	
 	public boolean getBit(int bit_number)
-	{
-		if (bit_number>bitCount) System.out.println("Error accessing bit");
-		if ((bitArray[(bit_number/32)] & (2<<(bit_number % 32))) >0) return true;
+	{ 	
+		int total_bits = currentByte*32 + bitCount;
+		if (bit_number>total_bits) System.out.println("Error accessing bit");
+		if ((bitArray[(bit_number/32)] & (2<<(31-(bit_number % 32)))) >0) return true;
 		else return false;
 	}
 	
 	public BufferedImage getBitCodeImage(int width, int height, int number_of_bits_high)
 	{
+		int total_bits = currentByte*32 + bitCount;
 		BufferedImage bi= new BufferedImage(width,height,BufferedImage.TYPE_BYTE_GRAY);
 		Graphics g  = bi.createGraphics();
         Graphics2D g2 = (Graphics2D) g;
 		g2.setPaint(Color.white);
-		int w = width / (bitCount / number_of_bits_high);
+		int w = width * number_of_bits_high / total_bits;
 		int h = height / number_of_bits_high;
-		for (int i=0;i< bitCount;i++)
+		for (int i=0;i< total_bits;i++)
 			if (getBit(i)) 
-				g2.fillRect(i % (bitCount /  number_of_bits_high), i / (bitCount /  number_of_bits_high), w, h);
+				g2.fillRect(w * (i % (total_bits /  number_of_bits_high)),h* i * number_of_bits_high / total_bits , w, h);
 		return bi;
 	}
 }
