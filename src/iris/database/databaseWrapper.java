@@ -80,7 +80,7 @@ public class databaseWrapper {
 	        	String insert = new String();
 	        	int count;
 	        	
-	            for(count  =0; count < code.length; count++){
+	            for(count =0; count < code.length; count++){
 
 	                if(count == 0)
 	                    insert = insert + code[count];
