@@ -1,5 +1,10 @@
 package iris.bitcodeMatcher;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.awt.Color;
+
 /**
  * A class that stores a bitcode and makes it easy to add one bit at a time
  * 
@@ -50,5 +55,26 @@ public class BitCode {
 	public int getSize()
 	{
 		return bitArray.length;
+	}
+	
+	public boolean getBit(int bit_number)
+	{
+		if (bit_number>bitCount) System.out.println("Error accessing bit");
+		if ((bitArray[(bit_number/32)] & (2<<(bit_number % 32))) >0) return true;
+		else return false;
+	}
+	
+	public BufferedImage getBitCodeImage(int width, int height, int number_of_bits_high)
+	{
+		BufferedImage bi= new BufferedImage(width,height,BufferedImage.TYPE_BYTE_GRAY);
+		Graphics g  = bi.createGraphics();
+        Graphics2D g2 = (Graphics2D) g;
+		g2.setPaint(Color.white);
+		int w = width / (bitCount / number_of_bits_high);
+		int h = height / number_of_bits_high;
+		for (int i=0;i< bitCount;i++)
+			if (getBit(i)) 
+				g2.fillRect(i % (bitCount /  number_of_bits_high), i / (bitCount /  number_of_bits_high), w, h);
+		return bi;
 	}
 }
