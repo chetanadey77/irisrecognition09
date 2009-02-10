@@ -15,37 +15,56 @@ public class testBitCode {
 		
 	}
 	
-	@Test
-	public void testBitCode()
-	{
-		b = new BitCode(3000);
-		assertEquals(94, b.getSize());
-		
-		for (int bits=1;bits<10000; bits+=1)
-		{
-			b = new BitCode(bits);
-			assertEquals(Math.ceil((float)bits/32), b.getSize());
-		}
-		
-	}
+//	@Test
+//	public void testBitCode()
+//	{
+//		b = new BitCode(3000);
+//		assertEquals(94, b.());
+//		
+//		for (int bits=1;bits<10000; bits+=1)
+//		{
+//			b = new BitCode(bits);
+//			assertEquals(Math.ceil((float)bits/32), b.getNumBits());
+//		}
+//		
+//	}
 
 	@Test
 	public void testAddBit() {
 		b = new BitCode(2048);
 		
-		for (int i = 0; i < 32; i++) { b.addBit(1);	}
-		for (int i = 0; i < 32/2; i++) { b.addBit(1); b.addBit(0);}
-		for (int i = 0; i < 32/2; i++) { b.addBit(0); b.addBit(1);}
-		for (int i = 0; i < 32/4; i++) { b.addBit(1); b.addBit(1); b.addBit(0); b.addBit(0);}
-		for (int i = 0; i < 32/4; i++) { b.addBit(0); b.addBit(0); b.addBit(1); b.addBit(1);}
+		b.addBit(true);
+		b.addBit(false);
+		b.addBit((byte)1);
+		b.addBit((byte)0);
+		b.addBit((int)1);
+		b.addBit((int)0);
 		
-		int[] i = b.getBitCode();
-		
-		assertEquals(Integer.toBinaryString(i[0]),0xFFFFFFFF, i[0]);
-		assertEquals(Integer.toBinaryString(i[1]),0xAAAAAAAA, i[1]);
-		assertEquals(Integer.toBinaryString(i[2]),0x55555555, i[2]);
-		assertEquals(Integer.toBinaryString(i[3]),0xCCCCCCCC, i[3]);
-		assertEquals(Integer.toBinaryString(i[4]),0x33333333, i[4]);
+		assertEquals(true, b.get(0));
+		assertEquals(false, b.get(1));
+		assertEquals(true, b.get(2));
+		assertEquals(false, b.get(3));
+		assertEquals(true, b.get(4));
+		assertEquals(false, b.get(5));
+	}
+	
+	@Test
+	public void tesGetNumBits()
+	{
+		b = new BitCode(2048);
+		for (int i = 0; i<33; i++){ b.addBit(0);}
+		assertEquals(33, b.getBitcodeSize());
+	}
+	
+	@Test
+	public void testGetBit()
+	{
+		b = new BitCode(2048);
+		b.addBit(1); b.addBit(1); b.addBit(1); b.addBit(0);
+		assertEquals(true, b.get(0));
+		assertEquals(true, b.get(1));
+		assertEquals(true, b.get(2));
+		assertEquals(false, b.get(3));
 	}
 
 }
