@@ -242,16 +242,16 @@ class MainFrame extends JFrame
                 		//BufferedImage eyeball = isl.loadImage("eye.bmp");
                 		BitcodeGenerator b = new BitcodeGenerator();
                 		BitCode bc =  b.getBitcode(biEyeOne,eyeOne.inner.x,eyeOne.inner.y,eyeOne.inner.radius,eyeOne.outer.x,eyeOne.outer.y,eyeOne.outer.radius);
-                		int[] intarr = bc.getBitCode();
+                		//int[] intarr = bc.getBitCode();
                 		biBitCodeOne = bc.getBitCodeImage(768,24,8);
                 		iconBitCodeOne.setImage(biBitCodeOne);
                         imageBitCodeOne.setIcon(iconBitCodeOne);
                         imageBitCodeOne.repaint();
                 		
-                		for (int i=0; i < intarr.length; i++)
-                		{
-                			System.out.println(i + ".: " + Integer.toBinaryString(intarr[i]) + " :: " + intarr[i] );
-                		}
+//                		for (int i=0; i < intarr.length; i++)
+//                		{
+//                			System.out.println(i + ".: " + Integer.toBinaryString(intarr[i]) + " :: " + intarr[i] );
+//                		}
                 		System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
                 		/*int bit=0;
                 		for (int i=0; i < intarr.length; i++)
@@ -274,16 +274,16 @@ class MainFrame extends JFrame
             		long startTime=System.currentTimeMillis(); //calculate runtime
             		BitcodeGenerator b = new BitcodeGenerator();
             		BitCode bc =  b.getBitcode(biEyeTwo,eyeTwo.inner.x,eyeTwo.inner.y,eyeTwo.inner.radius,eyeTwo.outer.x,eyeTwo.outer.y,eyeTwo.outer.radius);
-            		int[] intarr = bc.getBitCode();
+            		//int[] intarr = bc.getBitCode();
             		biBitCodeTwo = bc.getBitCodeImage(768,24,8);
             		iconBitCodeTwo.setImage(biBitCodeTwo);
                     imageBitCodeTwo.setIcon(iconBitCodeTwo);
                     imageBitCodeTwo.repaint();
             		
-            		for (int i=0; i < intarr.length; i++)
-            		{
-            			System.out.println(i + ".: " + Integer.toBinaryString(intarr[i]) + " :: " + intarr[i] );
-            		}
+//            		for (int i=0; i < intarr.length; i++)
+//            		{
+//            			System.out.println(i + ".: " + Integer.toBinaryString(intarr[i]) + " :: " + intarr[i] );
+//            		}
             		System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
             		/*int bit=0;
             		for (int i=0; i < intarr.length; i++)
