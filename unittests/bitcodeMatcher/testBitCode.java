@@ -14,20 +14,6 @@ public class testBitCode {
 	public void setUp() throws Exception {
 		
 	}
-	
-//	@Test
-//	public void testBitCode()
-//	{
-//		b = new BitCode(3000);
-//		assertEquals(94, b.());
-//		
-//		for (int bits=1;bits<10000; bits+=1)
-//		{
-//			b = new BitCode(bits);
-//			assertEquals(Math.ceil((float)bits/32), b.getNumBits());
-//		}
-//		
-//	}
 
 	@Test
 	public void testAddBit() {
@@ -65,6 +51,25 @@ public class testBitCode {
 		assertEquals(true, b.get(1));
 		assertEquals(true, b.get(2));
 		assertEquals(false, b.get(3));
+	}
+	
+	@Test
+	public void testHammingDistance()
+	{
+		BitCode b1 = new BitCode(2048);
+		BitCode b2 = new BitCode(2048);
+		
+		assertEquals(0,b1.hammingDistance(b2));
+		
+		b1.addBit(1); b1.addBit(0); 
+		b2.addBit(1); b2.addBit(0);
+		
+		assertEquals(0, b1.hammingDistance(b2));
+		
+		b1.addBit(1); b1.addBit(0);
+		b2.addBit(0); b2.addBit(1);
+		
+		assertEquals(2, b2.hammingDistance(b1));
 	}
 
 }
