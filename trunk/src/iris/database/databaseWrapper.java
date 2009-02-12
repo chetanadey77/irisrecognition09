@@ -97,8 +97,37 @@ public class databaseWrapper {
 			 * A method that allows a user to add a new row to the database with Id as primary key.
 			 * @author Seb Smith & Andrew Durnin
 			 * @version 1.0
+	         * @throws SQLException 
 			 */
 	        
+	         private void addRecord(String id, int[] left, int right[]) throws SQLException{
+	        	 
+	        	 String insert_l = new String();
+		        	int count;
+		        	
+		            for(count =0; count < left.length; count++){
+
+		                if(count == 0)
+		                    insert_l = insert_l + left[count];
+		                else
+		                    insert_l = insert_l +"," + left[count];
+		            }
+		         	 
+		            String insert_r = new String();
+			        	int count_2;
+			        	
+			            for(count =0; count < right.length; count++){
+
+			                if(count == 0)
+			                    insert_r = insert_r + right[count];
+			                else
+			                    insert_r = insert_r +"," + right[count];
+			            }
+		        	   	 
+	        	 
+	        	 
+	        	 stmt.executeUpdate("INSERT into iris (id)(left)(right)VALUES('" + id + "', '{" + insert_l + "}', '{" + insert_r + "}')");
+	         }
 	        
 	         private void addId(String id) throws SQLException{
 	        	
