@@ -85,4 +85,11 @@ public class BitCode extends BitSet {
 				g2.fillRect(w * (i % (total_bits /  number_of_bits_high)),h* i * number_of_bits_high / total_bits , w, h);
 		return bi;
 	}
+	
+	public int hammingDistance(BitCode b)
+	{
+		BitSet bs = (BitSet) b.clone();
+		bs.xor(this);
+		return bs.cardinality();
+	}
 }
