@@ -1,8 +1,7 @@
 package analysis;
 
 
-/* This filtering is not complete, should log-Gabor or 2-D Gabor filter be used?
- * What is a filter bank? I will need either help on this.
+/* This filtering is not complete.
  */
 
 public class Gabor {

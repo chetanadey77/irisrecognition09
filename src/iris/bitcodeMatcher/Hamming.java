@@ -85,9 +85,12 @@ public class Hamming {
 	}
 
 	
-	
-	public int[] shiftBits(int[] array,int shift)
+	/* The first shift*shiftSize bits are shifted. In order to avoid an array
+     * out of bounds require that shift*shiftSize < array length.
+     */ 
+	public int[] shiftBits(int[] array,int shift,int shiftSize)
 	{
+
 		if(shift!=0)
 		{
 			int[] ans = new int[length];
@@ -97,23 +100,24 @@ public class Hamming {
 
 			if(shift<0) // Shift to the left.
 			{
-				for(i=0;i<p;i++) shifted[i] = irisCode[s+i];
-			    for(i=p;i<length;i++) shifted[i] = irisCode[i-p];
+				try{
+					for(i=0;i<p;i++) shifted[i] = irisCode[s+i];
+			    		for(i=p;i<length;i++) shifted[i] = irisCode[i-p];
+				}catch (ArrayOutOfBoundsException ex){
+					System.out.println(ex);
+				}
 			}
 			else // Shift to the right.
 			{
-				for(i=s;i<length;i++) shifted[i] = irisCode[i-s];
-				for(i=0;i<s;i++) shifted[i] = irisCode[i+p];		
+				try{
+					for(i=s;i<length;i++) shifted[i] = irisCode[i-s];
+					for(i=0;i<s;i++) shifted[i] = irisCode[i+p];
+				}catch(ArrayOutOfBoundsException){
+					System.out.Println(ex);
+				}		
 			}
 			return ans;
 		}
 		return irisCode;
 	}	
-
-	
-
-	
-
-	
-
 }
