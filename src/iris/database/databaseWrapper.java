@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -25,9 +26,14 @@ public class databaseWrapper {
 	 * A class that sets up an access node to the database
 	 * @author Seb Smith and Andrew Durnin
 	 * @version 1.0
+	 * @return 
+	 * @throws DbException 
+	 * @throws SQLException 
+	 * @throws IOException 
 	 */
 	
-	     
+
+			     
 			public databaseWrapper() throws DbException{
 	        
 			   System.out.println( "Setting up access point for Iris project\n" );
@@ -40,7 +46,7 @@ public class databaseWrapper {
 	        }
 	    
 	        try {
-	            conn = DriverManager.getConnection ("jdbc:postgresql://db.doc.ic.ac.uk/","g08v36205_u","6IxtbnTGoI");
+	            conn = DriverManager.getConnection ("jdbc:postgresql://localhost:1432","g08v36205_u","6IxtbnTGoI");
 	            stmt = conn.createStatement();
 	        } catch (Exception e) {
 	               System.err.println("Exception: " + e + "\n" + e.getMessage() );
@@ -141,7 +147,7 @@ public class databaseWrapper {
 				 */
 	         
 	        
-	         private String getNext(int[] left, int[] right) throws SQLException, IOException {
+	         private String getNext(Integer[] left, Integer[] right) throws SQLException, IOException {
 	     		
 	        	ResultSet rs = stmt.executeQuery("SELECT * FROM iris");
 	        	String id = new String();
@@ -157,8 +163,8 @@ public class databaseWrapper {
 	     		
 	     		else return null;
 	 			
-	             left = (int[])leftiris.getArray();
-	             right = (int[])rightiris.getArray();
+	             left = (Integer[])leftiris.getArray();
+	             right = (Integer[])rightiris.getArray();
 	     		
 	             return id;
 	 	        	 
