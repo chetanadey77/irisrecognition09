@@ -63,7 +63,7 @@ class EditDialog extends JDialog
         
         {      
         	super(owner, "Find the pupil and iris",true);
-        	
+        		//bi = gaussian_blur(bi,3);
         		sbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
         		
         		fixedsbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
@@ -186,5 +186,57 @@ class EditDialog extends JDialog
         	EyeData ed = new EyeData(ix,iy,irad,ox,oy,orad);
         	return ed;
         }
+        public BufferedImage gaussian_blur(BufferedImage bi,int pixels)
+        {
+        	float[] matrix = new float[(pixels*2+1)*(pixels*2+1)] ;
+        	double sigma = (double) pixels / 3.0;
+        	float normalise=0.0f;
+        	double sigma_sq = sigma*sigma;
+        	for (int x = -pixels; x<=pixels;x++)
+        		for (int y = -pixels; y<=pixels;y++)
+        		{
+        			matrix[x+pixels+(y+pixels)*(2*pixels+1)]=(float)Math.exp(-(double)(x*x+y*y)/(sigma_sq*2.0));
+        			normalise += matrix[x+pixels+(y+pixels)*(2*pixels+1)];   	
+        		}
+        	for (int x = -pixels; x<=pixels;x++)
+        		for (int y = -pixels; y<=pixels;y++)
+        		{
+        			matrix[x+pixels+(y+pixels)*(2*pixels+1)]= matrix[x+pixels+(y+pixels)*(2*pixels+1)] / normalise;   	
+        		}
+        	BufferedImageOp op = new ConvolveOp(new Kernel(2*pixels+1, 2*pixels+1,matrix));
+        	BufferedImage nbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
+        	op.filter(bi,nbi);
+        	return nbi;
+        	
+        }
+        public CircleType find_circle(BufferedImage bi, int pixel_blur, Bounds bounds)
+        {
+        	for (int radius= bounds.rmin;radius<=bounds.rmax;radius++)
+        		for (int x =bounds.xmin + radius;x<=bounds.xmax-radius;x++)
+        			for (int y =bounds.ymin + radius;y<=bounds.ymax-radius;y++)
+        			{
+        				if ()
+        			}
+                			
+        	CircleType c = new CircleType();
+        	return c;	
+        }
 }
+// controls how much of the image will be searched for a circle
+// in particular used to find pupil (which we know is inside iris)
+class Bounds
+{
+	public int xmin;
+	public int xmax;
+	
+	public int ymin;
+	public int ymax;
+	
+	public int rmin;
+	public int rmax;
+	
+	public int thetamin;
+	public int thetamax;
+}
+
        
