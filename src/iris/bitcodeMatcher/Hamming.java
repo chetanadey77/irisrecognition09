@@ -5,9 +5,6 @@ package iris.bitcodeMatcher;
 public class Hamming {
 	
 	
-	/* I am not sure about some of these attributes i.e. whether in fact they should be attributes at all. It
-	 * won't affect the answers but from a strict oo point of view I'm not sure if it's good practice.
-	 */
 	int[] irisCode1;
 	int[] mask1;
 	int[] irisCode2;
@@ -28,7 +25,6 @@ public class Hamming {
 		shiftSize = _shiftSize;
 		length = _irisCode1.length;
 		hdArray = new int[2*numShifts+1];
-		for(int i=0;i<numShifts;i++) hdArray[i] = 0;
 	}
 	
 	
