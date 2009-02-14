@@ -116,7 +116,7 @@ public class BitCode extends BitSet {
 			}
 
 			bsa.xor(bb);
-			System.out.println(bsa.size() +"  "+bsa.cardinality());
+			//System.out.println(bsa.size() +"  "+bsa.cardinality());
 			hc = (double) (bsa.cardinality())/(double)(bsa.size()) ;
 			if (min_hamming>hc) min_hamming=hc;
 			//need to include the masks in the above
