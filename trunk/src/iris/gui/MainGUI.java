@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
+import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -63,7 +64,7 @@ class MainFrame extends JFrame
     static JButton editimageTwo = new JButton("Edit image");
     static JButton bitcodeimageOne = new JButton("Bitcode image");
     static JButton bitcodeimageTwo = new JButton("Bitcode image");
-    
+    static JTextField hamming_result = new JTextField(30);
     static JButton compare = new JButton("Click to compare eyes");
 
     static ImageIcon iconEyeOne = new ImageIcon();
@@ -83,7 +84,8 @@ class MainFrame extends JFrame
     static EditDialog editdialogOne = null;
     static EditDialog editdialogTwo = null;
     
-    
+    static BitCode bcOne;
+    static BitCode bcTwo;
     static EyeData eyeOne;
     static EyeData eyeTwo;
     
@@ -178,6 +180,8 @@ class MainFrame extends JFrame
                 getContentPane().add(imageBitCodeOne);
                 compare.setEnabled(false);
                 getContentPane().add(compare);
+                hamming_result.setEnabled(false);
+                getContentPane().add(hamming_result);
                 getContentPane().add(paneleyeTwo);
                 getContentPane().add(imageBitCodeTwo);
                 //Handle the get Image buttons
@@ -226,7 +230,6 @@ class MainFrame extends JFrame
                     if (editdialogTwo == null) editdialogTwo = new EditDialog(MainFrame.this,biEyeTwo);
                         
                         editdialogTwo.setVisible(true);
-                    	//System.out.println("returned from edit");
                         eyeTwo = editdialogTwo.getEyeData();
                     	copyIris(biEyeTwo,biIrisTwo,eyeTwo);
                     	 iconIrisTwo.setImage(biIrisTwo);
@@ -238,34 +241,13 @@ class MainFrame extends JFrame
                 bitcodeimageOne.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent arg0) {
                 		long startTime=System.currentTimeMillis(); //calculate runtime
-                		//ImageSaverLoader isl = new ImageSaverLoader(); 
-                		//BufferedImage eyeball = isl.loadImage("eye.bmp");
                 		BitcodeGenerator b = new BitcodeGenerator();
-                		BitCode bc =  b.getBitcode(biEyeOne,eyeOne.inner.x,eyeOne.inner.y,eyeOne.inner.radius,eyeOne.outer.x,eyeOne.outer.y,eyeOne.outer.radius);
-                		//int[] intarr = bc.getBitCode();
-                		biBitCodeOne = bc.getBitCodeImage(768,24,8);
+                		bcOne =  b.getBitcode(biEyeOne,eyeOne.inner.x,eyeOne.inner.y,eyeOne.inner.radius,eyeOne.outer.x,eyeOne.outer.y,eyeOne.outer.radius);
+                		biBitCodeOne = bcOne.getBitCodeImage(768,24,8);
                 		iconBitCodeOne.setImage(biBitCodeOne);
                         imageBitCodeOne.setIcon(iconBitCodeOne);
                         imageBitCodeOne.repaint();
-                		
-//                		for (int i=0; i < intarr.length; i++)
-//                		{
-//                			System.out.println(i + ".: " + Integer.toBinaryString(intarr[i]) + " :: " + intarr[i] );
-//                		}
                 		System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
-                		/*int bit=0;
-                		for (int i=0; i < intarr.length; i++)
-                		{
-                			System.out.print(i + ".: ");
-                			for(int j=0;j<32;j++){
-                				if (bc.getBit(bit))
-                					System.out.print(1);
-                				else 
-                					System.out.print(0);
-                				bit++;
-                			}
-                			System.out.println();
-                		}*/
                 	
                         }
             });
@@ -273,34 +255,28 @@ class MainFrame extends JFrame
             	public void actionPerformed(ActionEvent arg0) {
             		long startTime=System.currentTimeMillis(); //calculate runtime
             		BitcodeGenerator b = new BitcodeGenerator();
-            		BitCode bc =  b.getBitcode(biEyeTwo,eyeTwo.inner.x,eyeTwo.inner.y,eyeTwo.inner.radius,eyeTwo.outer.x,eyeTwo.outer.y,eyeTwo.outer.radius);
-            		//int[] intarr = bc.getBitCode();
-            		biBitCodeTwo = bc.getBitCodeImage(768,24,8);
+            		bcTwo =  b.getBitcode(biEyeTwo,eyeTwo.inner.x,eyeTwo.inner.y,eyeTwo.inner.radius,eyeTwo.outer.x,eyeTwo.outer.y,eyeTwo.outer.radius);
+               		biBitCodeTwo = bcTwo.getBitCodeImage(768,24,8);
             		iconBitCodeTwo.setImage(biBitCodeTwo);
                     imageBitCodeTwo.setIcon(iconBitCodeTwo);
                     imageBitCodeTwo.repaint();
             		
-//            		for (int i=0; i < intarr.length; i++)
-//            		{
-//            			System.out.println(i + ".: " + Integer.toBinaryString(intarr[i]) + " :: " + intarr[i] );
-//            		}
             		System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
-            		/*int bit=0;
-            		for (int i=0; i < intarr.length; i++)
-            		{
-            			System.out.print(i + ".: ");
-            			for(int j=0;j<32;j++){
-            				if (bc.getBit(bit))
-            					System.out.print(1);
-            				else 
-            					System.out.print(0);
-            				bit++;
-            			}
-            			System.out.println();
-            		}*/
+            		compare.setEnabled(true);
             	
                     }
         });
+                compare.addActionListener(new ActionListener() {
+                	public void actionPerformed(ActionEvent arg0) {
+                		long startTime=System.currentTimeMillis(); //calculate runtime
+                		double hd = BitCode.hammingDistance(bcOne,bcTwo);
+                		hamming_result.setText("Hamming Distance "+hd);
+                		hamming_result.setEnabled(true);
+                		
+                		System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
+                	
+                        }
+            });
         }
     private static void copyIris(BufferedImage bifrom, BufferedImage bito, EyeData ed )
     {
