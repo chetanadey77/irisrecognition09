@@ -246,10 +246,10 @@ class EditDialog extends JDialog
         	double d =5.0/ 4.0 - (double) r;
         	//normally will do 1/8th of the circle and then test 8
         	//versions but first and last only get tested 4 times
-        	if ((octant & 129)>0) {total+=bi.getRGB(cenx+x,ceny+y);count++;}
-        	if ((octant & 6)>0) {total+=bi.getRGB(cenx+y,ceny+x);count++;}
-        	if ((octant & 24)>0) {total+=bi.getRGB(cenx+x,ceny-y);count++;}
-        	if ((octant & 96)>0) {total+=bi.getRGB(cenx-y,ceny+x);count++;}
+        	if ((octant & 129)>0) {total+=bi.getRGB(cenx+x,ceny+y)&255;count++;}
+        	if ((octant & 6)>0) {total+=bi.getRGB(cenx+y,ceny+x)&255;count++;}
+        	if ((octant & 24)>0) {total+=bi.getRGB(cenx+x,ceny-y)&255;count++;}
+        	if ((octant & 96)>0) {total+=bi.getRGB(cenx-y,ceny+x)&255;count++;}
         	while(y>x)
         	{
         		if (d<0) d+= 2.0*(double)x+3.0;
@@ -259,22 +259,22 @@ class EditDialog extends JDialog
         			y--;
         		}
         		x++;
-        		if ((octant & 1)>0) {total+=bi.getRGB(cenx+x,ceny+y);count++;}
-        		if ((octant & 2)>0) {total+=bi.getRGB(cenx+y,ceny+x);count++;}
-        		if ((octant & 4)>0) {total+=bi.getRGB(cenx+y,ceny-x);count++;}
-        		if ((octant & 8)>0) {total+=bi.getRGB(cenx+x,ceny-y);count++;}
-        		if ((octant & 16)>0) {total+=bi.getRGB(cenx-x,ceny+y);count++;}
-        		if ((octant & 32)>0) {total+=bi.getRGB(cenx-y,ceny+x);count++;}
-        		if ((octant & 64)>0) {total+=bi.getRGB(cenx-y,ceny-x);count++;}
-        		if ((octant & 128)>0) {total+=bi.getRGB(cenx-x,ceny-y);count++;}
+        		if ((octant & 1)>0) {total+=bi.getRGB(cenx+x,ceny+y)&255;count++;}
+        		if ((octant & 2)>0) {total+=bi.getRGB(cenx+y,ceny+x)&255;count++;}
+        		if ((octant & 4)>0) {total+=bi.getRGB(cenx+y,ceny-x)&255;count++;}
+        		if ((octant & 8)>0) {total+=bi.getRGB(cenx+x,ceny-y)&255;count++;}
+        		if ((octant & 16)>0) {total+=bi.getRGB(cenx-x,ceny+y)&255;count++;}
+        		if ((octant & 32)>0) {total+=bi.getRGB(cenx-y,ceny+x)&255;count++;}
+        		if ((octant & 64)>0) {total+=bi.getRGB(cenx-y,ceny-x)&255;count++;}
+        		if ((octant & 128)>0) {total+=bi.getRGB(cenx-x,ceny-y)&255;count++;}
         		
         	}
         	if(y==x)
         	{
-        		if ((octant & 3)>0) {total+=bi.getRGB(cenx+x,ceny+x);count++;}
-        		if ((octant & 12)>0) {total+=bi.getRGB(cenx+x,ceny-x);count++;}
-        		if ((octant & 48)>0) {total+=bi.getRGB(cenx-x,ceny-x);count++;}
-        		if ((octant & 192)>0) {total+=bi.getRGB(cenx-x,ceny+x);count++;}
+        		if ((octant & 3)>0) {total+=bi.getRGB(cenx+x,ceny+x)&255;count++;}
+        		if ((octant & 12)>0) {total+=bi.getRGB(cenx+x,ceny-x)&255;count++;}
+        		if ((octant & 48)>0) {total+=bi.getRGB(cenx-x,ceny-x)&255;count++;}
+        		if ((octant & 192)>0) {total+=bi.getRGB(cenx-x,ceny+x)&255;count++;}
         	}
         	
         	
@@ -287,7 +287,7 @@ class EditDialog extends JDialog
         	Bounds b = new Bounds();
             int blur=20;
             b.rmin = 30;// specification is iris must be at least 70 pixels in diameter
-            b.rmin=80;//just for testing
+            b.rmin=90;//just for testing
             b.xmin = blur;
             b.ymin = blur;
             b.xmax = bi.getWidth() -blur;
