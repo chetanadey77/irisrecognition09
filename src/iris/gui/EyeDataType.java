@@ -1,10 +1,10 @@
 package iris.gui;
 
-public class EyeData {
+public class EyeDataType {
 	   public CircleType inner;
        public CircleType outer;
        
-	public EyeData(int ix, int iy, int irad, int ox, int oy, int orad) {
+	public EyeDataType(int ix, int iy, int irad, int ox, int oy, int orad) {
 		inner = new CircleType();
 	    outer = new CircleType();
 		inner.x=ix;
@@ -15,7 +15,7 @@ public class EyeData {
  	   	outer.radius = orad;
 	}
 
-	public EyeData()
+	public EyeDataType()
 	{
 		inner = new CircleType();
 	    outer = new CircleType();
