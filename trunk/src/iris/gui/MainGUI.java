@@ -86,8 +86,8 @@ class MainFrame extends JFrame
     
     static BitCode bcOne;
     static BitCode bcTwo;
-    static EyeData eyeOne;
-    static EyeData eyeTwo;
+    static EyeDataType eyeOne;
+    static EyeDataType eyeTwo;
     
     static final int FRAME_WIDTH = 900;
     static final int FRAME_HEIGHT = 850;
@@ -278,7 +278,7 @@ class MainFrame extends JFrame
                         }
             });
         }
-    private static void copyIris(BufferedImage bifrom, BufferedImage bito, EyeData ed )
+    private static void copyIris(BufferedImage bifrom, BufferedImage bito, EyeDataType ed )
     {
     	int colour;
         for(int x =0;x<320;x++)
