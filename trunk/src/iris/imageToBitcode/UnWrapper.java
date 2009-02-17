@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
  */
 public class UnWrapper {
 
-	CoordConverter cc;
+	static CoordConverter cc;
 
 	public UnWrapper() { }
 	
@@ -28,7 +28,7 @@ public class UnWrapper {
 	 * @param unwrWidth the height (in pixels) of the unwrapped iris image
 	 * @return the unwrapped iris as a BufferedImage
 	 */
-	public BufferedImage unWrap(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris, int unwrHeight, int unwrWidth)
+	public static BufferedImage unWrap(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris, int unwrHeight, int unwrWidth)
 	{
 		BufferedImage retImg = new BufferedImage(unwrWidth, unwrHeight, BufferedImage.TYPE_BYTE_GRAY);
 		cc = new CoordConverter(xPup,yPup,rPup,xIris,yIris,rIris);
@@ -68,7 +68,7 @@ public class UnWrapper {
 	 */
 	public int[][] unWrapByteArr(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris, int unwrHeight, int unwrWidth)
 	{
-		BufferedImage img = this.unWrap(eyeImage, xPup, yPup, rPup, xIris, yIris, rIris, unwrHeight, unwrWidth);
+		BufferedImage img = UnWrapper.unWrap(eyeImage, xPup, yPup, rPup, xIris, yIris, rIris, unwrHeight, unwrWidth);
 		int[][] retvals = new int[img.getWidth()][img.getHeight()];
 		Color c;
 		for (int i=0; i<img.getWidth()-1; i++)
@@ -97,7 +97,7 @@ public class UnWrapper {
 	 */
 	public BufferedImage unWrapWithGuides(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris, int unwrHeight, int unwrWidth)
 	{
-		BufferedImage grayImage = this.unWrap(eyeImage, xPup, yPup, rPup, xIris, yIris, rIris, unwrHeight, unwrWidth);
+		BufferedImage grayImage = UnWrapper.unWrap(eyeImage, xPup, yPup, rPup, xIris, yIris, rIris, unwrHeight, unwrWidth);
 		BufferedImage retImage = this.toColor(grayImage);
 
 		Graphics g = retImage.getGraphics();

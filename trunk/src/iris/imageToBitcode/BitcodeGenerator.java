@@ -21,11 +21,11 @@ public class BitcodeGenerator {
 	CoordConverter c;
 	UnWrapper uw;
 	int[][] intensityArr;
-	
+
 	int xp, yp, rp, xi, yi, ri;
 	int imgWidth, imgHeight;
 	int unwrappedWidth, unwrappedHeight;
-	
+
 	double a, b, w, a2, b2, x0, y0;	// alpha, beta and omega
 	double ab_lowLim, ab_upLim, ab_step; // alpha and beta range
 	int ab_numSteps; 
@@ -35,34 +35,31 @@ public class BitcodeGenerator {
 	int x0_numSteps;
 	double y0_lowLim, y0_upLim, y0_step; // y0 range
 	int y0_numSteps;
-	
+
 	public BitcodeGenerator()
 	{			
 		// set ranges for Gabor filter constants
-		ab_lowLim = 50;
-		ab_upLim = 50;
+		ab_lowLim = 1000;
+		ab_upLim = 1000;
 		ab_numSteps = 1;
-		
+
 		w_lowLim = 0.01;
-		w_upLim  = 0.05;
-		w_numSteps = 16;
-		
-		x0_numSteps = 8;
-		x0_lowLim = 0;
-		x0_upLim = 1.0;
-		
-		y0_numSteps = 8;
-		y0_lowLim = 0;
-		y0_upLim = 1.0;
-		
+		w_upLim  = 0.5;
+		w_numSteps = 8;
+
+		x0_numSteps = 2;
+		x0_lowLim = 0.5;
+		x0_upLim = 0.8;
+
+		y0_numSteps = 2;
+		y0_lowLim = 0.5;
+		y0_upLim = 0.8;
+
 		// width and height of the unwrapped image. Up those numbers => more detail and longer runtime
-		unwrappedWidth = 180;
-		unwrappedHeight = 50;
-		
-		// length of bitcode determined by the number of 
-		bitcode = new BitCode(ab_numSteps*2 * w_numSteps * x0_numSteps * y0_numSteps);
+		unwrappedWidth = 360;
+		unwrappedHeight = 100;
 	}
-	
+
 	/**
 	 * Generate bitcode
 	 * @param eyeImage original image of an eye
@@ -80,16 +77,19 @@ public class BitcodeGenerator {
 		xi = xIris; yi = yIris; ri = rIris;
 		c = new CoordConverter(xp,yp,rp,xi,yi,ri);
 		uw = new UnWrapper();
-		
+
+		// length of bitcode determined by the number of combinations of constants
+		bitcode = new BitCode(ab_numSteps*2 * w_numSteps * x0_numSteps * y0_numSteps);
+
 		intensityArr = uw.unWrapByteArr(eyeImage, xp, yp, rp, xi, yi, ri, unwrappedHeight, unwrappedWidth); //the unwrapped iris pixels
 		imgWidth = intensityArr.length;
 		imgHeight = intensityArr[0].length;
-		
+
 		ab_step = (ab_upLim - ab_lowLim)/ab_numSteps;
 		w_step = (w_upLim - w_lowLim)/w_numSteps;
-		x0_step = imgWidth * (x0_upLim - x0_lowLim)/ (x0_numSteps-1);
-		y0_step = imgWidth * (y0_upLim - y0_lowLim)/ (y0_numSteps-1);
-		
+		x0_step = imgWidth * (x0_upLim - x0_lowLim)/ x0_numSteps;
+		y0_step = imgWidth * (y0_upLim - y0_lowLim)/ y0_numSteps;
+
 		for (float aI=0; aI < ab_numSteps; aI++)
 		{
 			for (float bI=0; bI < ab_numSteps; bI++ )
@@ -105,25 +105,25 @@ public class BitcodeGenerator {
 							w = w_lowLim + wI*w_step;
 							x0 = x0_lowLim + x0I*x0_step;
 							y0 = y0_lowLim + y0I*y0_step;
-							//System.out.println(a+"::"+b+"::"+w+"::"+x0+"::"+y0);
-							this.gaborFilter();
+
+							this.gaborFilter1D();
 						}
 					}
 				}
 			}
 		}
-		
+
 		return bitcode;
 	}
-	
-	private void gaborFilter()
+
+	private void gaborFilter2D()
 	{
 		a2 = a*a;
 		b2 = b*b; 
 		double k,imPart,rePart,tmpVal;
 		double sumRe = 0;
 		double sumIm = 0;		
-		
+
 		for(double x = 0; x < imgWidth-1; x++)
 		{
 			for(double y=0; y < imgHeight-1; y++)
@@ -135,7 +135,7 @@ public class BitcodeGenerator {
 				imPart = Math.sin( tmpVal );
 				//cos(-2*pi*w(x-x0 + y-y0))
 				rePart = Math.cos( tmpVal );
-				
+
 				sumRe += (double)intensityArr[(int) x][(int) y] * k * imPart;
 				sumIm += (double)intensityArr[(int) x][(int) y] * k * rePart; 
 			}
@@ -144,7 +144,36 @@ public class BitcodeGenerator {
 		bitcode.addBit(sumRe >= 0);
 		bitcode.addBit(sumIm >= 0);
 	}
-	
-	
-	
+
+	private void gaborFilter1D()
+	{
+		a2 = a*a;
+		b2 = b*b; 
+		double k,imPart,rePart,tmpVal;
+		double sumRe, sumIm;
+		
+		for(double x = 0; x < imgWidth-1; x++)
+		{
+			sumRe = sumIm = 0;
+			for(double y=0; y < imgHeight-1; y++)
+			{
+				//e^(-pi((x-x0)^2/a^2 + (y-y0)^2/b^2) 
+				k = Math.exp( -Math.PI * (Math.pow( x - x0, 2) / a2 + Math.pow( y - y0, 2) / b2) );
+				//sin(-2*pi*w(x-x0 + y-y0))
+				tmpVal =  -w * 2 * Math.PI * ( x-x0 + y-y0); 
+				imPart = Math.sin( tmpVal );
+				//cos(-2*pi*w(x-x0 + y-y0))
+				rePart = Math.cos( tmpVal );
+
+				sumRe += (double)intensityArr[(int) x][(int) y] * k * imPart;
+				sumIm += (double)intensityArr[(int) x][(int) y] * k * rePart; 
+			}
+			bitcode.addBit(sumRe >= 0);
+			bitcode.addBit(sumIm >= 0);
+		}
+
+	}
+
+
+
 }
