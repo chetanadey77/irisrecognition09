@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Reports/report1.tex</name>
+			<type>1</type>
+			<location>/Users/ss1008/Desktop/report1.tex</location>
+		</link>
+	</linkedResources>
 </projectDescription>
