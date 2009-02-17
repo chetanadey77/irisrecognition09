@@ -43,7 +43,9 @@ public class LocateIris {
     	double diff = 0.0;
     	int xo=0,yo=0,ro=0;
     	for (int radius= bounds.rmin;radius<=bounds.rmax;radius++)
+    	{
     		for (int x =bounds.xmin + radius;x<=bounds.xmax-radius;x++)
+    		{
     			for (int y =bounds.ymin + radius;y<=bounds.ymax-radius;y++)
     			{
     				diff = Math.abs(loop_integral(bigb,x,y,radius,octant)- loop_integral(bigb,x,y,radius-1,octant));
@@ -53,7 +55,8 @@ public class LocateIris {
     					//xo=x; yo=y; ro=radius;
     				}
     			}
-    	
+    		}
+    	}
     	 Graphics g  = bi.createGraphics();
     	 for(int q=0; q<cl.get_size();q++)
     		 g.drawOval(cl.get_circle(q).x-cl.get_circle(q).radius, 
@@ -116,8 +119,8 @@ public class LocateIris {
     	EyeDataType ed = new EyeDataType();
     	Bounds b = new Bounds();
         int blur=4;
-        b.rmin = 30;// specification is iris must be at least 70 pixels in diameter
-        b.rmin=45;//just for testing
+        b.rmin = 20;// specification is iris must be at least 70 pixels in diameter
+        //b.rmin=45;//just for testing
         b.xmin = blur;
         b.ymin = blur;
         b.xmax = bi.getWidth() -blur;
