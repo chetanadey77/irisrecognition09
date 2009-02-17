@@ -56,20 +56,26 @@ public class testBitCode {
 	@Test
 	public void testHammingDistance()
 	{
-		BitCode b1 = new BitCode(2048);
-		BitCode b2 = new BitCode(2048);
+		BitCode b1 = new BitCode(2);
+		BitCode b2 = new BitCode(2);
 		
-		assertEquals(0,BitCode.hammingDistance(b1,b2));
 		
 		b1.addBit(1); b1.addBit(0); 
 		b2.addBit(1); b2.addBit(0);
-		
+		System.out.println(b1.size()+" "+b2.size());
 		assertEquals(0, BitCode.hammingDistance(b1,b2));
 		
 		b1.addBit(1); b1.addBit(0);
 		b2.addBit(0); b2.addBit(1);
+		System.out.println(b1.length()+" "+b2.length());
+		System.out.println(b1.getBitcodeSize()   +" "+b2.getBitcodeSize());
+		assertEquals(0.5, BitCode.hammingDistance(b1,b2));
 		
-		assertEquals(2, BitCode.hammingDistance(b1,b2));
+		b1.clear(0,3);b2.clear();
+		b1.addBit(1);b1.addBit(1);b1.addBit(0);b1.addBit(0);b1.addBit(1);
+		b2.addBit(1);b2.addBit(0);b2.addBit(0);b2.addBit(1);b2.addBit(1);
+		System.out.println(b1.size()+" "+b2.size());
+		assertEquals(0.0, BitCode.hammingDistance(b1,b2));
+		
 	}
-
 }
