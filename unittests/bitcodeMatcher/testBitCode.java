@@ -59,17 +59,17 @@ public class testBitCode {
 		BitCode b1 = new BitCode(2048);
 		BitCode b2 = new BitCode(2048);
 		
-		assertEquals(0,b1.hammingDistance(b2));
+		assertEquals(0,BitCode.hammingDistance(b1,b2));
 		
 		b1.addBit(1); b1.addBit(0); 
 		b2.addBit(1); b2.addBit(0);
 		
-		assertEquals(0, b1.hammingDistance(b2));
+		assertEquals(0, BitCode.hammingDistance(b1,b2));
 		
 		b1.addBit(1); b1.addBit(0);
 		b2.addBit(0); b2.addBit(1);
 		
-		assertEquals(2, b2.hammingDistance(b1));
+		assertEquals(2, BitCode.hammingDistance(b1,b2));
 	}
 
 }

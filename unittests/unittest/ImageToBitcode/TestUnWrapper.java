@@ -1,11 +1,7 @@
 package unittest.ImageToBitcode;
 
-import static org.junit.Assert.*;
-
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import iris.imageToBitcode.CoordConverter;
 import iris.imageToBitcode.UnWrapper;
 
 import org.junit.Before;
@@ -23,12 +19,11 @@ public class TestUnWrapper {
 		xi = 182; yi = 134; ri = 37;
 		xp = 182; yp = 134; rp = 100;
 		
-		UnWrapper u = new UnWrapper();
 		ImageSaverLoader isl = new ImageSaverLoader();
-		BufferedImage img = isl.loadImage("eye.bmp");
+		BufferedImage img = isl.loadImage("002_1_1.gif");
 		
-		BufferedImage retImg = u.unWrap(img,xp,yp,rp,xi,yi,ri,100,360);
-		isl.saveImage(retImg, "unwrapped1.jpg");
+		BufferedImage retImg = UnWrapper.unWrap(img,xp,yp,rp,xi,yi,ri,100,360);
+		isl.saveImage(retImg, "unwrapped2.jpg");
 	
 	}
 	
@@ -40,7 +35,7 @@ public class TestUnWrapper {
 		
 		UnWrapper u = new UnWrapper();
 		ImageSaverLoader isl = new ImageSaverLoader();
-		BufferedImage img = isl.loadImage("eye.bmp");
+		BufferedImage img = isl.loadImage("002_1_1.gif");
 		
 		BufferedImage retImg = u.unWrapWithGuides(img,xp,yp,rp,xi,yi,ri,100,360);
 		isl.saveImage(retImg, "unwrapWithGuides.jpg");
