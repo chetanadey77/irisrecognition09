@@ -87,7 +87,7 @@ public class BitCode extends BitSet {
 	}
 	
 	public static double hammingDistance(BitCode ba, BitCode bb)
-	{	final int rotation = 10; //number of degrees (from -rotation to +rotation)
+	{	final int rotation = 0; //number of degrees (from -rotation to +rotation)
 		//rotation =0 should compare with no rotation
 		//need to work out where to get the mask from
 		//it is likely to be either part of the bit code for the eye
@@ -99,30 +99,34 @@ public class BitCode extends BitSet {
 		//I think that we should do the shifting in this function 
 		
 		//In the paper from 2004 below 0.32 showed a very high chance of non independence
+		if (ba.getBitcodeSize()==0) {System.out.println("Bit code size is 0");return 2.0;}
+
+		BitCode bsa =  new BitCode(ba.getBitcodeSize());
+		for(int i =0; i<ba.getBitcodeSize();i++) bsa.addBit(false);
 		
-		BitSet bsa = (BitSet) ba.clone();
 		//BitSet bsma = (BitSet) maska.clone();
 		double min_hamming=1.0;
 		double hc;
 		//doesn't seem to be a bitset shift function
-		for (int i = - ba.size()*rotation/360;i<= ba.size()*rotation/360; i++)
+		for (int i = - ba.getBitcodeSize()*rotation/360;i<= ba.getBitcodeSize()*rotation/360; i++)
 		{
 			bsa.clear();
 			//bsma.clear();
-			for(int j =0;j<ba.size();j++)
+			for(int j =0;j<ba.getBitcodeSize();j++)
 			{
-				if (ba.get((i+ba.size()+j)%ba.size())) bsa.set(j,true);
+				if (ba.get((i+ba.getBitcodeSize()+j)%ba.getBitcodeSize())) bsa.set(j,true);
 				//need the same for mask a
 			}
 
 			bsa.xor(bb);
-			//System.out.println(bsa.size() +"  "+bsa.cardinality());
-			hc = (double) (bsa.cardinality())/(double)(bsa.size()) ;
+			//System.out.println(bsa.getBitcodeSize()() +"  "+bsa.cardinality());
+		
+			hc = (double) (bsa.cardinality())/(double)(bsa.getBitcodeSize()) ;
 			if (min_hamming>hc) min_hamming=hc;
 			//need to include the masks in the above
 		}
 		
-		bsa.xor(bb);
+		
 		return min_hamming;
 	}
 }
