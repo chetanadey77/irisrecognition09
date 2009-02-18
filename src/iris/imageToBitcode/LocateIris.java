@@ -46,7 +46,6 @@ public class LocateIris {
     	int xo=0,yo=0,ro=0;
     	for (int radius= bounds.rmin;radius<=bounds.rmax;radius++)
     	{
-    		//System.out.println(radius);
     		for (int x = Math.max(radius,bounds.xmin);x<Math.min(bi.getWidth()-radius, bounds.xmax);x++)
     		{
     			for (int y =Math.max(radius, bounds.ymin) ;y<Math.min(bi.getHeight()-radius,bounds.ymax);y++)
@@ -59,21 +58,10 @@ public class LocateIris {
     				}
     			}
     		}
-    	}  //  	 for(int q=0; q<cl.get_size();q++)
-    //		 bi = draw_part_circle(bi, cl.get_circle(q).x, cl.get_circle(q).y,cl.get_circle(q).radius, octant, 0xFFFFFF);
-    		// g.drawOval(cl.get_circle(q).x-cl.get_circle(q).radius, 
-    			//	 cl.get_circle(q).y-cl.get_circle(q).radius,
-    				// cl.get_circle(q).radius*2,cl.get_circle(q).radius*2);
-    	// g.drawOval(xo-ro, yo-ro, ro*2, ro*2);
-    	 /*bi = draw_part_circle(bi,xo,yo,ro, octant, 0xFFFFFF);
-
-    	 Graphics g  = bi.createGraphics();
-    	 String message = xo + " , " + yo + "  Radius "+ro;
-    	 g.setFont(new Font("SansSerif",Font.BOLD,18));
-    	 g.drawString(message,10,20);
-    	 ImageSaverLoader isl = new ImageSaverLoader();
-    	 isl.saveImage(bi, "locateiris.gif");*/
-        c.x = xo;
+    	} 
+    	//for(int q=0; q<cl.get_size();q++)
+    	//	 bi = draw_part_circle(bi, cl.get_circle(q).x, cl.get_circle(q).y,cl.get_circle(q).radius, octant, 0xFFFFFF);
+    	c.x = xo;
         c.y = yo;
         c.radius = ro;
     	return c;	
