@@ -53,7 +53,7 @@ public class LocateIris {
     				diff = Math.abs(loop_integral(bigb,x,y,radius,octant)- loop_integral(bigb,x,y,radius-1,octant));
     				if (diff>max_diff) 
     				{
-    					max_diff = diff;cl.add_circle(new CircleType(x,y,radius,diff));
+    					max_diff = diff;//cl.add_circle(new CircleType(x,y,radius,diff));
     					xo=x; yo=y; ro=radius;
     				}
     			}
