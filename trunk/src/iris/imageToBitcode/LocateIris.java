@@ -38,7 +38,7 @@ public class LocateIris {
     }
     public static CircleType find_circle(BufferedImage bi, int pixel_blur, char octant,Bounds bounds)
     {
-    	BufferedImage bigb = gaussian_blur(bi,3);
+    	BufferedImage bigb = gaussian_blur(bi,pixel_blur);
     	CircleList cl = new CircleList(50);
     	CircleType c = new CircleType();
     	double max_diff = 0.0;
@@ -160,7 +160,7 @@ public class LocateIris {
     {
     	EyeDataType ed = new EyeDataType();
     	Bounds b = new Bounds();
-        int blur=12;
+        int blur=3;
         b.rmin = 29;// specification is iris must be at least 70 pixels in diameter
         //b.rmin=45;//just for testing
         b.xmin = 110;//bi.getWidth()*3/8;
