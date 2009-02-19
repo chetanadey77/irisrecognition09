@@ -41,15 +41,16 @@ public class TestLocateIris {
 		File[] listOfFiles = folder.listFiles(); 
 		ImageSaverLoader isl = new ImageSaverLoader();
 		//String[] listOf = {"072_1_1.gif"};
-		
 		for (int i = 0; i < listOfFiles.length; i++) 
+		//for (int i = 0; i < 1; i++) 
 		{
 			if (listOfFiles[i].isFile()) {
 				file = listOfFiles[i].getName();
 				//file = listOf[i];
 				System.out.println(file);
 				eyeImage = isl.loadImage("/" + load_path, file);
-                ed=LocateIris.find_iris(eyeImage);
+				//for(int n=0;i<10;i++)
+				ed=LocateIris.find_iris(eyeImage);
                 x = ed.inner.x;
                 y = ed.inner.y;
                 r = ed.inner.radius;
