@@ -42,7 +42,7 @@ public class TestLocateIris {
 		ImageSaverLoader isl = new ImageSaverLoader();
 		//String[] listOf = {"072_1_1.gif"};
 		for (int i = 0; i < listOfFiles.length; i++) 
-		//for (int i = 0; i < 1; i++) 
+		//for (int i = 0; i < 3; i++) 
 		{
 			if (listOfFiles[i].isFile()) {
 				file = listOfFiles[i].getName();
@@ -57,9 +57,19 @@ public class TestLocateIris {
                 eyeImage = LocateIris.draw_part_circle(eyeImage,x,y,r,(char)126, 0xFFFFFF);
            	 	Graphics g  = eyeImage.createGraphics();
            	 	String message = x + " , " + y + "  Radius " + r;
-           	 	g.setFont(new Font("SansSerif",Font.BOLD,18));
+           	 	//g.setFont(new Font("SansSerif",Font.BOLD,18));
            	 	g.drawString(message,10,20);
+           	 	x = ed.outer.x;
+           	 	y = ed.outer.y;
+           	 	r = ed.outer.radius;
+           	 	eyeImage = LocateIris.draw_part_circle(eyeImage,x,y,r,(char)102, 0xFFFFFF);
+        	 	g  = eyeImage.createGraphics();
+        	 	message = x + " , " + y + "  Radius " + r;
+        	 	//g.setFont(new Font("SansSerif",Font.BOLD,18));
+        	 	g.drawString(message,10,40);
+        	 	
            	 	isl.saveImage(eyeImage,"/unittests/testImages/pupil_centres/",file);
+           	 	
            	 	if ( x>xmax) xmax=x;
            	 	if ( r>rmax) rmax=r;
            	 	if ( y>ymax) ymax=y;
