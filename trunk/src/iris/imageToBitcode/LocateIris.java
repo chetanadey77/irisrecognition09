@@ -46,21 +46,23 @@ public class LocateIris {
     	
     	CircleList cl = new CircleList(50);
     	CircleType c = new CircleType();
-    	double[][][] hist = new double[bounds.rmax+1][bi.getWidth()][bi.getHeight()];
+    	double[][][] hist = new double[bounds.rmax+1 - bounds.rmin][bounds.xmax +1 - bounds.xmin][bounds.ymax +1 - bounds.ymin];
     	double max_diff = 0.0;
     	double diff = 0.0;
     	int xo=0,yo=0,ro=0;
     	int r_min = bounds.rmin;
+    	int x_min = bounds.xmin;
+    	int y_min = bounds.ymin;
     	for (int radius= r_min;radius<=bounds.rmax;radius++)
     	{
     		for (int x = Math.max(radius,bounds.xmin);x<Math.min(bi.getWidth()-radius, bounds.xmax);x++)
     		{
     			for (int y =Math.max(radius, bounds.ymin) ;y<Math.min(bi.getHeight()-radius,bounds.ymax);y++)
     			{
-    				hist[radius][x][y] = loop_integral(array_image,x,y,radius,octant);
+    				hist[radius-r_min][x-x_min][y-y_min] = loop_integral(array_image,x,y,radius,octant);
     				if (radius>r_min)
     				{
-    					diff = Math.abs(hist[radius][x][y] - hist[radius-1][x][y]);
+    					diff = Math.abs(hist[radius-r_min][x-x_min][y-y_min] - hist[radius-1-r_min][x-x_min][y-y_min]);
     					if (diff>max_diff) 
     					{
     						max_diff = diff;//cl.add_circle(new CircleType(x,y,radius,diff));
@@ -171,7 +173,7 @@ public class LocateIris {
     {
     	EyeDataType ed = new EyeDataType();
     	Bounds b = new Bounds();
-        int blur=3;
+        int blur=5;
         b.rmin = 29;// specification is iris must be at least 70 pixels in diameter
         //b.rmin=45;//just for testing
         b.xmin = 110;//bi.getWidth()*3/8;
@@ -184,16 +186,18 @@ public class LocateIris {
         CircleType c = find_circle(bi,blur,(char)126,b);
         ed.inner = c;
         
-        /*blur=2;
-        b.xmin = bl;
-        b.ymin = blur;
-        b.xmax = bi.getWidth() - blur;
-        b.ymax = bi.getHeight() - blur;
-        b.rmax = b.xmax-b.xmin;
-        b.rmin = 30;// specification is iris must be at least 70 pixels in diameter
+        blur=1;
+        b.rmin = 75;// specification is iris must be at least 70 pixels in diameter
+        b.rmax = 120;
         
-        c = find_circle(bi,10,(char)231,b);
-        */
+        b.xmin = c.x - b.rmin / 4;
+        b.ymin = c.y - b.rmin /5;
+        b.xmax = c.x + b.rmin / 4;
+        b.ymax = c.y + b.rmin /5;
+        
+        c = find_circle(bi,10,(char)102,b);
+        
+        ed.outer = c;
         return ed;
     }
     
