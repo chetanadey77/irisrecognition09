@@ -39,22 +39,33 @@ public class LocateIris {
     public static CircleType find_circle(BufferedImage bi, int pixel_blur, char octant,Bounds bounds)
     {
     	BufferedImage bigb = gaussian_blur(bi,pixel_blur);
+    	int[][] array_image = new int[bigb.getWidth()][bigb.getHeight()];
+    	for (int x=0;x<bigb.getWidth();x++)
+    		for (int y=0;y<bigb.getHeight();y++)
+    			array_image[x][y] = bigb.getRGB(x,y) & 255;
+    	
     	CircleList cl = new CircleList(50);
     	CircleType c = new CircleType();
+    	double[][][] hist = new double[bounds.rmax+1][bi.getWidth()][bi.getHeight()];
     	double max_diff = 0.0;
     	double diff = 0.0;
     	int xo=0,yo=0,ro=0;
-    	for (int radius= bounds.rmin;radius<=bounds.rmax;radius++)
+    	int r_min = bounds.rmin;
+    	for (int radius= r_min;radius<=bounds.rmax;radius++)
     	{
     		for (int x = Math.max(radius,bounds.xmin);x<Math.min(bi.getWidth()-radius, bounds.xmax);x++)
     		{
     			for (int y =Math.max(radius, bounds.ymin) ;y<Math.min(bi.getHeight()-radius,bounds.ymax);y++)
     			{
-    				diff = Math.abs(loop_integral(bigb,x,y,radius,octant)- loop_integral(bigb,x,y,radius-1,octant));
-    				if (diff>max_diff) 
+    				hist[radius][x][y] = loop_integral(array_image,x,y,radius,octant);
+    				if (radius>r_min)
     				{
-    					max_diff = diff;//cl.add_circle(new CircleType(x,y,radius,diff));
-    					xo=x; yo=y; ro=radius;
+    					diff = Math.abs(hist[radius][x][y] - hist[radius-1][x][y]);
+    					if (diff>max_diff) 
+    					{
+    						max_diff = diff;//cl.add_circle(new CircleType(x,y,radius,diff));
+    						xo=x; yo=y; ro=radius;
+    					}
     				}
     			}
     		}
@@ -66,7 +77,7 @@ public class LocateIris {
         c.radius = ro;
     	return c;	
     }
-    public static double loop_integral(BufferedImage bi, int cenx, int ceny, int r, char octant)
+    public static double loop_integral(int[][] array_bi, int cenx, int ceny, int r, char octant)
     {
     	int total=0;
     	int count =0;
@@ -76,10 +87,10 @@ public class LocateIris {
     	double d =5.0/ 4.0 - (double) r;
     	//normally will do 1/8th of the circle and then test 8
     	//versions but first and last only get tested 4 times
-    	if ((octant & 129)>0) {total+=bi.getRGB(cenx+x,ceny+y)&255;count++;}
-    	if ((octant & 6)>0) {total+=bi.getRGB(cenx+y,ceny+x)&255;count++;}
-    	if ((octant & 24)>0) {total+=bi.getRGB(cenx+x,ceny-y)&255;count++;}
-    	if ((octant & 96)>0) {total+=bi.getRGB(cenx-y,ceny+x)&255;count++;}
+    	if ((octant & 129)>0) {total+=array_bi[cenx+x][ceny+y];count++;}
+    	if ((octant & 6)>0) {total+=array_bi[cenx+y][ceny+x];count++;}
+    	if ((octant & 24)>0) {total+=array_bi[cenx+x][ceny-y];count++;}
+    	if ((octant & 96)>0) {total+=array_bi[cenx-y][ceny+x];count++;}
     	while(y>x)
     	{
     		if (d<0) d+= 2.0*(double)x+3.0;
@@ -89,22 +100,22 @@ public class LocateIris {
     			y--;
     		}
     		x++;
-    		if ((octant & 1)>0) {total+=bi.getRGB(cenx+x,ceny+y)&255;count++;}
-    		if ((octant & 2)>0) {total+=bi.getRGB(cenx+y,ceny+x)&255;count++;}
-    		if ((octant & 4)>0) {total+=bi.getRGB(cenx+y,ceny-x)&255;count++;}
-    		if ((octant & 8)>0) {total+=bi.getRGB(cenx+x,ceny-y)&255;count++;}
-    		if ((octant & 16)>0) {total+=bi.getRGB(cenx-x,ceny-y)&255;count++;}
-    		if ((octant & 32)>0) {total+=bi.getRGB(cenx-y,ceny-x)&255;count++;}
-    		if ((octant & 64)>0) {total+=bi.getRGB(cenx-y,ceny+x)&255;count++;}
-    		if ((octant & 128)>0) {total+=bi.getRGB(cenx-x,ceny+y)&255;count++;}
+    		if ((octant & 1)>0) {total+=array_bi[cenx+x][ceny+y];count++;}
+    		if ((octant & 2)>0) {total+=array_bi[cenx+y][ceny+x];count++;}
+    		if ((octant & 4)>0) {total+=array_bi[cenx+y][ceny-x];count++;}
+    		if ((octant & 8)>0) {total+=array_bi[cenx+x][ceny-y];count++;}
+    		if ((octant & 16)>0) {total+=array_bi[cenx-x][ceny-y];count++;}
+    		if ((octant & 32)>0) {total+=array_bi[cenx-y][ceny-x];count++;}
+    		if ((octant & 64)>0) {total+=array_bi[cenx-y][ceny+x];count++;}
+    		if ((octant & 128)>0) {total+=array_bi[cenx-x][ceny+y];count++;}
     		
     	}
     	if(y==x)
     	{
-    		if ((octant & 3)>0) {total+=bi.getRGB(cenx+x,ceny+x)&255;count++;}
-    		if ((octant & 12)>0) {total+=bi.getRGB(cenx+x,ceny-x)&255;count++;}
-    		if ((octant & 48)>0) {total+=bi.getRGB(cenx-x,ceny-x)&255;count++;}
-    		if ((octant & 192)>0) {total+=bi.getRGB(cenx-x,ceny+x)&255;count++;}
+    		if ((octant & 3)>0) {total+=array_bi[cenx+x][ceny+x];count++;}
+    		if ((octant & 12)>0) {total+=array_bi[cenx+x][ceny-x];count++;}
+    		if ((octant & 48)>0) {total+=array_bi[cenx-x][ceny-x];count++;}
+    		if ((octant & 192)>0) {total+=array_bi[cenx-x][ceny+x];count++;}
     	}
     	
     	
