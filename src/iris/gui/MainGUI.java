@@ -13,6 +13,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
@@ -293,7 +295,14 @@ class MainFrame extends JFrame
         		}
     }
     private ImageIcon gtImage() {
-        JFileChooser filedialog = new JFileChooser();
+    	
+        JFileChooser filedialog = new  JFileChooser();
+        try{
+        File f = new File(new File("./images/").getCanonicalPath());
+        filedialog.setCurrentDirectory(f);
+    } catch (IOException e) {
+    }
+
         filedialog.showOpenDialog(this.getContentPane());
         //System.out.println(filedialog.getSelectedFile().getPath());
         ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
