@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,10 +29,27 @@ public class databaseWrapper {
 	 * @version 1.0
 	 * @return 
 	 * @throws DbException 
+	 * @throws DbException 
+	 * @throws IOException 
+	 * @throws SQLException 
 	 * @throws SQLException 
 	 * @throws IOException 
 	 */
+	public static void main(String[] args) throws DbException, SQLException, IOException{
+		
+		
+		databaseWrapper test = new databaseWrapper();
+		byte[] insert = new byte[200];
+		insert[100] = 32;
+		System.out.println(insert.toString());
+		test.addRightByte(insert, "sx008");
+		ResultSet rs = stmt.executeQuery("SELECT * FROM iris");
+    	rs.next();
+    	rs.next();
+    	byte[] result = rs.getBytes("rig");
+		System.out.println(Arrays.toString(result));
 	
+	}
 
 			     
 			public databaseWrapper() throws DbException{
@@ -137,7 +155,7 @@ public class databaseWrapper {
 	        
 	         private void addId(String id) throws SQLException{
 	        	
-	        	stmt.executeUpdate("INSERT into iris (id) VALUES('" + id + "');");
+	        	stmt.executeUpdate("INSERT INTO iris (id) VALUES('" + id + "');");
 	        }
 	         
 	         /**
@@ -170,7 +188,20 @@ public class databaseWrapper {
 	 	        	 
 	     	
 	 			
-	     	}
+	         }
+	         
+	         private void addRightByte(byte[] insert, String id) throws SQLException{
+	        	 
+	        	 
+	        	 
+	        	 PreparedStatement ps = conn.prepareStatement("UPDATE iris SET rig = ? WHERE id = '" + id + "'");
+	        	 ps.setBytes(1, insert);
+	        	 ps.executeUpdate();
+	        	 ps.close();
+	        	 
+	        	 
+	        	 
+	         }
 	         
 	        
 	        
