@@ -1,4 +1,4 @@
-function bits = bitmovie( imname, plotOn )
+function  bitmovie( imname )
 
 img = imread(imname);
 
@@ -6,28 +6,26 @@ img = imread(imname);
 %   Detailed explanation goes here
 [height,width] = size(img);
 z = zeros(height,width);
-if plotOn
-    subplot(3,1,1);
-    imshow(img);
-    aviobj = avifile('example1.avi');
-end
+subplot(3,1,1);
+imshow(img);
+aviobj = avifile('example1.avi');
 
 % constants
-ab_lowLim = 10;
-ab_upLim = 15;
+ab_lowLim = 15;
+ab_upLim = 25;
 ab_numSteps = 2;
 
-w_lowLim = 0.19;
-w_upLim  = 0.15;
+w_lowLim = 0.08;
+w_upLim  = 0.09;
 w_numSteps = 2;
 
-x0_numSteps = width-ab_lowLim*2;
-x0_lowLim = ab_upLim;
-x0_upLim = width-ab_upLim;
+x0_numSteps = 50;
+x0_lowLim = 25;
+x0_upLim = width-25;
 
 y0_numSteps = 2;
-y0_lowLim = height-ab_lowLim;
-y0_upLim =  height-ab_upLim;
+y0_lowLim = height-10;
+y0_upLim =  height-40;
 
 aK = ab_lowLim : (ab_upLim - ab_lowLim)/ab_numSteps : ab_upLim;
 bK = aK;
@@ -35,7 +33,7 @@ wK = w_lowLim : (w_upLim - w_lowLim)/w_numSteps : w_upLim;
 x0K = x0_lowLim : (x0_upLim - x0_lowLim)/x0_numSteps : x0_upLim;
 y0K = y0_lowLim : (y0_upLim - y0_lowLim)/y0_numSteps : y0_upLim;
 
-bits = zeros(1,length(x0K)*3);
+bits = zeros(1,length(aK)*length(wK)*length(x0K)*length(y0K));
 i = 1;
 for x0=x0K
     for j=1:3
@@ -43,30 +41,28 @@ for x0=x0K
         a2 = aK(j)^2;
         b2 = a2;
         w = wK(j);
-
-        sum = 0;
-        for x=1:width
-            for y=1:height
-                z(y,x) = double(img(y,x))*exp(-pi*((x-x0)^2/a2 + (y-y0)^2/b2)) * cos(2*pi*w*(x-x0));
-                sum = sum + z(y,x);
+        
+            sum = 0;
+            for x=1:width
+                for y=1:height
+                    z(y,x) = double(img(y,x))*exp(-pi*((x-x0)^2/a2 + (y-y0)^2/b2)) * cos(2*pi*w*(x-x0));
+                    sum = sum + z(y,x);
+                end
             end
-        end
-        bits(1,i) = sum > 0;
-        i = i+1;
-        if plotOn
             subplot(3,1,2);
-            imshow(z,[-160,160]);
-            subplot(3,1,3);
 
-            plotbits(bits,width/2);
+            imshow(z,[-160,160]);
+
+            subplot(3,1,3);
+            bits(1,i) = sum > 0;
+            i = i+1;
+            plotbits(bits,width/4);
             pause(0.001);
             frame = getFrame(gcf);
             aviobj = addframe(aviobj,frame);
-        end
+        
     end
 
 
 end
-if plotOn
-    aviobj = close(aviobj);
-end
+aviobj = close(aviobj);
