@@ -1,5 +1,7 @@
 package iris.database;
 
+import iris.bitcodeMatcher.BitCode;
+
 import java.io.IOException;
 import java.sql.Array;
 import java.sql.Connection;
@@ -71,11 +73,58 @@ public class databaseWrapper {
 	        }}
 
 			/**
+			 * A method that converts a bitcode to a byte array
+			 * @author Seb Smith & Andrew Durnin
+			 * @version 1.0
+			 * @return byte[]
+			 */
+		   
+			public static byte[] toByteArray(BitCode bitcode){
+				
+				byte[] result = new byte[bitcode.length()/8+1];
+				for(int i=0; i<bitcode.length(); i++){
+					
+					if  (bitcode.get(i))
+						result[result.length-i/8-1] |= 1<<(i%8);
+					
+				}
+				
+				return result;
+				
+			}
+			
+			/**
+			 * A method that converts a byte array to a bitcode
+			 * @author Seb Smith & Andrew Durnin
+			 * @version 1.0
+			 * @return BitCode
+			 */
+		   
+			
+			public static BitCode toBitCode(byte[] stored){
+				
+				BitCode bitcode = new BitCode(stored.length);
+				
+				for(int i=0; i<stored.length*8; i++){
+					
+					if((stored[stored.length-i/8-1]&(1<<(i%8))) > 0)
+						bitcode.set(i);
+					
+				}
+				
+				return bitcode;
+				
+			}
+			
+			
+			
+			/**
 			 * A method that allows a user to add a bitcode to the database for the left iris.
 			 * @author Seb Smith & Andrew Durnin
 			 * @version 1.0
 			 */
-		   
+			
+			
 		   @Test private void addLeft(String id, int[] code) throws SQLException, IOException{
 	        
 	    	String insert = new String();
