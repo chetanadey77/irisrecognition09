@@ -119,7 +119,7 @@ public class databaseWrapper {
 			
 			
 			/**
-			 * A method that allows a user to add a bitcode to the database for the left iris.
+			 * A method that allows a user to add a bitcode to the database for the left iris using the Array format.
 			 * @author Seb Smith & Andrew Durnin
 			 * @version 1.0
 			 */
@@ -141,6 +141,45 @@ public class databaseWrapper {
             stmt.executeUpdate("UPDATE iris SET l = '{" + insert + "}' WHERE id = '" + id + "'");             
 	    	org.junit.Assert.assertFalse(count==0);
 		   }
+		   
+		   /**
+			 * A method that allows a user to add a bitcode to the database for the left iris using the byte array format.
+			 * @author Seb Smith & Andrew Durnin
+			 * @version 1.0
+		 * @throws SQLException 
+			 */
+		   
+		   private void addLeft(String id, byte[] bitcode) throws SQLException{
+			   
+			   
+	        	 PreparedStatement ps = conn.prepareStatement("UPDATE iris SET l = ? WHERE id = '" + id + "'");
+	        	 ps.setBytes(1, bitcode);
+	        	 ps.executeUpdate();
+	        	 ps.close();
+			   
+		   }
+		   
+		   
+		   /**
+			 * A method that allows a user to add a bitcode to the database for the left iris using the BitCode class.
+			 * @author Seb Smith & Andrew Durnin
+			 * @version 1.0
+		 * @throws SQLException 
+			 */
+		   
+		   
+		   private void addLeft(String id, BitCode bitcode) throws SQLException{
+			   
+			   byte[] insert = this.toByteArray(bitcode);
+			   PreparedStatement ps = conn.prepareStatement("UPDATE iris SET l = ? WHERE id = '" + id + "'");
+	        	 ps.setBytes(1, insert);
+	        	 ps.executeUpdate();
+	        	 ps.close();
+			   
+			   
+			   
+		   }
+		   
 		        
 		   /**
 			 * A method that allows a user to add a bitcode to the database for the right iris.
@@ -167,79 +206,13 @@ public class databaseWrapper {
 	        }
 	        
 	        /**
-			 * A method that allows a user to add a new row to the database with Id as primary key.
+			 * A method that allows a user to add a bitcode to the database for the right iris using the byte array format.
 			 * @author Seb Smith & Andrew Durnin
 			 * @version 1.0
-	         * @throws SQLException 
 			 */
 	        
-	         private void addRecord(String id, int[] left, int right[]) throws SQLException{
-	        	 
-	        	 String insert_l = new String();
-		        	int count;
-		        	
-		            for(count =0; count < left.length; count++){
-
-		                if(count == 0)
-		                    insert_l = insert_l + left[count];
-		                else
-		                    insert_l = insert_l +"," + left[count];
-		            }
-		         	 
-		            String insert_r = new String();
-			        	int count_2;
-			        	
-			            for(count =0; count < right.length; count++){
-
-			                if(count == 0)
-			                    insert_r = insert_r + right[count];
-			                else
-			                    insert_r = insert_r +"," + right[count];
-			            }
-		        	   	 
-	        	 
-	        	 
-	        	 stmt.executeUpdate("INSERT into iris (id)(left)(right)VALUES('" + id + "', '{" + insert_l + "}', '{" + insert_r + "}')");
-	         }
 	        
-	         private void addId(String id) throws SQLException{
-	        	
-	        	stmt.executeUpdate("INSERT INTO iris (id) VALUES('" + id + "');");
-	        }
-	         
-	         /**
-				 * A method that returns the id and left and right bitcodes of the next database record.
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
-				 */
-	         
-	        
-	         private String getNext(Integer[] left, Integer[] right) throws SQLException, IOException {
-	     		
-	        	ResultSet rs = stmt.executeQuery("SELECT * FROM iris");
-	        	String id = new String();
-	     		Array leftiris;
-	     		Array rightiris;
-	     		
-	     		
-	     		if(rs.next()){
-	     			id = rs.getString("id");
-	     			leftiris = rs.getArray("l");
-	     			rightiris = rs.getArray("r");
-	     			}
-	     		
-	     		else return null;
-	 			
-	             left = (Integer[])leftiris.getArray();
-	             right = (Integer[])rightiris.getArray();
-	     		
-	             return id;
-	 	        	 
-	     	
-	 			
-	         }
-	         
-	         private void addRightByte(byte[] insert, String id) throws SQLException{
+	        private void addRight(byte[] insert, String id) throws SQLException{
 	        	 
 	        	 
 	        	 
@@ -251,6 +224,84 @@ public class databaseWrapper {
 	        	 
 	        	 
 	         }
+	        
+	        /**
+			 * A method that allows a user to add a bitcode to the database for the right iris using the BitCode Class.
+			 * @author Seb Smith & Andrew Durnin
+			 * @version 1.0
+			 */
+	        
+	        private void addRight(String id, byte[] bitcode) throws SQLException{
+				   
+				   
+	        	 PreparedStatement ps = conn.prepareStatement("UPDATE iris SET r = ? WHERE id = '" + id + "'");
+	        	 ps.setBytes(1, bitcode);
+	        	 ps.executeUpdate();
+	        	 ps.close();
+	        	 
+	        }
+	        
+	        /**
+			 * A method that allows a user to add a new row to the database with Id as primary key.
+			 * @author Seb Smith & Andrew Durnin
+			 * @version 1.0
+	         * @throws SQLException 
+			 */
+	        
+	         private void addRecord(String id, byte[] left, byte[] right) throws SQLException{
+	        	 
+	        	 PreparedStatement ps = conn.prepareStatement("INSERT INTO iris (id)(l)(r) VALUES("+id+",?,?)");
+	        	 ps.setBytes(1, left);
+	        	 ps.setBytes(2,right);
+	        	 ps.executeUpdate();
+	        	 ps.close();
+	        	
+	        	 
+	        	  }
+	        
+	         private void addId(String id) throws SQLException{
+	        	
+	        	stmt.executeUpdate("INSERT INTO iris (id) VALUES('" + id + "');");
+	        }
+	         
+	         /**
+				 * A method that returns the id and left and right bitcodes of the next database record in byte array format.
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+				 */
+	         
+	        
+	         private String getNext(byte[] left, byte[] right) throws SQLException, IOException {
+	     		
+	        	ResultSet rs = stmt.executeQuery("SELECT * FROM iris");
+	        	String id = new String();
+	     		
+	     		
+	     		if(rs.next()){
+	     			id = rs.getString("id");
+	     			left = rs.getBytes("l");
+	     			right = rs.getBytes("r");
+	     			}
+	     		
+	     		else return null;
+	 			
+	             
+	             return id;
+	 	        	 
+	     	
+	 			
+	         }
+	         
+	         private ResultSet getAll() throws SQLException{
+	        	 
+	        	ResultSet rs = stmt.executeQuery("SELECT * FROM iris");
+	        	 
+				return rs; 
+	        	 
+	        	 
+	        	 }
+	         
+	         
 	         
 	        
 	        
