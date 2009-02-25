@@ -41,20 +41,29 @@ public class databaseWrapper {
 		
 		
 		databaseWrapper test = new databaseWrapper();
-		byte[] insert = new byte[200];
-		insert[100] = 32;
-		System.out.println(insert.toString());
-		test.addRightByte(insert, "sx008");
-		ResultSet rs = stmt.executeQuery("SELECT * FROM iris");
-    	rs.next();
-    	rs.next();
-    	byte[] result = rs.getBytes("rig");
-		System.out.println(Arrays.toString(result));
-	
+		BitCode testcode = new BitCode(40);
+		testcode.set(10);
+		testcode.set(15);
+		testcode.set(20);
+		System.out.println(testcode);
+		byte[] insert = test.toByteArray(testcode);
+		byte[] resultleft = new byte[200];
+		System.out.println(Arrays.toString(insert));
+		//test.addRecord("test4", insert, insert);
+		//test.addId("test");
+		byte[] newres = new byte[3];
+		String result = new String();
+		rs.next();
+		byte[] newresr = test.getLeftArray(result);
+		//result = test.getNext(newres,newresr);
+		
+		System.out.println(result + Arrays.toString(newresr));
+		BitCode resultcode = test.toBitCode(newresr);
+		System.out.println(resultcode);
 	}
 
 			     
-			public databaseWrapper() throws DbException{
+			public databaseWrapper() throws DbException, SQLException{
 	        
 			   System.out.println( "Setting up access point for Iris project\n" );
 
@@ -70,7 +79,12 @@ public class databaseWrapper {
 	            stmt = conn.createStatement();
 	        } catch (Exception e) {
 	               System.err.println("Exception: " + e + "\n" + e.getMessage() );
-	        }}
+	        }
+	        
+	        rs = stmt.executeQuery("SELECT * FROM iris");
+        	
+			
+			}
 
 			/**
 			 * A method that converts a bitcode to a byte array
@@ -249,7 +263,7 @@ public class databaseWrapper {
 	        
 	         private void addRecord(String id, byte[] left, byte[] right) throws SQLException{
 	        	 
-	        	 PreparedStatement ps = conn.prepareStatement("INSERT INTO iris (id)(l)(r) VALUES("+id+",?,?)");
+	        	 PreparedStatement ps = conn.prepareStatement("INSERT INTO iris (id,l,r) VALUES('"+id+"',?,?);");
 	        	 ps.setBytes(1, left);
 	        	 ps.setBytes(2,right);
 	        	 ps.executeUpdate();
@@ -263,40 +277,65 @@ public class databaseWrapper {
 	        	stmt.executeUpdate("INSERT INTO iris (id) VALUES('" + id + "');");
 	        }
 	         
-	         /**
-				 * A method that returns the id and left and right bitcodes of the next database record in byte array format.
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
-				 */
+	      
 	         
-	        
-	         private String getNext(byte[] left, byte[] right) throws SQLException, IOException {
-	     		
-	        	ResultSet rs = stmt.executeQuery("SELECT * FROM iris");
-	        	String id = new String();
-	     		
-	     		
-	     		if(rs.next()){
-	     			id = rs.getString("id");
-	     			left = rs.getBytes("l");
-	     			right = rs.getBytes("r");
-	     			}
-	     		
-	     		else return null;
-	 			
-	             
-	             return id;
-	 	        	 
-	     	}
-	         
+	         private byte[] getLeftArray(String id) throws SQLException{
+				
+
+	        	 byte[] result = rs.getBytes("l");
+	        	 id = rs.getString("id");
+	        	 
+	        	 return result;
+	        	 
+	        	 
+	            }
 	    
-	        
+	         private  byte[] getRightArray(String id) throws SQLException{
 	         
-	         private ResultSet getAll() throws SQLException{
+
 	        	 
-	        	ResultSet rs = stmt.executeQuery("SELECT * FROM iris");
+	        	 byte[] result = rs.getBytes("l");
+	        	 id = rs.getString("id");
+        	 
+	        	 return result;
+        	 
+        	 
+            }
+    
+	        
+	         private BitCode getLeftCode(String id) throws SQLException{
+					
+
+	        	 byte[] result_array = rs.getBytes("l");
+	        	 id = rs.getString("id");
 	        	 
-				return rs; 
+	        	 BitCode result = databaseWrapper.toBitCode(result_array);
+	        	 
+	        	 return result;
+	        	 
+	        	 
+	            }
+	         
+	         private BitCode getRightCode(String id) throws SQLException{
+					
+
+	        	 byte[] result_array = rs.getBytes("r");
+	        	 id = rs.getString("id");
+	        	 
+	        	 BitCode result = databaseWrapper.toBitCode(result_array);
+	        	 
+	        	 return result;
+	        	 
+	        	 
+	            }
+	         
+	         
+	         
+	         private ResultSet getNewSet() throws SQLException{
+	        	 
+	        	ResultSet rset = stmt.executeQuery("SELECT * FROM iris");
+	        	 
+				return rset; 
 	        	 
 	        	 
 	        	 }
@@ -305,7 +344,7 @@ public class databaseWrapper {
 	         
 	        
 	        
-	        
+	        private static ResultSet rs;
 	        private static Connection conn;
 	        private static Statement stmt;
 	   
