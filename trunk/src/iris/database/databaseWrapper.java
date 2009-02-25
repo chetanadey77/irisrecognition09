@@ -177,8 +177,7 @@ public class databaseWrapper {
 	        	 ps.close();
 			   
 			   
-			   
-		   }
+			   }
 		   
 		        
 		   /**
@@ -288,9 +287,10 @@ public class databaseWrapper {
 	             
 	             return id;
 	 	        	 
-	     	
-	 			
-	         }
+	     	}
+	         
+	    
+	        
 	         
 	         private ResultSet getAll() throws SQLException{
 	        	 
