@@ -3,15 +3,13 @@ package iris.database;
 import iris.bitcodeMatcher.BitCode;
 
 import java.io.IOException;
-import java.sql.Array;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
-
 import org.junit.Test;
 
 
@@ -39,7 +37,7 @@ public class databaseWrapper {
 	 */
 	public static void main(String[] args) throws DbException, SQLException, IOException{
 		
-		
+		/*
 		databaseWrapper test = new databaseWrapper();
 		BitCode testcode = new BitCode(40);
 		testcode.set(10);
@@ -60,6 +58,7 @@ public class databaseWrapper {
 		System.out.println(result + Arrays.toString(newresr));
 		BitCode resultcode = test.toBitCode(newresr);
 		System.out.println(resultcode);
+		*/
 	}
 
 			     
@@ -130,6 +129,17 @@ public class databaseWrapper {
 				
 			}
 			
+			
+			private Blob bitcodeToBlob(BitCode bitcode) {  
+			    
+				byte[] byteArray = toByteArray(bitcode);  
+			    
+				//Blob blob = conn.createBlob(); 
+			    
+				//blob.setBytes(1, byteArray);  
+			  
+			    return null;  
+			}  
 			
 			
 			/**
