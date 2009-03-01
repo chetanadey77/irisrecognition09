@@ -298,7 +298,7 @@ class MainFrame extends JFrame
     	
         JFileChooser filedialog = new  JFileChooser();
         try{
-        File f = new File(new File("./images/").getCanonicalPath());
+        File f = new File(new File("./images/automatic/").getCanonicalPath());
         filedialog.setCurrentDirectory(f);
     } catch (IOException e) {
     }
