@@ -91,8 +91,8 @@ public class BitcodeGenerator {
 				if (x<boxsize[number_of_passes-1])
 					intensityArr[x+imgWidth][y] = tmpArr[x][y];
 			}
-		imgWidth = intensityArr.length;
-		imgHeight = intensityArr[0].length;
+		//imgWidth = intensityArr.length;
+		//imgHeight = intensityArr[0].length;
 		
 		ab_step = (ab_upLim - ab_lowLim)/ab_numSteps;
 		w_step = (w_upLim - w_lowLim)/w_numSteps;
