@@ -115,6 +115,10 @@ public class UnWrapper {
 		}
 		return retImage;
 	}
+	public BufferedImage unWrapWithGuides(BufferedImage eyeImage, EyeDataType eye, int unwrHeight, int unwrWidth)
+	{
+		return unWrapWithGuides(eyeImage, eye.inner.x,eye.inner.y,eye.inner.radius,eye.outer.x,eye.outer.y,eye.outer.radius, unwrHeight, unwrWidth);
+	}
 	public BufferedImage originalWithGuides(BufferedImage eyeImage, EyeDataType eye)
 	{
 		return originalWithGuides(eyeImage, eye.inner.x, eye.inner.y, eye.inner.radius, eye.outer.x, eye.outer.y, eye.outer.radius);
