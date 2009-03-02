@@ -1,5 +1,5 @@
 function bits = bitmovie( imname, plotOn )
-
+% bits = bitmovie('unwrapped.jpg',true);
 img = imread(imname);
 
 %BITMOVIE Summary of this function goes here
