@@ -90,11 +90,14 @@ class MainFrame extends JFrame
     			final Color WHITE = new Color(255,255,255);
                 setTitle("Iris Recognition");
                 setSize(FRAME_WIDTH,FRAME_HEIGHT);
+
                 setBackground(WHITE);
                 setLayout(new FlowLayout());
                 JPanel panelEyeImage[] = new JPanel[2];
                 JPanel panelWhole[] = new JPanel[2];
                 JPanel panelData[] = new JPanel[2];
+                JPanel panelUnwrap[] = new JPanel[2];
+                JPanel panelBitcode[] = new JPanel[2];
                 
 //              create panel for each section in turn
                 for (int n = 0; n<2;n++)
@@ -102,6 +105,8 @@ class MainFrame extends JFrame
                 	panelEyeImage[n] = new JPanel();
                     panelWhole[n] = new JPanel();
                     panelData[n] = new JPanel();
+                    panelUnwrap[n] = new JPanel();
+                    panelBitcode[n] = new JPanel();
                 	imageEye[n] = new  JLabel();
                 	imageUnwrappedEye[n] = new  JLabel();
                 	imageBitCode[n] = new  JLabel();
@@ -152,22 +157,29 @@ class MainFrame extends JFrame
                 	imageUnwrappedEye[n].setIcon(iconUnwrappedEye[n]);
                 	imageBitCode[n].setIcon(iconBitCode[n]);
                 	
-                	//panelEyeImage[n].setLayout(new GridLayout(2,1));
+                	panelEyeImage[n].setLayout(new BorderLayout());
                 	panelEyeImage[n].setBackground(WHITE);
-                	panelEyeImage[n].add(getimage[n]);
-                	panelEyeImage[n].add(imageEye[n]);
+                	panelEyeImage[n].add(getimage[n],BorderLayout.NORTH);
+                	panelEyeImage[n].add(imageEye[n],BorderLayout.SOUTH);
                 	
-                	//panelData[n].setLayout(new GridLayout(4,1));
+                	panelUnwrap[n].setLayout(new BorderLayout());
+                	panelUnwrap[n].setBackground(WHITE);
+                	panelUnwrap[n].add(new JLabel("Unwrapped iris"),BorderLayout.NORTH);
+                	panelUnwrap[n].add(imageUnwrappedEye[n],BorderLayout.SOUTH);
+                	panelBitcode[n].setLayout(new BorderLayout());
+                	panelBitcode[n].setBackground(WHITE);
+                	panelBitcode[n].add(new JLabel("Bitcode"),BorderLayout.NORTH);
+                	panelBitcode[n].add(imageBitCode[n],BorderLayout.SOUTH);
+                	panelData[n].setLayout(new BorderLayout());
                 	panelData[n].setBackground(WHITE);
-                	panelData[n].add(new JLabel("Unwrapped iris"));
-                	panelData[n].add(imageUnwrappedEye[n]);
-                	panelData[n].add(new JLabel("Bitcode"));
-                	panelData[n].add(imageBitCode[n]);
+                	panelData[n].add(panelUnwrap[n],BorderLayout.NORTH);
+                	panelData[n].add(panelBitcode[n],BorderLayout.SOUTH);
                 	
                 	//panelWhole[n].setLayout(new GridLayout(1,2));
                 	panelWhole[n].setBackground(WHITE);
-                	panelWhole[n].add(panelEyeImage[n]);
-                	panelWhole[n].add(panelData[n]);
+                	panelWhole[n].setLayout(new BorderLayout());
+                	panelWhole[n].add(panelEyeImage[n],BorderLayout.WEST);
+                	panelWhole[n].add(panelData[n],BorderLayout.EAST);
                 }
                 getContentPane().add(panelWhole[0]);
                 hamming_result.setEnabled(false);
@@ -189,6 +201,7 @@ class MainFrame extends JFrame
                 		iconBitCode[0].setImage(biBitCode[0]);
                         imageBitCode[0].setIcon(iconBitCode[0]);
                         imageBitCode[0].repaint();
+                        imageUnwrappedEye[0].repaint();
                 		System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
                 	
                 		if (eyeLoaded[1])
