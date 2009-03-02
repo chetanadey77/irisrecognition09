@@ -1,9 +1,10 @@
 package iris.imageToBitcode;
 
+import iris.bitcodeMatcher.BitCode;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import iris.gui.EyeDataType;
 
 /**
  * Extracts and unwraps an iris from an eye image, given the iris inner and outer boundaries
@@ -170,3 +171,60 @@ public class UnWrapper {
 
 
 }
+
+//public BitCode getBitcode2(BufferedImage eyeImage,int xPup, int yPup, int rPup, int xIris, int yIris, int rIris)
+//{
+//	xp = xPup; yp = yPup; rp = rPup;
+//	xi = xIris; yi = yIris; ri = rIris;
+//	c = new CoordConverter(xp,yp,rp,xi,yi,ri);
+//	uw = new UnWrapper();
+//	int boxsize[] = {10,20,40};//the last box must be the largest
+//	assert (boxsize.length == number_of_passes);
+//
+//	// length of bitcode determined by the number of combinations of constants
+//	//is the width of unwrapped image * number of passes * 2
+//	bitcode = new BitCode(unwrappedWidth*number_of_passes*2);
+//
+//	int[][] tmpArr = uw.unWrapByteArr(eyeImage, xp, yp, rp, xi, yi, ri, unwrappedHeight, unwrappedWidth); //the unwrapped iris pixels
+//	//we need to extend the image by the width of the largest box 
+//	//so that the image wraps around
+//	imgWidth = tmpArr.length;
+//	imgHeight = tmpArr[0].length;
+//	intensityArr = new int[imgWidth+boxsize[number_of_passes-1]][imgHeight];
+//	for (int x=0;x<imgWidth;x++)
+//		for (int y=0;y<imgHeight;y++)
+//		{
+//			intensityArr[x][y] = tmpArr[x][y];
+//			if (x<boxsize[number_of_passes-1])
+//				intensityArr[x+imgWidth][y] = tmpArr[x][y];
+//		}
+//	//imgWidth = intensityArr.length;
+//	//imgHeight = intensityArr[0].length;
+//	
+//	ab_step = (ab_upLim - ab_lowLim)/ab_numSteps;
+//	w_step = (w_upLim - w_lowLim)/w_numSteps;
+//	x0_step = imgWidth * (x0_upLim - x0_lowLim)/ x0_numSteps;
+//	y0_step = imgWidth * (y0_upLim - y0_lowLim)/ y0_numSteps;
+//
+//	for (int x=0; x < imgWidth; x++)
+//	{
+//		for (int n = 0;n<number_of_passes;n++)
+//		{
+//			//need to change these so that they fit into one box 
+//			a = ab_lowLim ;
+//			b = ab_lowLim ;
+//			w = w_lowLim ;
+//			x0 = x0_lowLim ;
+//			y0 = y0_lowLim ;
+//			
+//			//also not sure of the direction of y in intensity array
+//						
+//			this.gaborFilter1DBox((double)x,0,(double)(x + boxsize[n]),(double)(boxsize[n]));
+//					
+//				
+//			
+//		}
+//	}
+//
+//	return bitcode;
+//}

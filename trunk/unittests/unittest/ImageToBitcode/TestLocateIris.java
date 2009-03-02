@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import unittest.*;
 
-import iris.gui.EyeDataType;
+import iris.imageToBitcode.EyeDataType;
 import iris.imageToBitcode.LocateIris;
 
 import java.awt.Font;

@@ -14,18 +14,20 @@ import java.util.BitSet;
  */
 public class BitCode extends BitSet {
 
-	int bitCount;
+	int bitCount, shiftNum;
 	
 	public BitCode(int numBits)
 	{
 		super(numBits);
 		bitCount = 0;
+		shiftNum = 1;
 	}
 	
 	public BitCode()
 	{
 		super();
 		bitCount = 0;
+		shiftNum = 1;
 	}
 	
 	/**
@@ -65,6 +67,36 @@ public class BitCode extends BitSet {
 	}
 	
 	/**
+	 * @return Number of bits for each value of theta (information for hamming distance calculation)
+	 */
+	public int getShiftNum()
+	{
+		return shiftNum;
+	}
+	
+	/**
+	 * @param _shiftNum Number of bits for each value of theta (information for hamming distance calculation)
+	 */
+	public void setShiftNum(int _shiftNum)
+	{
+		shiftNum = _shiftNum;
+	}
+	
+	/**
+	 * 
+	 * @return returns distribution of bits (0=all zeros, 1.0=all ones, 0.5=even amount of ones and zeros)
+	 */
+	public float getBitDistribution()
+	{
+		return (float)this.cardinality()/(float)this.getBitcodeSize();
+	}
+	
+	public String toString()
+	{
+		return "Bitcode size: " + this.getBitcodeSize() + ", distribution: " + this.getBitDistribution();
+	}
+	
+	/**
 	 * Return an image 
 	 * @param width
 	 * @param height
@@ -87,7 +119,8 @@ public class BitCode extends BitSet {
 	}
 	
 	public static double hammingDistance(BitCode ba, BitCode bb)
-	{	final int rotation = 0; //number of degrees (from -rotation to +rotation)
+	{	
+		int rotation = 3;//number of degrees (from -rotation to +rotation)
 		//rotation =0 should compare with no rotation
 		//need to work out where to get the mask from
 		//it is likely to be either part of the bit code for the eye

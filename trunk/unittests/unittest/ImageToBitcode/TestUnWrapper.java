@@ -23,7 +23,7 @@ public class TestUnWrapper {
 		BufferedImage img = isl.loadImage("002_1_1.gif");
 		
 		BufferedImage retImg = UnWrapper.unWrap(img,xp,yp,rp,xi,yi,ri,100,360);
-		isl.saveImage(retImg, "unwrapped2.jpg");
+		isl.saveImage(retImg, "unwrapped2.gif");
 	
 	}
 	

@@ -2,7 +2,6 @@ package iris.imageToBitcode;
 
 
 import iris.gui.CircleType;
-import iris.gui.EyeDataType;
 import unittest.ImageToBitcode.ImageSaverLoader;
 
 import java.awt.Font;
