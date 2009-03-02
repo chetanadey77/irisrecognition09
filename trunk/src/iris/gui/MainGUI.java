@@ -30,6 +30,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.synth.ColorType;
 
 import unittest.ImageToBitcode.ImageSaverLoader;
 
@@ -87,11 +88,10 @@ class MainFrame extends JFrame
         {       
     			
     			getimage[1] = new JButton("Load eye image");
-    			final Color WHITE = new Color(255,255,255);
+    			//final Color WHITE = new Color(255,255,255);
                 setTitle("Iris Recognition");
                 setSize(FRAME_WIDTH,FRAME_HEIGHT);
-
-                setBackground(WHITE);
+                setBackground(Color.WHITE);
                 setLayout(new FlowLayout());
                 JPanel panelEyeImage[] = new JPanel[2];
                 JPanel panelWhole[] = new JPanel[2];
@@ -158,33 +158,37 @@ class MainFrame extends JFrame
                 	imageBitCode[n].setIcon(iconBitCode[n]);
                 	
                 	panelEyeImage[n].setLayout(new BorderLayout());
-                	panelEyeImage[n].setBackground(WHITE);
+                	panelEyeImage[n].setBackground(Color.WHITE);
                 	panelEyeImage[n].add(getimage[n],BorderLayout.NORTH);
                 	panelEyeImage[n].add(imageEye[n],BorderLayout.SOUTH);
                 	
                 	panelUnwrap[n].setLayout(new BorderLayout());
-                	panelUnwrap[n].setBackground(WHITE);
+                	panelUnwrap[n].setBackground(Color.WHITE);
                 	panelUnwrap[n].add(new JLabel("Unwrapped iris"),BorderLayout.NORTH);
                 	panelUnwrap[n].add(imageUnwrappedEye[n],BorderLayout.SOUTH);
                 	panelBitcode[n].setLayout(new BorderLayout());
-                	panelBitcode[n].setBackground(WHITE);
+                	panelBitcode[n].setBackground(Color.WHITE);
                 	panelBitcode[n].add(new JLabel("Bitcode"),BorderLayout.NORTH);
                 	panelBitcode[n].add(imageBitCode[n],BorderLayout.SOUTH);
                 	panelData[n].setLayout(new BorderLayout());
-                	panelData[n].setBackground(WHITE);
+                	panelData[n].setBackground(Color.WHITE);
                 	panelData[n].add(panelUnwrap[n],BorderLayout.NORTH);
                 	panelData[n].add(panelBitcode[n],BorderLayout.SOUTH);
                 	
                 	//panelWhole[n].setLayout(new GridLayout(1,2));
-                	panelWhole[n].setBackground(WHITE);
+                	panelWhole[n].setBackground(Color.WHITE);
                 	panelWhole[n].setLayout(new BorderLayout());
                 	panelWhole[n].add(panelEyeImage[n],BorderLayout.WEST);
                 	panelWhole[n].add(panelData[n],BorderLayout.EAST);
                 }
-                getContentPane().add(panelWhole[0]);
+                JPanel background = new JPanel();
+                background.setBackground(Color.WHITE);
+                background.setPreferredSize(new Dimension(FRAME_WIDTH,FRAME_HEIGHT));
+                getContentPane().add(background);
                 hamming_result.setEnabled(false);
-                getContentPane().add(hamming_result);
-                getContentPane().add(panelWhole[1]);
+                background.add(panelWhole[0]);
+                background.add(hamming_result);
+                background.add(panelWhole[1]);
                 
                 getimage[0].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent arg0) {
@@ -192,17 +196,21 @@ class MainFrame extends JFrame
                     	long startTime=System.currentTimeMillis(); //calculate runtime
                         imageEye[0].setIcon(iconEye[0]);
                         eyeLoaded[0] = true;
+                        biEye[0].getGraphics().drawImage( iconEye[0].getImage(),0,0,null);
+                        
                         eyeData[0] = LocateIris.find_iris(biEye[0]);
                         UnWrapper uw = new UnWrapper();
-                        biUnwrappedEye[0] = uw.originalWithGuides(biEye[0],eyeData[0]);
+                        biUnwrappedEye[0] = UnWrapper.unWrap(uw.originalWithGuides(biEye[0],eyeData[0]),eyeData[0],512,128);//biUnwrappedEye[0].getWidth(),biUnwrappedEye[0].getHeight());
+                        iconUnwrappedEye[0].setImage(biUnwrappedEye[0]);
+                        imageUnwrappedEye[0].setIcon(iconUnwrappedEye[0]);
+                        imageUnwrappedEye[0].repaint();
                 		BitcodeGenerator b = new BitcodeGenerator();
                 		bc[0] =  b.getBitcode(biEye[0],eyeData[0]);
                 		biBitCode[0] = bc[0].getBitCodeImage(512,128,32);
                 		iconBitCode[0].setImage(biBitCode[0]);
                         imageBitCode[0].setIcon(iconBitCode[0]);
                         imageBitCode[0].repaint();
-                        imageUnwrappedEye[0].repaint();
-                		System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
+                        System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
                 	
                 		if (eyeLoaded[1])
                 		{
