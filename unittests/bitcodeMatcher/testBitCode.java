@@ -77,5 +77,20 @@ public class testBitCode {
 		System.out.println(b1.size()+" "+b2.size());
 		assertEquals(0.0, BitCode.hammingDistance(b1,b2));
 		
+		// test with random bitcodes
+		b1 = new BitCode();
+		b2 = new BitCode();
+		
+		for(int i=0; i<10000; i++)
+		{
+			b1.addBit((int)Math.round(Math.random()));
+			b2.addBit((int)Math.round(Math.random()));
+			
+		}
+		
+		System.out.println("b1: " + (float)b1.cardinality()/(float)b1.getBitcodeSize() );
+		System.out.println("b2: " + (float)b2.cardinality()/(float)b2.getBitcodeSize() );
+		System.out.println("hamming: " + BitCode.hammingDistance(b1,b2));
+		
 	}
 }

@@ -2,6 +2,7 @@ package iris.gui;
 
 import iris.bitcodeMatcher.BitCode;
 import iris.imageToBitcode.BitcodeGenerator;
+import iris.imageToBitcode.EyeDataType;
 
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
