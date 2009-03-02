@@ -53,7 +53,10 @@ public class UnWrapper {
 		}
 		return retImg;
 	}
-	
+	public static BufferedImage unWrap(BufferedImage eyeImage,EyeDataType eye,int unwrHeight, int unwrWidth)
+	{
+		return unWrap(eyeImage, eye.inner.x, eye.inner.y, eye.inner.radius, eye.outer.x, eye.outer.y, eye.outer.radius, unwrHeight, unwrWidth);
+	}
 	/**
 	 * Returns an unwrapped iris as a two dimensional array of integers
 	 * @param eyeImage original image of an eye
