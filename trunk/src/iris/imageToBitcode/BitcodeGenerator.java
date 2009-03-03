@@ -104,7 +104,7 @@ public class BitcodeGenerator {
 				this.gaborFilter2D();
 			} 
 		}  
-		bitcode.setShiftNum(bitcodeShiftNum);
+		bitcode.setShiftNum(bitcodeShiftNum*2);
 		return bitcode;
 
 	}
