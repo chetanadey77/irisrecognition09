@@ -41,7 +41,7 @@ public class UnWrapper {
 		{
 			for(int r=0; r < unwrHeight; r++)
 			{
-				double fTh = 360/unwrWidth*th;
+				double fTh = 360.0/unwrWidth*th;
 				double fR = r * 1.0 / unwrHeight;
 				int rgb = 0;
 				try{
