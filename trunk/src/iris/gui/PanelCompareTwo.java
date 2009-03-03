@@ -1,7 +1,10 @@
+/**
+ * 
+ */
 package iris.gui;
 
-import iris.imageToBitcode.BitcodeGenerator;
 import iris.bitcodeMatcher.BitCode;
+import iris.imageToBitcode.BitcodeGenerator;
 import iris.imageToBitcode.EyeDataType;
 import iris.imageToBitcode.LocateIris;
 import iris.imageToBitcode.UnWrapper;
@@ -9,88 +12,26 @@ import iris.imageToBitcode.UnWrapper;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.plaf.synth.ColorType;
+import javax.swing.JTextField;
 
-import unittest.ImageToBitcode.ImageSaverLoader;
-
-public class MainGUI {
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		 EventQueue.invokeLater(new Runnable()
-         {
-                         public void run()
-                         {
-                                 MainFrame frame = new MainFrame();
-                                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                                 frame.setVisible(true);
-                         }
-         });
-	}
-
-}
-
-
-class MainFrame extends JFrame
-{
-	static final int FRAME_WIDTH = 900;
-    static final int FRAME_HEIGHT = 850;
-
-	MainFrame()
-	{
-		setTitle("Iris Recognition");
-		setSize(FRAME_WIDTH,FRAME_HEIGHT);
-		setBackground(Color.WHITE);
-		setLayout(new FlowLayout());
-		PanelCompareTwo panelCT = new PanelCompareTwo(FRAME_WIDTH,FRAME_HEIGHT);
-		PanelStatistics panelStatistics = new PanelStatistics(FRAME_WIDTH,FRAME_HEIGHT);
-		JTabbedPane tabbedMainFrame = new JTabbedPane();
-		getContentPane().setLayout(null);	
-		getContentPane().add(tabbedMainFrame);
-		tabbedMainFrame.addTab("Compare Two",null,panelCT,null);
-		tabbedMainFrame.addTab("Statistics",null,panelStatistics,null);
-		tabbedMainFrame.setBounds(0, 0, FRAME_WIDTH,FRAME_HEIGHT);
-		tabbedMainFrame.setVisible(true);
-			//getContentPane().add(jTabbedPane2);
-			//jTabbedPane2.setBounds(0,38,558,336);
-		//	jTabbedPane1.setBounds(0, 10, 785, 370);
-			//{
-				//jPanel1 = new JPanel();
-	//			jTabbedPane1.addTab("Compare Two", null, jPanel1, null);
-		//		jTabbedPane1.addTab("Database Match", null);
-			//	jPanel1.setBounds(0, -6, 784, 375);
-				//jPanel1.setPreferredSize(new java.awt.Dimension(717, 299));
-			
-	}
-		
-}
-/*	static JLabel imageEye[] = new  JLabel[2];
+/**
+ * @author user1
+ *
+ */
+public class PanelCompareTwo extends JPanel implements ActionListener{
+	static JLabel imageEye[] = new  JLabel[2];
 	static JLabel imageUnwrappedEye[] = new  JLabel[2];
 	static JLabel imageBitCode[] = new  JLabel[2];
 	
@@ -111,21 +52,17 @@ class MainFrame extends JFrame
     static BitCode[] bc = new BitCode[2];
     static EyeDataType eyeData[] = new EyeDataType[2];
   
-    static final int FRAME_WIDTH = 900;
-    static final int FRAME_HEIGHT = 850;
+    
     
     static boolean[] eyeLoaded = new boolean[2];
     
-    public MainFrame()
+    public PanelCompareTwo(int FRAME_WIDTH,int FRAME_HEIGHT)
         
         {       
     			
     			getimage[1] = new JButton("Load eye image");
     			//final Color WHITE = new Color(255,255,255);
-                setTitle("Iris Recognition");
-                setSize(FRAME_WIDTH,FRAME_HEIGHT);
-                setBackground(Color.WHITE);
-                setLayout(new FlowLayout());
+               
                 JPanel panelEyeImage[] = new JPanel[2];
                 JPanel panelWhole[] = new JPanel[2];
                 JPanel panelData[] = new JPanel[2];
@@ -218,7 +155,7 @@ class MainFrame extends JFrame
                 JPanel background = new JPanel();
                 background.setBackground(Color.WHITE);
                 background.setPreferredSize(new Dimension(FRAME_WIDTH,FRAME_HEIGHT));
-                getContentPane().add(background);
+                add(background);
                 hamming_result.setEnabled(false);
                 background.add(panelWhole[0]);
                 background.add(hamming_result);
@@ -230,7 +167,7 @@ class MainFrame extends JFrame
                 /*new ActionListener() {
                     public void actionPerformed(ActionEvent arg0) {
                     	);*/
-  /*      }
+        }
     public void actionPerformed(ActionEvent ev)
     {	int n=0;
     	//System.out.println( ev.getActionCommand()+"  "+ev.getClass()+" "+ev.getSource());
@@ -287,19 +224,16 @@ class MainFrame extends JFrame
         		}
     }
     private ImageIcon gtImage() {
-    	
         JFileChooser filedialog = new  JFileChooser();
         try{
-        File f = new File(new File("./images/automatic/").getCanonicalPath());
-        filedialog.setCurrentDirectory(f);
-    } catch (IOException e) {
-    }
-
-        filedialog.showOpenDialog(this.getContentPane());
+        	File f = new File(new File("./images/automatic/").getCanonicalPath());
+        	filedialog.setCurrentDirectory(f);
+        }
+        catch (IOException e) {}
+        filedialog.showOpenDialog(this.getParent());
         //System.out.println(filedialog.getSelectedFile().getPath());
         ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
         return icon;    
     }
+
 }
-*/
-              
