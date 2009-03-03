@@ -20,19 +20,21 @@ public class UnWrapper {
 	/**
 	 * Unwrap an iris image
 	 * @param eyeImage original image of an eye
-	 * @param xPup center point of pupil (x)
-	 * @param yPup center point of pupil (y)
-	 * @param rPup radius of pupil
-	 * @param xIris center point of iris (x)
-	 * @param yIris center point of iris (y)
-	 * @param rIris radius of iris
+	 * @param eyeData holds the size and location of the pupil and iris 
 	 * @param unwrHeight the width (in pixels) of the unwrapped iris image
 	 * @param unwrWidth the height (in pixels) of the unwrapped iris image
+	 * @param overWrap is  the size (in pixels) of the duplication of the iris image
 	 * @return the unwrapped iris as a BufferedImage
 	 */
-	public static BufferedImage unWrap(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris, int unwrHeight, int unwrWidth)
+	public static BufferedImage unWrap(BufferedImage eyeImage, EyeDataType eyeData, int unwrHeight, int unwrWidth, int overWrap )
 	{
-		BufferedImage retImg = new BufferedImage(unwrWidth, unwrHeight, BufferedImage.TYPE_BYTE_GRAY);
+		int xPup = eyeData.inner.x;
+		int yPup = eyeData.inner.y;
+		int rPup = eyeData.inner.radius;
+		int xIris = eyeData.outer.x;
+		int yIris = eyeData.outer.y;
+		int rIris = eyeData.outer.radius;
+		BufferedImage retImg = new BufferedImage(unwrWidth + overWrap, unwrHeight, BufferedImage.TYPE_BYTE_GRAY);
 		cc = new CoordConverter(xPup,yPup,rPup,xIris,yIris,rIris);
 
 		for(int th=0; th < unwrWidth; th++)
@@ -45,6 +47,7 @@ public class UnWrapper {
 				try{
 					rgb = eyeImage.getRGB(cc.getX(fR, fTh), cc.getY(fR, fTh));
 					retImg.setRGB(th, r, rgb);
+					if (th<overWrap) retImg.setRGB(th + unwrWidth, r, rgb);
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 					System.out.println(fR + " : " + fTh);
@@ -54,10 +57,57 @@ public class UnWrapper {
 		}
 		return retImg;
 	}
-	public static BufferedImage unWrap(BufferedImage eyeImage,EyeDataType eye,int unwrHeight, int unwrWidth)
+	/**
+	 * Overloading of unWrap
+	 * 
+	 * */
+	/**
+	 * @param eyeImage original image of an eye
+	 * @param eyeData holds the size and location of the pupil and iris 
+	 * @param unwrHeight the width (in pixels) of the unwrapped iris image
+	 * @param unwrWidth the height (in pixels) of the unwrapped iris image
+	 * @return the unwrapped iris as a BufferedImage
+	 */
+	public static BufferedImage unWrap(BufferedImage eyeImage,EyeDataType eyeData,int unwrHeight, int unwrWidth)
 	{
-		return unWrap(eyeImage, eye.inner.x, eye.inner.y, eye.inner.radius, eye.outer.x, eye.outer.y, eye.outer.radius, unwrHeight, unwrWidth);
+		return unWrap(eyeImage, eyeData,unwrHeight, unwrWidth,0);
 	}
+	/**
+	 * @param eyeImage original image of an eye
+	 * * @param xPup center point of pupil (x)
+	 * @param yPup center point of pupil (y)
+	 * @param rPup radius of pupil
+	 * @param xIris center point of iris (x)
+	 * @param yIris center point of iris (y)
+	 * @param rIris radius of iris
+	 * @param unwrHeight the width (in pixels) of the unwrapped iris image
+	 * @param unwrWidth the height (in pixels) of the unwrapped iris image
+	 * @return the unwrapped iris as a BufferedImage
+	 */
+	
+	public static BufferedImage unWrap(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris, int unwrHeight, int unwrWidth)
+	{
+		return unWrap(eyeImage,new EyeDataType(xPup,yPup,rPup,xIris,yIris,rIris),unwrHeight,unwrWidth,0);
+	}
+	/**
+	 * @param eyeImage original image of an eye
+	 * * @param xPup center point of pupil (x)
+	 * @param yPup center point of pupil (y)
+	 * @param rPup radius of pupil
+	 * @param xIris center point of iris (x)
+	 * @param yIris center point of iris (y)
+	 * @param rIris radius of iris
+	 * @param unwrHeight the width (in pixels) of the unwrapped iris image
+	 * @param unwrWidth the height (in pixels) of the unwrapped iris image
+	 * @param overWrap is  the size (in pixels) of the duplication of the iris image
+	 * @return the unwrapped iris as a BufferedImage
+	 */
+	
+	public static BufferedImage unWrap(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris, int unwrHeight, int unwrWidth,int overWrap)
+	{
+		return unWrap(eyeImage,new EyeDataType(xPup,yPup,rPup,xIris,yIris,rIris),unwrHeight,unwrWidth,overWrap);
+	}
+	
 	/**
 	 * Returns an unwrapped iris as a two dimensional array of integers
 	 * @param eyeImage original image of an eye
