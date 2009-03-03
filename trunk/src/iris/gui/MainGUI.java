@@ -198,11 +198,16 @@ class MainFrame extends JFrame
                         imageEye[0].setIcon(iconEye[0]);
                         eyeLoaded[0] = true;
                         biEye[0].getGraphics().drawImage( iconEye[0].getImage(),0,0,null);
-                        
                         eyeData[0] = LocateIris.find_iris(biEye[0]);
                         UnWrapper uw = new UnWrapper();
-                        biUnwrappedEye[0] = UnWrapper.unWrap(uw.originalWithGuides(biEye[0],eyeData[0]),eyeData[0],512,128);//biUnwrappedEye[0].getWidth(),biUnwrappedEye[0].getHeight());
-                        iconUnwrappedEye[0].setImage(biUnwrappedEye[0]);
+                        BufferedImage bi=uw.originalWithGuides(biEye[0],eyeData[0]);
+                        iconEye[0].setImage(bi);
+                        imageEye[0].setIcon(iconEye[0]);
+                        imageEye[0].repaint();
+                        
+                        
+                        BufferedImage biUnwrapped = uw.unWrapWithGuides(biEye[0],eyeData[0],125,360);//biUnwrappedEye[0].getWidth(),biUnwrappedEye[0].getHeight());
+                        iconUnwrappedEye[0].setImage(biUnwrapped);
                         imageUnwrappedEye[0].setIcon(iconUnwrappedEye[0]);
                         imageUnwrappedEye[0].repaint();
                 		BitcodeGenerator b = new BitcodeGenerator();
@@ -222,6 +227,7 @@ class MainFrame extends JFrame
                     }
                 });
         }
+ //   public static void ButtonAction 
     private static void copyIris(BufferedImage bifrom, BufferedImage bito, EyeDataType ed )
     {
     	int colour;
