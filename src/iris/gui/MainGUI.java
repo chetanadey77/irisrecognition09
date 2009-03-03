@@ -56,7 +56,7 @@ public class MainGUI {
 }
 
 
-class MainFrame extends JFrame
+class MainFrame extends JFrame implements ActionListener
 {
 	static JLabel imageEye[] = new  JLabel[2];
 	static JLabel imageUnwrappedEye[] = new  JLabel[2];
@@ -115,7 +115,8 @@ class MainFrame extends JFrame
                 	iconUnwrappedEye[n] = new ImageIcon();
                 	iconBitCode[n] = new ImageIcon();
                 	eyeLoaded[n] = false;
-                	getimage[n] = new JButton("Load eye image");
+                	if (n==0) getimage[n] = new JButton("Load first image");
+                	else getimage[n] = new JButton("Load second image");
                 	getimage[n].setSize(320, 30);
                 	getimage[n].setEnabled(true);
                 	
@@ -191,42 +192,53 @@ class MainFrame extends JFrame
                 background.add(hamming_result);
                 background.add(panelWhole[1]);
                 
-                getimage[0].addActionListener(new ActionListener() {
+                getimage[0].addActionListener(this);
+                getimage[1].addActionListener(this);
+                
+                /*new ActionListener() {
                     public void actionPerformed(ActionEvent arg0) {
-                    	iconEye[0] = gtImage();
-                    	long startTime=System.currentTimeMillis(); //calculate runtime
-                        imageEye[0].setIcon(iconEye[0]);
-                        eyeLoaded[0] = true;
-                        biEye[0].getGraphics().drawImage( iconEye[0].getImage(),0,0,null);
-                        eyeData[0] = LocateIris.find_iris(biEye[0]);
-                        UnWrapper uw = new UnWrapper();
-                        BufferedImage bi=uw.originalWithGuides(biEye[0],eyeData[0]);
-                        iconEye[0].setImage(bi);
-                        imageEye[0].setIcon(iconEye[0]);
-                        imageEye[0].repaint();
-                        
-                        
-                        BufferedImage biUnwrapped = uw.unWrapWithGuides(biEye[0],eyeData[0],125,360);//biUnwrappedEye[0].getWidth(),biUnwrappedEye[0].getHeight());
-                        iconUnwrappedEye[0].setImage(biUnwrapped);
-                        imageUnwrappedEye[0].setIcon(iconUnwrappedEye[0]);
-                        imageUnwrappedEye[0].repaint();
-                		BitcodeGenerator b = new BitcodeGenerator();
-                		bc[0] =  b.getBitcode(biEye[0],eyeData[0]);
-                		biBitCode[0] = bc[0].getBitCodeImage(512,128,32);
-                		iconBitCode[0].setImage(biBitCode[0]);
-                        imageBitCode[0].setIcon(iconBitCode[0]);
-                        imageBitCode[0].repaint();
-                        System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
-                	
-                		if (eyeLoaded[1])
-                		{
-                			double hd = BitCode.hammingDistance(bc[0],bc[1]);
-                        	hamming_result.setText("Hamming Distance "+hd);
-                        	hamming_result.setEnabled(true);
-                        }
-                    }
-                });
+                    	);*/
         }
+    public void actionPerformed(ActionEvent ev)
+    {	int n=0;
+    	//System.out.println( ev.getActionCommand()+"  "+ev.getClass()+" "+ev.getSource());
+    	if (ev.getActionCommand()=="Load first image") n=0;
+    	else if (ev.getActionCommand()=="Load second image") n=1;
+    	else System.out.println("Error with the Main Frame Action Event Handler");
+    	iconEye[n] = gtImage();
+    	long startTime=System.currentTimeMillis(); //calculate runtime
+        imageEye[n].setIcon(iconEye[n]);
+        eyeLoaded[n] = true;
+        biEye[n].getGraphics().drawImage( iconEye[n].getImage(),0,0,null);
+        eyeData[n] = LocateIris.find_iris(biEye[n]);
+        UnWrapper uw = new UnWrapper();
+        BufferedImage bi=uw.originalWithGuides(biEye[n],eyeData[n]);
+        iconEye[n].setImage(bi);
+        imageEye[n].setIcon(iconEye[n]);
+        imageEye[n].repaint();
+        
+        
+        BufferedImage biUnwrapped = uw.unWrapWithGuides(biEye[n],eyeData[n],125,360);//biUnwrappedEye[n].getWidth(),biUnwrappedEye[n].getHeight());
+        iconUnwrappedEye[n].setImage(biUnwrapped);
+        imageUnwrappedEye[n].setIcon(iconUnwrappedEye[n]);
+        imageUnwrappedEye[n].repaint();
+		BitcodeGenerator b = new BitcodeGenerator();
+		bc[n] =  b.getBitcode(biEye[n],eyeData[n]);
+		biBitCode[n] = bc[n].getBitCodeImage(512,128,32);
+		iconBitCode[n].setImage(biBitCode[n]);
+        imageBitCode[n].setIcon(iconBitCode[n]);
+        imageBitCode[n].repaint();
+        System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
+	
+		if (eyeLoaded[1-n])
+		{
+			double hd = BitCode.hammingDistance(bc[0],bc[1]);
+        	hamming_result.setText("Hamming Distance "+hd);
+        	hamming_result.setEnabled(true);
+        }
+    }
+
+
  //   public static void ButtonAction 
     private static void copyIris(BufferedImage bifrom, BufferedImage bito, EyeDataType ed )
     {
