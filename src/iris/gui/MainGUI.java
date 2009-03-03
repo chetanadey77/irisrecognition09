@@ -218,7 +218,7 @@ class MainFrame extends JFrame implements ActionListener
         imageEye[n].repaint();
         
         
-        BufferedImage biUnwrapped = uw.unWrapWithGuides(biEye[n],eyeData[n],125,360);//biUnwrappedEye[n].getWidth(),biUnwrappedEye[n].getHeight());
+        BufferedImage biUnwrapped = uw.unWrapWithGuides(biEye[n],eyeData[n],128,512);//biUnwrappedEye[n].getWidth(),biUnwrappedEye[n].getHeight());
         iconUnwrappedEye[n].setImage(biUnwrapped);
         imageUnwrappedEye[n].setIcon(iconUnwrappedEye[n]);
         imageUnwrappedEye[n].repaint();
