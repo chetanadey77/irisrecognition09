@@ -120,7 +120,7 @@ public class BitCode extends BitSet {
 	
 	public static double hammingDistance(BitCode ba, BitCode bb)
 	{	
-		int rotation = 3;//number of degrees (from -rotation to +rotation)
+		int rotation = 6;//number of degrees (from -rotation to +rotation)
 		//rotation =0 should compare with no rotation
 		//need to work out where to get the mask from
 		//it is likely to be either part of the bit code for the eye
@@ -141,7 +141,7 @@ public class BitCode extends BitSet {
 		double min_hamming=1.0;
 		double hc;
 		//doesn't seem to be a bitset shift function
-		for (int i = - ba.getBitcodeSize()*rotation/360;i<= ba.getBitcodeSize()*rotation/360; i++)
+		for (int i = (int)(- ba.getBitcodeSize()*rotation/(360*ba.getShiftNum()))*ba.getShiftNum();i<= ba.getBitcodeSize()*rotation/360; i+= ba.getShiftNum())
 		{
 			bsa.clear();
 			//bsma.clear();
