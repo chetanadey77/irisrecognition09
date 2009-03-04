@@ -111,6 +111,63 @@ public class UnWrapper {
 	/**
 	 * Returns an unwrapped iris as a two dimensional array of integers
 	 * @param eyeImage original image of an eye
+	 * @param ed the location of the pupil and iris in an EyeDataType
+	 * @param unwrHeight the width (in pixels) of the unwrapped iris image
+	 * @param unwrWidth the height (in pixels) of the unwrapped iris image
+	 * @param overWrap is the extra rotation past 360 degrees in pixel (like x)
+	 * @return the unwrapped iris
+	 */
+	public int[][] unWrapByteArr(BufferedImage eyeImage, EyeDataType ed, int unwrHeight, int unwrWidth, int overWrap)
+	{
+		BufferedImage img = UnWrapper.unWrap(eyeImage, ed, unwrHeight, unwrWidth,overWrap);
+		int[][] retvals = new int[img.getWidth()+overWrap][img.getHeight()];
+		Color c;
+		for (int i=0; i<(img.getWidth() + overWrap-1); i++)
+		{
+			for (int j=0; j<img.getHeight()-1; j++)
+			{
+				c = new Color(img.getRGB(i,j));
+				retvals[i][j] = (c.getRed() + c.getGreen() + c.getBlue())/3;
+			}
+		}
+		return retvals;
+	}
+	
+	/**
+	 * Returns an unwrapped iris as a two dimensional array of integers
+	 * @param eyeImage original image of an eye
+	 * @param xPup center point of pupil (x)
+	 * @param yPup center point of pupil (y)
+	 * @param rPup radius of pupil
+	 * @param xIris center point of iris (x)
+	 * @param yIris center point of iris (y)
+	 * @param rIris radius of iris
+	 * @param unwrHeight the width (in pixels) of the unwrapped iris image
+	 * @param unwrWidth the height (in pixels) of the unwrapped iris image
+	 * @param overWrap is the extra rotation past 360 degrees in pixel (like x)
+	 * @return the unwrapped iris
+	 */
+	
+	public int[][] unWrapByteArr(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris, int unwrHeight, int unwrWidth,int overWrap)
+	{
+		EyeDataType ed = new EyeDataType(xPup, yPup, rPup, xIris, yIris, rIris);
+		return unWrapByteArr( eyeImage,  ed,  unwrHeight,  unwrWidth,  overWrap);
+	}
+	/**
+	 * Returns an unwrapped iris as a two dimensional array of integers
+	 * @param eyeImage original image of an eye
+	 * @param ed the location of the pupil and iris in an EyeDataType
+	 * @param unwrHeight the width (in pixels) of the unwrapped iris image
+	 * @param unwrWidth the height (in pixels) of the unwrapped iris image
+	 * @return the unwrapped iris
+	 */
+	public int[][] unWrapByteArr(BufferedImage eyeImage, EyeDataType ed, int unwrHeight, int unwrWidth)
+	{
+		return unWrapByteArr( eyeImage,  ed,  unwrHeight,  unwrWidth,  0);
+	}
+	/**
+	 * Returns an unwrapped iris as a two dimensional array of integers
+	 * @param eyeImage original image of an eye
 	 * @param xPup center point of pupil (x)
 	 * @param yPup center point of pupil (y)
 	 * @param rPup radius of pupil
@@ -123,20 +180,9 @@ public class UnWrapper {
 	 */
 	public int[][] unWrapByteArr(BufferedImage eyeImage, int xPup, int yPup, int rPup, int xIris, int yIris, int rIris, int unwrHeight, int unwrWidth)
 	{
-		BufferedImage img = UnWrapper.unWrap(eyeImage, xPup, yPup, rPup, xIris, yIris, rIris, unwrHeight, unwrWidth);
-		int[][] retvals = new int[img.getWidth()][img.getHeight()];
-		Color c;
-		for (int i=0; i<img.getWidth()-1; i++)
-		{
-			for (int j=0; j<img.getHeight()-1; j++)
-			{
-				c = new Color(img.getRGB(i,j));
-				retvals[i][j] = (c.getRed() + c.getGreen() + c.getBlue())/3;
-			}
-		}
-		return retvals;
+		EyeDataType ed = new EyeDataType(xPup, yPup, rPup, xIris, yIris, rIris);
+		return unWrapByteArr( eyeImage,  ed,  unwrHeight,  unwrWidth,  0);
 	}
-	
 	/**
 	 * Returns an unwrapped iris as a BufferedImage with colored guides (for visual analysis in GUI) 
 	 * @param eyeImage original image of an eye

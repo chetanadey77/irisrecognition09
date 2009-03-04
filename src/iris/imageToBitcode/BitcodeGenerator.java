@@ -46,6 +46,7 @@ public class BitcodeGenerator {
 		GaborParameters _wPar = new GaborParameters(0.20, 0.1, 3);
 		GaborParameters _abPar = new GaborParameters(15, 20, 3);
 		GaborParameters _x0Par = new GaborParameters(_abPar.upLim, _unwrWidth-_abPar.upLim , (int) (_unwrWidth-_abPar.upLim*2) );
+		//GaborParameters _x0Par = new GaborParameters(_abPar.upLim, _unwrWidth+_abPar.upLim, (int) (_unwrWidth-_abPar.upLim*2) );
 		GaborParameters _y0Par = new GaborParameters(_abPar.lowLim, _abPar.upLim, 3);
 
 		this.initialiseParams(_wPar, _abPar, _x0Par, _y0Par, _unwrWidth, _unwrHeight);
@@ -87,7 +88,7 @@ public class BitcodeGenerator {
 		bitcode = new BitCode();
 
 		// array of intensity values (used rather than BufferedImage for speed)
-		intensityArr = uw.unWrapByteArr(eyeImage, xp, yp, rp, xi, yi, ri, unwrHeight, unwrWidth); 
+		intensityArr = uw.unWrapByteArr(eyeImage, xp, yp, rp, xi, yi, ri, unwrHeight, unwrWidth);//+ 2 * _abPar.upLim +1); 
 		unWrapped = uw.unWrapWithGuides(eyeImage, xp, yp, rp, xi, yi, ri, unwrHeight, unwrWidth);
 		bitcodeShiftNum = 3;
 
@@ -135,7 +136,7 @@ public class BitcodeGenerator {
 		xmax = Math.ceil(x0+a);
 		ymin = Math.floor(y0-b);
 		ymax = Math.ceil(y0+b);
-		
+		//System.out.println("x "+xmin+" to "+xmax+"  y "+ymin+" to "+ymax);
 		for(double x = xmin; x <= xmax; x++)
 		{
 			for(double y =ymin; y <=ymax; y++)
@@ -143,9 +144,10 @@ public class BitcodeGenerator {
 
 				//imgVal = (double)intensityArr[(int) x][(int) y];
 
-				Color c = new Color(unWrapped.getRGB((int)x, (int)y));
-				imgVal = (c.getRed() + c.getGreen() + c.getBlue())/3;
-
+				//Color c = new Color(unWrapped.getRGB((int)x, (int)y));
+				
+				//imgVal = (c.getRed() + c.getGreen() + c.getBlue())/3;
+				imgVal = intensityArr[(int)x][(int)y];
 				//e^(-pi((x-x0)^2/a^2 + (y-y0)^2/b^2) 
 				k = Math.exp( -Math.PI * (Math.pow( x - x0, 2) / a2 + Math.pow( y - y0, 2) / b2) );
 				//sin(-2*pi*w(x-x0 + y-y0))
