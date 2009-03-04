@@ -110,11 +110,11 @@ public class BitCode extends BitSet {
 		Graphics g  = bi.createGraphics();
         Graphics2D g2 = (Graphics2D) g;
 		g2.setPaint(Color.white);
-		int w = width * number_of_bits_high / total_bits;
+		int w = (width * number_of_bits_high) / total_bits;
 		int h = height / number_of_bits_high;
 		for (int i=0;i< total_bits;i++)
 			if (this.get(i)) 
-				g2.fillRect(w * (i % (total_bits /  number_of_bits_high)),h* i * number_of_bits_high / total_bits , w, h);
+				g2.fillRect(w * (i % (total_bits /  number_of_bits_high)),h* (i % number_of_bits_high) , w, h);
 		return bi;
 	}
 	
