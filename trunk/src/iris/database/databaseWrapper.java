@@ -27,13 +27,9 @@ public class databaseWrapper {
 	 * A class that sets up an access node to the database
 	 * @author Seb Smith and Andrew Durnin
 	 * @version 1.0
-	 * @return 
-	 * @throws DbException 
 	 * @throws DbException 
 	 * @throws IOException 
-	 * @throws SQLException 
-	 * @throws SQLException 
-	 * @throws IOException 
+	 * @throws SQLException  
 	 */
 	public static void main(String[] args) throws DbException, SQLException, IOException{
 		
@@ -86,7 +82,7 @@ public class databaseWrapper {
 			}
 
 			/**
-			 * A method that converts a bitcode to a byte array
+			 * A method that converts a BitCode object to a byte array
 			 * @author Seb Smith & Andrew Durnin
 			 * @version 1.0
 			 * @return byte[]
@@ -107,7 +103,7 @@ public class databaseWrapper {
 			}
 			
 			/**
-			 * A method that converts a byte array to a bitcode
+			 * A method that converts a byte array to a BitCode object
 			 * @author Seb Smith & Andrew Durnin
 			 * @version 1.0
 			 * @return BitCode
@@ -170,7 +166,7 @@ public class databaseWrapper {
 			 * A method that allows a user to add a bitcode to the database for the left iris using the byte array format.
 			 * @author Seb Smith & Andrew Durnin
 			 * @version 1.0
-		 * @throws SQLException 
+			 * @throws SQLException 
 			 */
 		   
 		   private void addLeft(String id, byte[] bitcode) throws SQLException{
@@ -188,7 +184,7 @@ public class databaseWrapper {
 			 * A method that allows a user to add a bitcode to the database for the left iris using the BitCode class.
 			 * @author Seb Smith & Andrew Durnin
 			 * @version 1.0
-		 * @throws SQLException 
+			 * @throws SQLException 
 			 */
 		   
 		   
@@ -244,9 +240,7 @@ public class databaseWrapper {
 	        	 ps.executeUpdate();
 	        	 ps.close();
 	        	 
-	        	 
-	        	 
-	         }
+	        	 }
 	        
 	        /**
 			 * A method that allows a user to add a bitcode to the database for the right iris using the BitCode Class.
@@ -282,12 +276,25 @@ public class databaseWrapper {
 	        	 
 	        	  }
 	        
+	         /**
+				 * A method that allows a user to add a new Id to the database.
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+		         * @throws SQLException 
+				 */
+		        
 	         private void addId(String id) throws SQLException{
 	        	
 	        	stmt.executeUpdate("INSERT INTO iris (id) VALUES('" + id + "');");
 	        }
 	         
-	      
+	         /**
+				 * A method that allows the retreival of the left iris bitcode for a given id,returned as a byte array.
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+		         * @throws SQLException 
+		         * @return byte[]
+				 */
 	         
 	         private byte[] getLeftArray(String id) throws SQLException{
 				
@@ -299,6 +306,16 @@ public class databaseWrapper {
 	        	 
 	        	 
 	            }
+	         
+	         
+
+	         /**
+				 * A method that allows the retreival of the right iris bitcode for a given id, returned as a byte array.
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+		         * @throws SQLException 
+		         * @return byte[]
+				 */
 	    
 	         private  byte[] getRightArray(String id) throws SQLException{
 	         
@@ -311,6 +328,14 @@ public class databaseWrapper {
         	 
         	 
             }
+	         
+	         /**
+				 * A method that allows the retreival of the left iris bitcode for a given id,returned as a BitCode object.
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+		         * @throws SQLException 
+		         * @return BitCode
+				 */
     
 	        
 	         private BitCode getLeftCode(String id) throws SQLException{
@@ -326,6 +351,17 @@ public class databaseWrapper {
 	        	 
 	            }
 	         
+	         /**
+				 * A method that allows the retreival of the right iris bitcode for a given id,returned as a BitCode object.
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+		         * @throws SQLException 
+		         * @return BitCode
+				 */
+	         
+	         
+	         
+	         
 	         private BitCode getRightCode(String id) throws SQLException{
 					
 
@@ -339,6 +375,13 @@ public class databaseWrapper {
 	        	 
 	            }
 	         
+	         /**
+				 * A method that returns a fresh resultset of all records held in the database.
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+		         * @throws SQLException 
+		         * @return BitCode
+				 */
 	         
 	         
 	         private ResultSet getNewSet() throws SQLException{
