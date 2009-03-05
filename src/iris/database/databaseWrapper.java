@@ -10,6 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.BitSet;
+
 import org.junit.Test;
 
 
@@ -32,29 +35,32 @@ public class databaseWrapper {
 	 * @throws SQLException  
 	 */
 	public static void main(String[] args) throws DbException, SQLException, IOException{
-		
 		/*
-		databaseWrapper test = new databaseWrapper();
-		BitCode testcode = new BitCode(40);
+		
+		//databaseWrapper test = new databaseWrapper();
+		//BitSet testcode = new BitCode(40);
 		testcode.set(10);
 		testcode.set(15);
 		testcode.set(20);
-		System.out.println(testcode);
-		byte[] insert = test.toByteArray(testcode);
-		byte[] resultleft = new byte[200];
-		System.out.println(Arrays.toString(insert));
+		testcode.set(40);
+		System.out.println(testcode.get(39));
+		System.out.println(testcode.get(40));
+		//byte[] insert = test.toByteArray(testcode);
+		//test.addLeft("test2", insert);
+		//byte[] resultleft = new byte[200];
+		//System.out.println(Arrays.toString(insert));
 		//test.addRecord("test4", insert, insert);
 		//test.addId("test");
-		byte[] newres = new byte[3];
-		String result = new String();
-		rs.next();
-		byte[] newresr = test.getLeftArray(result);
+		//byte[] newres = new byte[3];
+		//String result = new String();
+		//rs.next();
+		//byte[] newresr = test.getLeftArray(result);
 		//result = test.getNext(newres,newresr);
 		
-		System.out.println(result + Arrays.toString(newresr));
-		BitCode resultcode = test.toBitCode(newresr);
-		System.out.println(resultcode);
-		*/
+		//System.out.println(result + Arrays.toString(newresr));
+		//BitCode resultcode = test.toBitCode(newresr);
+		//System.out.println(resultcode);
+	*/	
 	}
 
 			     
@@ -88,7 +94,7 @@ public class databaseWrapper {
 			 * @return byte[]
 			 */
 		   
-			public static byte[] toByteArray(BitCode bitcode){
+			private static byte[] toByteArray(BitCode bitcode){
 				
 				byte[] result = new byte[bitcode.length()/8+1];
 				for(int i=0; i<bitcode.length(); i++){
@@ -188,7 +194,7 @@ public class databaseWrapper {
 			 */
 		   
 		   
-		   private void addLeft(String id, BitCode bitcode) throws SQLException{
+		   public void addLeft(String id, BitCode bitcode) throws SQLException{
 			   
 			   byte[] insert = this.toByteArray(bitcode);
 			   PreparedStatement ps = conn.prepareStatement("UPDATE iris SET l = ? WHERE id = '" + id + "'");
@@ -283,7 +289,7 @@ public class databaseWrapper {
 		         * @throws SQLException 
 				 */
 		        
-	         private void addId(String id) throws SQLException{
+	         public void addId(String id) throws SQLException{
 	        	
 	        	stmt.executeUpdate("INSERT INTO iris (id) VALUES('" + id + "');");
 	        }
@@ -338,11 +344,11 @@ public class databaseWrapper {
 				 */
     
 	        
-	         private BitCode getLeftCode(String id) throws SQLException{
+	         public BitCode getLeftCode() throws SQLException{
 					
 
 	        	 byte[] result_array = rs.getBytes("l");
-	        	 id = rs.getString("id");
+	        	// id = rs.getString("id");
 	        	 
 	        	 BitCode result = databaseWrapper.toBitCode(result_array);
 	        	 
@@ -362,11 +368,11 @@ public class databaseWrapper {
 	         
 	         
 	         
-	         private BitCode getRightCode(String id) throws SQLException{
+	         public BitCode getRightCode() throws SQLException{
 					
 
 	        	 byte[] result_array = rs.getBytes("r");
-	        	 id = rs.getString("id");
+	        	 //id = rs.getString("id");
 	        	 
 	        	 BitCode result = databaseWrapper.toBitCode(result_array);
 	        	 
@@ -374,6 +380,13 @@ public class databaseWrapper {
 	        	 
 	        	 
 	            }
+	         
+	         public String getId() throws SQLException{
+	        	 
+	        	 String id = rs.getString("id");
+	        	 return id;
+	        	 
+	         }
 	         
 	         /**
 				 * A method that returns a fresh resultset of all records held in the database.
@@ -397,7 +410,7 @@ public class databaseWrapper {
 	         
 	        
 	        
-	        private static ResultSet rs;
+	        public ResultSet rs;
 	        private static Connection conn;
 	        private static Statement stmt;
 	   
