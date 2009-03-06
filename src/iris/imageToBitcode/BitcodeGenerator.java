@@ -166,7 +166,7 @@ public class BitcodeGenerator {
 			}
 		}
 
-		//bitcode.addBit(sumRe >= 0.0);
+		bitcode.addBit(sumRe >= 0.0);
 		bitcode.addBit(sumIm >= 0.0);
 		//System.out.println(sumRe+" "+sumIm);
 	}
