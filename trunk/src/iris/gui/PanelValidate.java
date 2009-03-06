@@ -57,6 +57,8 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
     static BitCode[] bc = new BitCode[2];
     static EyeDataType eyeData;
     static Boolean eyeLoaded;
+
+	
     JPanel panelValidate;
     
 	public PanelValidate(int FRAME_WIDTH,int FRAME_HEIGHT) {
@@ -69,7 +71,6 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
              JPanel panelData;
              JPanel panelUnwrap;
              JPanel panelBitcode;
-             JPanel panelSpacer;
              
              
 //           create panel 
@@ -218,9 +219,9 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
       
         
         try {
+        	databaseWrapper db = new databaseWrapper(); 
         	
         	String id;
-        	databaseWrapper db = new databaseWrapper(); 
         	double hd;
         	
 			while(db.rs.next()){
@@ -228,12 +229,14 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
         	id = db.getId();
 			left = db.getLeftCode();
 			bc[1] = left;
+			byte[] testing = db.toByteArray(bc[0]);
+			System.out.println(Arrays.toString(testing));
 			//right = db.getRightCode(id);
 			//eyeLoaded = true;
 			
 			hd = BitCode.hammingDistance(bc[0],bc[1]);
         	
-			if(hd<1){  
+			if(hd<.35){  
 				
 				hamming_result.setText("Identity Verified as :" +id +": Hamming Distance "+hd);
 				hamming_result.setEnabled(true);
@@ -246,6 +249,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 				hamming_result.setEnabled(true);
 				panelValidate.setBackground(Color.RED);
 				panelValidate.repaint();
+			
 			}
 			
 			
