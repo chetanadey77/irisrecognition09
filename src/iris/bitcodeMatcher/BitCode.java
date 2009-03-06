@@ -120,7 +120,7 @@ public class BitCode extends BitSet {
 	
 	public static double hammingDistance(BitCode ba, BitCode bb)
 	{	
-		int rotation = 6;//number of degrees (from -rotation to +rotation)
+		int rotation = 4;//number of degrees (from -rotation to +rotation)
 		//rotation =0 should compare with no rotation
 		//need to work out where to get the mask from
 		//it is likely to be either part of the bit code for the eye
