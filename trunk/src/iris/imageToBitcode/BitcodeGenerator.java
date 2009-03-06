@@ -30,7 +30,7 @@ public class BitcodeGenerator {
 	double a, b, w, a2, b2, x0, y0;	// alpha, beta and omega
 
 	public BitcodeGenerator()
-	{			
+	{		
 		// width and height of the unwrapped image. Up those numbers => more detail and longer runtime
 		int _unwrWidth = 360;
 		int _unwrHeight = 100;
@@ -98,6 +98,7 @@ public class BitcodeGenerator {
 				a = abPar.get_StepN(i);
 				b = abPar.get_StepN(i);
 				w = wPar.get_StepN(i);
+				//w = wPar.lowLim/(2.0*a);
 				x0 = x0Par.get_StepN(x0I);
 				y0 = y0Par.get_StepN(i);	
 
@@ -110,7 +111,7 @@ public class BitcodeGenerator {
 
 	}
 
-	private void initialiseParams(GaborParameters _wPar,GaborParameters _abPar, GaborParameters _x0Par, GaborParameters _y0Par, int _unwrWidth, int _unwrHeight)
+	public void initialiseParams(GaborParameters _wPar,GaborParameters _abPar, GaborParameters _x0Par, GaborParameters _y0Par, int _unwrWidth, int _unwrHeight)
 	{
 		unwrWidth = _unwrWidth;
 		unwrHeight = _unwrHeight;
@@ -154,15 +155,17 @@ public class BitcodeGenerator {
 				tmpVal =  -w * 2 * Math.PI * ( x-x0 ); 
 				imPart = Math.sin( tmpVal );
 				//cos(-2*pi*w(x-x0 + y-y0))
-				rePart = Math.cos( tmpVal );
+				rePart = Math.cos( tmpVal );//*wPar.upLim);
 
-				sumRe +=  imgVal * k * imPart;
-				sumIm += imgVal * k * rePart; 
+				sumRe +=  (double) imgVal * k * rePart;
+				sumIm +=  (double) imgVal * k * imPart; 
+			//System.out.println(rePart+" "+k*rePart);//+imPart);
 			}
 		}
 
-		bitcode.addBit(sumRe >= 0);
-		bitcode.addBit(sumIm >= 0);
+		bitcode.addBit(sumRe >= 0.0);
+		bitcode.addBit(sumIm >= 0.0);
+		//System.out.println(sumRe+" "+sumIm);
 	}
 
 	private void gaborFilter1D()
@@ -188,9 +191,65 @@ public class BitcodeGenerator {
 				sumRe += (double)intensityArr[(int) x][(int) y] * k * imPart;
 				sumIm += (double)intensityArr[(int) x][(int) y] * k * rePart; 
 			}
-			bitcode.addBit(sumRe >= 0);
-			bitcode.addBit(sumIm >= 0);
+			bitcode.addBit(sumRe >= 0.0);
+			bitcode.addBit(sumIm >= 0.0);
 		}
 	}
+	public BufferedImage drawWavelet(BufferedImage eyeImage,int x0,int y0,int step)
+	{
+		
+		int h=100, width= 360;
+		BufferedImage bimage = new BufferedImage(width,h*5,BufferedImage.TYPE_INT_RGB);
+		for(int i=0;i<width;i++)
+			for(int j=0;j<h*5;j++)
+				bimage.setRGB(i, j, 0);
+		a = abPar.get_StepN(step);
+		b = abPar.get_StepN(step);
+		//w = wPar.get_StepN(i);
+		w = wPar.lowLim/(2.0*a);
+		a2 = a*a;
+		b2 = b*b; 
+		double k,imPart,rePart,tmpVal, imgVal;
+		double sumRe = 0;
+		double sumIm = 0;
+		double xmin, xmax,ymin,ymax;
+		xmin = Math.floor(x0-a);
+		xmax = Math.ceil(x0+a);
+		ymin = Math.floor(y0-b);
+		ymax = Math.ceil(y0+b);
+		int colour=0;
+		//System.out.println("x "+xmin+" to "+xmax+"  y "+ymin+" to "+ymax);
+		for(double x = xmin; x <= xmax; x++)
+		{
+			for(double y =ymin; y <=ymax; y++)
+			{
 
+				//imgVal = (double)intensityArr[(int) x][(int) y];
+
+				//Color c = new Color(unWrapped.getRGB((int)x, (int)y));
+				
+				//imgVal = (c.getRed() + c.getGreen() + c.getBlue())/3;
+				
+				//e^(-pi((x-x0)^2/a^2 + (y-y0)^2/b^2) 
+				k = Math.exp( -Math.PI * (Math.pow( x - x0, 2) / a2 + Math.pow( y - y0, 2) / b2) );
+				//sin(-2*pi*w(x-x0 + y-y0))
+				tmpVal =  -w * 2 * Math.PI * ( x-x0 ); 
+				imPart = Math.sin( tmpVal );
+				//cos(-2*pi*w(x-x0 + y-y0))
+				rePart = Math.cos( tmpVal );
+
+				bimage.setRGB((int)x,(int) y, 0x10101* (int)(255.0*k));
+				bimage.setRGB((int)x,(int) y+h, 0x10101* (int)(127.0*imPart+128.0));
+				bimage.setRGB((int)x,(int) y+2*h, 0x10101* (int)(127.0*rePart+128.0));
+				if (imPart<0) colour = -0x10000 *(int)(255.0*k*imPart);
+				else colour = (int)(255.0*k*imPart);
+				bimage.setRGB((int)x,(int) y+3*h, colour);
+				if (rePart<0) colour = -0x10000 *(int)(255.0*k*rePart);
+				else colour = (int)(255.0*k*rePart);
+				bimage.setRGB((int)x,(int) y+4*h, colour);
+			}
+		}
+		
+		return bimage;
+	}
 }
