@@ -20,6 +20,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -56,7 +57,8 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
     static BitCode[] bc = new BitCode[2];
     static EyeDataType eyeData;
     static Boolean eyeLoaded;
-	
+    JPanel panelValidate;
+    
 	public PanelValidate(int FRAME_WIDTH,int FRAME_HEIGHT) {
 		    
  			
@@ -67,7 +69,8 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
              JPanel panelData;
              JPanel panelUnwrap;
              JPanel panelBitcode;
-             JPanel panelValidate;
+             JPanel panelSpacer;
+             
              
 //           create panel 
              
@@ -212,15 +215,12 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
        
         BitCode left;
         //BitCode right;
-        String id;
+      
         
         try {
+        	
+        	String id;
         	databaseWrapper db = new databaseWrapper(); 
-        	//db.addId("testi");
-        	//db.addLeft("testi", bc[0]);
-        	/*
-        	
-        	
         	double hd;
         	
 			while(db.rs.next()){
@@ -234,11 +234,20 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 			hd = BitCode.hammingDistance(bc[0],bc[1]);
         	
 			if(hd<1){  
-			hamming_result.setText("Identity Verified as " +id + ": Hamming Distance "+hd);
-        	hamming_result.setEnabled(true);
+				
+				hamming_result.setText("Identity Verified as :" +id +": Hamming Distance "+hd);
+				hamming_result.setEnabled(true);
+				panelValidate.setBackground(Color.GREEN);
+				panelValidate.repaint();
+				break;
+				}
+			
+				hamming_result.setText("Access Denied");
+				hamming_result.setEnabled(true);
+				panelValidate.setBackground(Color.RED);
+				panelValidate.repaint();
 			}
-			}
-			*/
+			
 			
 		} catch (DbException e) {
 			System.out.println("Database Error");
