@@ -158,7 +158,7 @@ public class BitcodeGenerator {
 				
 				imPart = Math.sin( tmpVal );
 				//cos(-2*pi*w(x-x0 + y-y0))
-				rePart = Math.cos( tmpVal );//*wPar.upLim);
+				rePart = Math.cos( tmpVal);// * wPar.upLim);
 
 				sumRe +=  (double) imgVal * k * rePart;
 				sumIm +=  (double) imgVal * k * imPart; 
@@ -166,7 +166,7 @@ public class BitcodeGenerator {
 			}
 		}
 
-		bitcode.addBit(sumRe >= 0.0);
+		//bitcode.addBit(sumRe >= 0.0);
 		bitcode.addBit(sumIm >= 0.0);
 		//System.out.println(sumRe+" "+sumIm);
 	}
