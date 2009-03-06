@@ -63,9 +63,10 @@ public class PanelStatistics extends JPanel implements ActionListener{
 		//As I read the docs, "setFileFilter(FileFilter)" allows you to "filter out files from the user's view", i.e. to control what the user sees, and "setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)" allows the user to "just select directories".
 		File folder = new File(directory);
 		//File folder2 = new File(directory);
-		double sm_box=21.0,bg_box=42.0;
+		double sm_box=17.0,bg_box=38.0;
+		double lambda = 2.0;
 		abPar= new GaborParameters(sm_box,bg_box,3);
-		wPar = new GaborParameters(3.1,1.30,3);
+		wPar = new GaborParameters(lambda/(2.0*sm_box),lambda/(2.0*bg_box),3);
 		x0Par= new GaborParameters(bg_box, 360-bg_box , (int) (360.0 - bg_box*2));
 		y0Par= new GaborParameters(sm_box, bg_box, 3);
 		b1.initialiseParams(wPar, abPar, x0Par, y0Par, 360,100);
