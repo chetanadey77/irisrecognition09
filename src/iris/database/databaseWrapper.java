@@ -3,6 +3,7 @@ package iris.database;
 import iris.bitcodeMatcher.BitCode;
 
 import java.io.IOException;
+import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -34,39 +35,12 @@ public class databaseWrapper {
 	 * @throws IOException 
 	 * @throws SQLException  
 	 */
-	public static void main(String[] args) throws DbException, SQLException, IOException{
-		/*
-		
-		//databaseWrapper test = new databaseWrapper();
-		//BitSet testcode = new BitCode(40);
-		testcode.set(10);
-		testcode.set(15);
-		testcode.set(20);
-		testcode.set(40);
-		System.out.println(testcode.get(39));
-		System.out.println(testcode.get(40));
-		//byte[] insert = test.toByteArray(testcode);
-		//test.addLeft("test2", insert);
-		//byte[] resultleft = new byte[200];
-		//System.out.println(Arrays.toString(insert));
-		//test.addRecord("test4", insert, insert);
-		//test.addId("test");
-		//byte[] newres = new byte[3];
-		//String result = new String();
-		//rs.next();
-		//byte[] newresr = test.getLeftArray(result);
-		//result = test.getNext(newres,newresr);
-		
-		//System.out.println(result + Arrays.toString(newresr));
-		//BitCode resultcode = test.toBitCode(newresr);
-		//System.out.println(resultcode);
-	*/	
-	}
+	
 
 			     
 			public databaseWrapper() throws DbException, SQLException{
 	        
-			   System.out.println( "Setting up access point for Iris project\n" );
+			   System.out.println( "Setting up access point for Iris project");
 
 	        try {
 	        Class.forName("org.postgresql.Driver");
@@ -76,13 +50,14 @@ public class databaseWrapper {
 	        }
 	    
 	        try {
-	            conn = DriverManager.getConnection ("jdbc:postgresql://localhost:1432","g08v36205_u","6IxtbnTGoI");
-	            stmt = conn.createStatement();
+	          conn = DriverManager.getConnection ("jdbc:postgresql://localhost:1422","g08v36205_u","6IxtbnTGoI");
+	          stmt = conn.createStatement();
 	        } catch (Exception e) {
 	               System.err.println("Exception: " + e + "\n" + e.getMessage() );
 	        }
 	        
 	        rs = stmt.executeQuery("SELECT * FROM iris");
+	        System.out.println("Access Point successfully created");
         	
 			
 			}
@@ -94,11 +69,13 @@ public class databaseWrapper {
 			 * @return byte[]
 			 */
 		   
-			private static byte[] toByteArray(BitCode bitcode){
+			
+			
+			
+			public static byte[] toByteArray(BitCode bitcode){
 				
 				byte[] result = new byte[bitcode.length()/8+1];
 				for(int i=0; i<bitcode.length(); i++){
-					
 					if  (bitcode.get(i))
 						result[result.length-i/8-1] |= 1<<(i%8);
 					
@@ -118,12 +95,13 @@ public class databaseWrapper {
 			
 			public static BitCode toBitCode(byte[] stored){
 				
-				BitCode bitcode = new BitCode(stored.length);
+				BitCode bitcode = new BitCode(2048);
 				
 				for(int i=0; i<stored.length*8; i++){
 					
 					if((stored[stored.length-i/8-1]&(1<<(i%8))) > 0)
-						bitcode.set(i);
+						bitcode.addBit(1);
+					else bitcode.addBit(0);
 					
 				}
 				
@@ -131,6 +109,7 @@ public class databaseWrapper {
 				
 			}
 			
+		
 			
 			private Blob bitcodeToBlob(BitCode bitcode) {  
 			    
@@ -151,8 +130,10 @@ public class databaseWrapper {
 			 */
 			
 			
-		   @Test private void addLeft(String id, int[] code) throws SQLException, IOException{
+		   
+		    public void addLeft(String id, BitCode bitcode) throws SQLException, IOException{
 	        
+			byte[] code = this.toByteArray(bitcode);
 	    	String insert = new String();
 	    	int count;
 	    	
@@ -165,7 +146,8 @@ public class databaseWrapper {
             }
 
             stmt.executeUpdate("UPDATE iris SET l = '{" + insert + "}' WHERE id = '" + id + "'");             
-	    	org.junit.Assert.assertFalse(count==0);
+	    	//org.junit.Assert.assertFalse(count==0);
+		   
 		   }
 		   
 		   /**
@@ -174,14 +156,15 @@ public class databaseWrapper {
 			 * @version 1.0
 			 * @throws SQLException 
 			 */
-		   
-		   private void addLeft(String id, byte[] bitcode) throws SQLException{
+		   /*
+		   public void addLeft(String id, byte[] bitcode) throws SQLException{
 			   
 			   
-	        	 PreparedStatement ps = conn.prepareStatement("UPDATE iris SET l = ? WHERE id = '" + id + "'");
-	        	 ps.setBytes(1, bitcode);
-	        	 ps.executeUpdate();
-	        	 ps.close();
+	        	 
+			   PreparedStatement ps = conn.prepareStatement("UPDATE iris SET l = ? WHERE id = '" + id + "'");
+			   ps.setBytes(1, bitcode);
+			   ps.executeUpdate();
+	           ps.close();
 			   
 		   }
 		   
@@ -193,7 +176,7 @@ public class databaseWrapper {
 			 * @throws SQLException 
 			 */
 		   
-		   
+		   /*
 		   public void addLeft(String id, BitCode bitcode) throws SQLException{
 			   
 			   byte[] insert = this.toByteArray(bitcode);
@@ -204,7 +187,7 @@ public class databaseWrapper {
 			   
 			   
 			   }
-		   
+		   */
 		        
 		   /**
 			 * A method that allows a user to add a bitcode to the database for the right iris.
@@ -212,12 +195,13 @@ public class databaseWrapper {
 			 * @version 1.0
 			 */
 	       
-	        @Test private void addRight(String id, int[] code) throws SQLException{
-	        	
-	        	String insert = new String();
-	        	int count;
-	        	
-	            for(count =0; count < code.length; count++){
+		    public void addRight(String id, BitCode bitcode) throws SQLException, IOException{
+		        
+				byte[] code = this.toByteArray(bitcode);
+		    	String insert = new String();
+		    	int count;
+		    	
+	            for(count  =0; count < code.length; count++){
 
 	                if(count == 0)
 	                    insert = insert + code[count];
@@ -226,9 +210,9 @@ public class databaseWrapper {
 	            }
 
 	            stmt.executeUpdate("UPDATE iris SET r = '{" + insert + "}' WHERE id = '" + id + "'");             
-		    	org.junit.Assert.assertFalse(count == 0);
-	        	
-	        }
+		    	//org.junit.Assert.assertFalse(count==0);
+			   
+			   }
 	        
 	        /**
 			 * A method that allows a user to add a bitcode to the database for the right iris using the byte array format.
@@ -327,7 +311,7 @@ public class databaseWrapper {
 	         
 
 	        	 
-	        	 byte[] result = rs.getBytes("l");
+	        	 byte[] result = rs.getBytes("r");
 	        	 id = rs.getString("id");
         	 
 	        	 return result;
@@ -346,13 +330,25 @@ public class databaseWrapper {
 	        
 	         public BitCode getLeftCode() throws SQLException{
 					
-
-	        	 byte[] result_array = rs.getBytes("l");
+	        	 Array r;
+	        	 r = rs.getArray("l");
+	        	 Integer[] result = (Integer[])r.getArray();
+	        	 
+	        	 //byte[] result_array = rs.getBytes("l");
 	        	// id = rs.getString("id");
 	        	 
-	        	 BitCode result = databaseWrapper.toBitCode(result_array);
+	        	 byte[] bitarray = new byte[result.length];
+	        	 for(int i = 0; i<result.length;i++){
+	        		 
+	        		 bitarray[i] = result[i].byteValue();
+	        		 
+	        	 }
 	        	 
-	        	 return result;
+	        	 System.out.println(Arrays.toString(bitarray));
+	        	 
+	        	 BitCode bitcode = this.toBitCode(bitarray);
+	        	 
+	        	 return bitcode;
 	        	 
 	        	 
 	            }
@@ -370,16 +366,27 @@ public class databaseWrapper {
 	         
 	         public BitCode getRightCode() throws SQLException{
 					
-
-	        	 byte[] result_array = rs.getBytes("r");
-	        	 //id = rs.getString("id");
+	        	 Array r;
+	        	 r = rs.getArray("r");
+	        	 Integer[] result = (Integer[])r.getArray();
 	        	 
-	        	 BitCode result = databaseWrapper.toBitCode(result_array);
+	        	 //byte[] result_array = rs.getBytes("l");
+	        	// id = rs.getString("id");
 	        	 
-	        	 return result;
+	        	 byte[] bitarray = new byte[result.length];
+	        	 for(int i = 0; i<result.length;i++){
+	        		 
+	        		 bitarray[i] = result[i].byteValue();
+	        		 
+	        	 }
 	        	 
+	        	 System.out.println(Arrays.toString(bitarray));
 	        	 
-	            }
+	        	 BitCode bitcode = this.toBitCode(bitarray);
+	        	 
+	        	 return bitcode;
+	        	 }
+	         
 	         
 	         public String getId() throws SQLException{
 	        	 
@@ -405,6 +412,15 @@ public class databaseWrapper {
 	        	 
 	        	 
 	        	 }
+	         
+	         
+	         public Boolean DeleteAll() throws SQLException{
+	        	 
+	        	 stmt.executeUpdate("DELETE FROM iris");
+	        	 return true;
+	        	 
+	        	 
+	         }
 	         
 	         
 	         
