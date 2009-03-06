@@ -35,6 +35,7 @@ public class PanelStatistics extends JPanel implements ActionListener{
     }
 	public void displayTable()
 	{
-		
+		//As I read the docs, "setFileFilter(FileFilter)" allows you to "filter out files from the user's view", i.e. to control what the user sees, and "setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)" allows the user to "just select directories".
+
 	}
 }
