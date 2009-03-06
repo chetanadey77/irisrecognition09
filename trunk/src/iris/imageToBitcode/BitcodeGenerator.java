@@ -44,7 +44,7 @@ public class BitcodeGenerator {
 
 		
 		GaborParameters _wPar = new GaborParameters(0.20, 0.1, 3);
-		GaborParameters _abPar = new GaborParameters(15, 20, 3);
+		GaborParameters _abPar = new GaborParameters(5, 20, 3);
 		GaborParameters _x0Par = new GaborParameters(_abPar.upLim, _unwrWidth-_abPar.upLim , (int) (_unwrWidth-_abPar.upLim*2) );
 		//GaborParameters _x0Par = new GaborParameters(_abPar.upLim, _unwrWidth+_abPar.upLim, (int) (_unwrWidth-_abPar.upLim*2) );
 		GaborParameters _y0Par = new GaborParameters(_abPar.lowLim, _abPar.upLim, 3);
@@ -138,6 +138,8 @@ public class BitcodeGenerator {
 		ymin = Math.floor(y0-b);
 		ymax = Math.ceil(y0+b);
 		//System.out.println("x "+xmin+" to "+xmax+"  y "+ymin+" to "+ymax);
+		//double lambda =2.0;
+		//w = lambda /(a*2);
 		for(double x = xmin; x <= xmax; x++)
 		{
 			for(double y =ymin; y <=ymax; y++)
@@ -153,6 +155,7 @@ public class BitcodeGenerator {
 				k = Math.exp( -Math.PI * (Math.pow( x - x0, 2) / a2 + Math.pow( y - y0, 2) / b2) );
 				//sin(-2*pi*w(x-x0 + y-y0))
 				tmpVal =  -w * 2 * Math.PI * ( x-x0 ); 
+				
 				imPart = Math.sin( tmpVal );
 				//cos(-2*pi*w(x-x0 + y-y0))
 				rePart = Math.cos( tmpVal );//*wPar.upLim);
