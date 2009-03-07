@@ -33,6 +33,19 @@ import javax.swing.JFrame;
 
 import org.jdesktop.layout.GroupLayout;
 
+
+/**
+* This code was edited or generated using CloudGarden's Jigloo
+* SWT/Swing GUI Builder, which is free for non-commercial
+* use. If Jigloo is being used commercially (ie, by a corporation,
+* company or business for any purpose whatever) then you
+* should purchase a license for each developer using Jigloo.
+* Please visit www.cloudgarden.com for details.
+* Use of Jigloo implies acceptance of these licensing terms.
+* A COMMERCIAL LICENSE HAS NOT BEEN PURCHASED FOR
+* THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
+* LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
+*/
 public class PanelAdministrator extends javax.swing.JPanel implements ActionListener {
 
 	static JLabel imageEye;
@@ -40,7 +53,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	static JLabel imageBitCode;
 	
 	static JButton getimage;
-	static JButton validate;
+	static JButton deleteEntry;
+	static JButton addEntry;
 	
 	static ImageIcon iconEye;
 	static ImageIcon iconUnwrappedEye;
@@ -59,7 +73,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
     static Boolean eyeLoaded;
 
 	
-    JPanel panelValidate;
+    JPanel panelAdministrator;
     
 	public PanelAdministrator(int FRAME_WIDTH,int FRAME_HEIGHT) {
 		    
@@ -80,7 +94,6 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
                  panelData = new JPanel();
                  panelUnwrap = new JPanel();
                  panelBitcode = new JPanel();
-                 panelValidate = new JPanel();
              	imageEye = new  JLabel();
              	imageUnwrappedEye = new  JLabel();
              	imageBitCode = new  JLabel();
@@ -88,12 +101,15 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	iconUnwrappedEye = new ImageIcon();
              	iconBitCode = new ImageIcon();
              	eyeLoaded = false;
-             	getimage = new JButton("Load image to be validated");
-             	validate = new JButton("Validate Identity");
+             	getimage = new JButton("Load image");
+             	deleteEntry = new JButton("Delete");
+             	addEntry = new JButton("Add");
              	getimage.setSize(320, 30);
              	getimage.setEnabled(true);
-             	validate.setSize(320, 30);
-             	validate.setEnabled(true);
+             	deleteEntry.setSize(320, 30);
+             	deleteEntry.setEnabled(true);
+             	addEntry.setSize(320, 30);
+             	addEntry.setEnabled(true);
              	
              	Eye = new BufferedImage(320,280,BufferedImage.TYPE_INT_RGB);
              	UnwrappedEye  = new BufferedImage(512,128,BufferedImage.TYPE_INT_RGB);
@@ -138,10 +154,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	panelEyeImage.setBackground(Color.WHITE);
              	panelEyeImage.add(getimage,BorderLayout.NORTH);
              	panelEyeImage.add(imageEye,BorderLayout.SOUTH);
-             	
-             	panelValidate.setLayout(new BorderLayout());
-             	panelValidate.setBackground(Color.WHITE);
-             	panelValidate.add(validate,BorderLayout.WEST);
+             	panelEyeImage.add(deleteEntry,BorderLayout.WEST);
+             	panelEyeImage.add(addEntry, BorderLayout.SOUTH);
              	
              	panelUnwrap.setLayout(new BorderLayout());
              	panelUnwrap.setBackground(Color.WHITE);
@@ -161,19 +175,21 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	panelWhole.setLayout(new BorderLayout());
              	panelWhole.add(panelEyeImage,BorderLayout.WEST);
              	panelWhole.add(panelData,BorderLayout.EAST);
-             	panelWhole.add(panelValidate,BorderLayout.SOUTH);
+             	panelWhole.add(panelAdministrator,BorderLayout.SOUTH);
              
              JPanel background = new JPanel();
              background.setBackground(Color.WHITE);
              background.setPreferredSize(new Dimension(FRAME_WIDTH,FRAME_HEIGHT));
              add(background);
+             background.setPreferredSize(new java.awt.Dimension(602, 95));
              hamming_result.setEnabled(false);
              background.add(panelWhole);
              background.add(hamming_result);
              //background.add(panelWhole);
              
              getimage.addActionListener(this);
-             validate.addActionListener(this);
+             deleteEntry.addActionListener(this);
+             addEntry.addActionListener(this);
 		
 		
 	}
@@ -184,7 +200,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		long startTime = 0;
     	//System.out.println( ev.getActionCommand()+"  "+ev.getClass()+" "+ev.getSource());
     	
-		if (ev.getActionCommand()=="Load image to be validated"){
+		if (ev.getActionCommand()=="Load image to be deleted"){
     	
     	iconEye = gtImage();
     	startTime=System.currentTimeMillis(); //calculate runtime
@@ -211,63 +227,11 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
         imageBitCode.setIcon(iconBitCode);
         imageBitCode.repaint();
 		}
-        else if (ev.getActionCommand()=="Validate Identity"){
-    	
-       
-        BitCode left;
-        //BitCode right;
-      
-        
-        try {
-        	databaseWrapper db = new databaseWrapper(); 
-        	
-        	String id;
-        	double hd;
-        	
-			while(db.rs.next()){
-        	
-        	id = db.getId();
-			left = db.getLeftCode();
-			bc[1] = left;
-			byte[] testing = db.toByteArray(bc[0]);
-			System.out.println(Arrays.toString(testing));
-			//right = db.getRightCode(id);
-			//eyeLoaded = true;
-			
-			hd = BitCode.hammingDistance(bc[0],bc[1]);
-        	
-			if(hd<.35){  
-				
-				hamming_result.setText("Identity Verified as :" +id +": Hamming Distance "+hd);
-				hamming_result.setEnabled(true);
-				panelValidate.setBackground(Color.GREEN);
-				panelValidate.repaint();
-				break;
-				}
-			
-				hamming_result.setText("Access Denied");
-				hamming_result.setEnabled(true);
-				panelValidate.setBackground(Color.RED);
-				panelValidate.repaint();
-			
-			}
-			
-			
-		} catch (DbException e) {
-			System.out.println("Database Error");
-			e.printStackTrace();
-		} catch (SQLException e) {
-			System.out.println("SQL Syntax Error");
-			e.printStackTrace();
-		}
-        
-        
-         System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
-	
-		}
-		else System.out.println("Error with the Main Frame Action Event Handler");
-		
 	}
+       // else if (ev.getActionCommand()=="Delete from Database"){
+       // else id (ev.getActionCommand()=="Add to Database"){
+       
+        
 
 	private ImageIcon gtImage() {
         JFileChooser filedialog = new  JFileChooser();
