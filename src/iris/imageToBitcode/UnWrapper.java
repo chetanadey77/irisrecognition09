@@ -122,7 +122,7 @@ public class UnWrapper {
 		BufferedImage img = UnWrapper.unWrap(eyeImage, ed, unwrHeight, unwrWidth,overWrap);
 		int[][] retvals = new int[img.getWidth()+overWrap][img.getHeight()];
 		Color c;
-		for (int i=0; i<(img.getWidth() + overWrap-1); i++)
+		for (int i=0; i<(img.getWidth() ); i++)
 		{
 			for (int j=0; j<img.getHeight()-1; j++)
 			{

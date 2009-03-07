@@ -35,4 +35,9 @@ public class GaborParameters {
 			return (upLim - lowLim)/(double)(numVals - 1);
 		}
 	}
+	public GaborParameters add(GaborParameters gp,double scale)
+	{
+		GaborParameters temp = new GaborParameters(lowLim + (scale *gp.lowLim),upLim + (scale * gp.upLim),numVals);
+		return temp;
+	}
 }
