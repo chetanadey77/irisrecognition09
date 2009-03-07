@@ -20,6 +20,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,69 +35,146 @@ import org.jdesktop.layout.GroupLayout;
 
 public class PanelAdministrator extends javax.swing.JPanel implements ActionListener {
 
+	static JLabel imageEye;
+	static JLabel imageUnwrappedEye;
+	static JLabel imageBitCode;
 	
-	static JButton addEntry;
-	static JButton deleteEntry;
-	static JButton deleteAll;
+	static JButton getimage;
+	static JButton validate;
 	
+	static ImageIcon iconEye;
+	static ImageIcon iconUnwrappedEye;
+	static ImageIcon iconBitCode;
+	
+	
+    static JTextField hamming_result = new JTextField(30);
+        
+    static BufferedImage Eye;
+    static BufferedImage UnwrappedEye;
+    static BufferedImage ValidateBitCode;
+  
     
     static BitCode[] bc = new BitCode[2];
     static EyeDataType eyeData;
     static Boolean eyeLoaded;
+
 	
+    JPanel panelValidate;
+    
 	public PanelAdministrator(int FRAME_WIDTH,int FRAME_HEIGHT) {
 		    
  			
- 			addEntry= new JButton("Add entry");
- 			deleteEntry= new JButton("Delete entry");
- 			deleteAll= new JButton("Delete all entries");
+ 			getimage= new JButton("Load eye image");
  			
              JPanel panelEyeImage;
              JPanel panelWhole;
              JPanel panelData;
              JPanel panelUnwrap;
              JPanel panelBitcode;
-             JPanel panelAdministrator;
+             
              
 //           create panel 
              
-             	 panelEyeImage = new JPanel();
+             	panelEyeImage = new JPanel();
                  panelWhole = new JPanel();
                  panelData = new JPanel();
                  panelUnwrap = new JPanel();
                  panelBitcode = new JPanel();
-                 panelAdministrator = new JPanel();
-             	
-             
+                 panelValidate = new JPanel();
+             	imageEye = new  JLabel();
+             	imageUnwrappedEye = new  JLabel();
+             	imageBitCode = new  JLabel();
+             	iconEye = new ImageIcon();
+             	iconUnwrappedEye = new ImageIcon();
+             	iconBitCode = new ImageIcon();
              	eyeLoaded = false;
-             	addEntry = new JButton("Add entry to Database");
-             	deleteEntry = new JButton("Delete entry from Database");
-             	deleteAll = new JButton("Delete all entries");
-             	addEntry.setSize(320, 30);
-             	addEntry.setEnabled(true);
-             	deleteEntry.setSize(320, 30);
-             	deleteEntry.setEnabled(true);
-             	deleteAll.setSize(320, 30);
-             	deleteAll.setEnabled(true);
-      	
+             	getimage = new JButton("Load image to be validated");
+             	validate = new JButton("Validate Identity");
+             	getimage.setSize(320, 30);
+             	getimage.setEnabled(true);
+             	validate.setSize(320, 30);
+             	validate.setEnabled(true);
              	
-             	panelAdministrator.add(addEntry,BorderLayout.NORTH);             	
-                panelAdministrator.setLayout(new BorderLayout());
-             	panelAdministrator.setBackground(Color.WHITE);
-             	panelAdministrator.add(deleteEntry,BorderLayout.WEST);
-             	panelAdministrator.add(deleteAll,BorderLayout.SOUTH);
-                    	
+             	Eye = new BufferedImage(320,280,BufferedImage.TYPE_INT_RGB);
+             	UnwrappedEye  = new BufferedImage(512,128,BufferedImage.TYPE_INT_RGB);
+             	ValidateBitCode = new BufferedImage(512,128,BufferedImage.TYPE_BYTE_GRAY);
+                         
+                           
+            
+             //set images to alternate squares of grey and white
+             	int square_size=10;
+             	int grey = 0xf0f0f0;
+             	int white = 0xffffff;
+             	int colour;
+             	for(int x =0;x<Eye.getWidth();x++)
+             		for(int y=0;y<Eye.getHeight();y++) 
+             		{
+             			colour=((x/square_size +y/square_size)%2==1)?grey:white;
+             			Eye.setRGB(x,y,colour);
+             		}
+             	square_size=8;
+             	for(int x =0;x<UnwrappedEye.getWidth();x++)
+                 		for(int y=0;y<UnwrappedEye.getHeight();y++) 
+                 		{
+                 			colour=((x/square_size +y/square_size)%2==1)?grey:white;
+                 			UnwrappedEye.setRGB(x,y,colour);
+                 		}
+             	for(int x =0;x<ValidateBitCode.getWidth();x++)
+                     		for(int y=0;y<ValidateBitCode.getHeight();y++) 
+                     		{
+                     			colour=((x/square_size +y/square_size)%2==1)?grey:white;
+                     			ValidateBitCode.setRGB(x,y,colour);
+                     		}
+             
+             	iconEye.setImage(Eye);
+             	iconUnwrappedEye.setImage(UnwrappedEye);
+             	iconBitCode.setImage(ValidateBitCode);
+             
+             	imageEye.setIcon(iconEye);
+             	imageUnwrappedEye.setIcon(iconUnwrappedEye);
+             	imageBitCode.setIcon(iconBitCode);
+             	
+             	panelEyeImage.setLayout(new BorderLayout());
+             	panelEyeImage.setBackground(Color.WHITE);
+             	panelEyeImage.add(getimage,BorderLayout.NORTH);
+             	panelEyeImage.add(imageEye,BorderLayout.SOUTH);
+             	
+             	panelValidate.setLayout(new BorderLayout());
+             	panelValidate.setBackground(Color.WHITE);
+             	panelValidate.add(validate,BorderLayout.WEST);
+             	
+             	panelUnwrap.setLayout(new BorderLayout());
+             	panelUnwrap.setBackground(Color.WHITE);
+             	panelUnwrap.add(new JLabel("Unwrapped iris"),BorderLayout.NORTH);
+             	panelUnwrap.add(imageUnwrappedEye,BorderLayout.SOUTH);
+             	panelBitcode.setLayout(new BorderLayout());
+             	panelBitcode.setBackground(Color.WHITE);
+             	panelBitcode.add(new JLabel("Bitcode"),BorderLayout.NORTH);
+             	panelBitcode.add(imageBitCode,BorderLayout.SOUTH);
+             	panelData.setLayout(new BorderLayout());
+             	panelData.setBackground(Color.WHITE);
+             	panelData.add(panelUnwrap,BorderLayout.NORTH);
+             	panelData.add(panelBitcode,BorderLayout.SOUTH);
+             	
              	//panelWhole[n].setLayout(new GridLayout(1,2));
              	panelWhole.setBackground(Color.WHITE);
              	panelWhole.setLayout(new BorderLayout());
              	panelWhole.add(panelEyeImage,BorderLayout.WEST);
              	panelWhole.add(panelData,BorderLayout.EAST);
-             	panelWhole.add(panelAdministrator,BorderLayout.SOUTH);
-       
+             	panelWhole.add(panelValidate,BorderLayout.SOUTH);
              
-             addEntry.addActionListener(this);
-             deleteEntry.addActionListener(this);
-             deleteAll.addActionListener(this);
+             JPanel background = new JPanel();
+             background.setBackground(Color.WHITE);
+             background.setPreferredSize(new Dimension(FRAME_WIDTH,FRAME_HEIGHT));
+             add(background);
+             hamming_result.setEnabled(false);
+             background.add(panelWhole);
+             background.add(hamming_result);
+             //background.add(panelWhole);
+             
+             getimage.addActionListener(this);
+             validate.addActionListener(this);
+		
 		
 	}
 	
@@ -106,8 +184,83 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		long startTime = 0;
     	//System.out.println( ev.getActionCommand()+"  "+ev.getClass()+" "+ev.getSource());
     	
-		if (ev.getActionCommand()=="Add entry to Database"){
-  
+		if (ev.getActionCommand()=="Load image to be validated"){
+    	
+    	iconEye = gtImage();
+    	startTime=System.currentTimeMillis(); //calculate runtime
+        imageEye.setIcon(iconEye);
+        eyeLoaded = false;
+        Eye.getGraphics().drawImage( iconEye.getImage(),0,0,null);
+        eyeData = LocateIris.find_iris(Eye);
+        UnWrapper uw = new UnWrapper();
+        BufferedImage validate=uw.originalWithGuides(Eye,eyeData);
+        iconEye.setImage(validate);
+        imageEye.setIcon(iconEye);
+        imageEye.repaint();
+        
+        
+        BufferedImage biUnwrapped = uw.unWrapWithGuides(Eye,eyeData,128,512);//biUnwrappedEye[n].getWidth(),biUnwrappedEye[n].getHeight());
+        iconUnwrappedEye.setImage(biUnwrapped);
+        imageUnwrappedEye.setIcon(iconUnwrappedEye);
+        imageUnwrappedEye.repaint();
+		BitcodeGenerator b = new BitcodeGenerator();
+		bc[0] =  b.getBitcode(Eye,eyeData);
+		//System.out.println(bc[n].getBitcodeSize());
+		ValidateBitCode = bc[0].getBitCodeImage(512,128,32);
+		iconBitCode.setImage(ValidateBitCode);
+        imageBitCode.setIcon(iconBitCode);
+        imageBitCode.repaint();
+		}
+        else if (ev.getActionCommand()=="Validate Identity"){
+    	
+       
+        BitCode left;
+        //BitCode right;
+      
+        
+        try {
+        	databaseWrapper db = new databaseWrapper(); 
+        	
+        	String id;
+        	double hd;
+        	
+			while(db.rs.next()){
+        	
+        	id = db.getId();
+			left = db.getLeftCode();
+			bc[1] = left;
+			byte[] testing = db.toByteArray(bc[0]);
+			System.out.println(Arrays.toString(testing));
+			//right = db.getRightCode(id);
+			//eyeLoaded = true;
+			
+			hd = BitCode.hammingDistance(bc[0],bc[1]);
+        	
+			if(hd<.35){  
+				
+				hamming_result.setText("Identity Verified as :" +id +": Hamming Distance "+hd);
+				hamming_result.setEnabled(true);
+				panelValidate.setBackground(Color.GREEN);
+				panelValidate.repaint();
+				break;
+				}
+			
+				hamming_result.setText("Access Denied");
+				hamming_result.setEnabled(true);
+				panelValidate.setBackground(Color.RED);
+				panelValidate.repaint();
+			
+			}
+			
+			
+		} catch (DbException e) {
+			System.out.println("Database Error");
+			e.printStackTrace();
+		} catch (SQLException e) {
+			System.out.println("SQL Syntax Error");
+			e.printStackTrace();
+		}
+        
         
          System.out.println("Running time: " + (float)(System.currentTimeMillis() - startTime)/1000 + " seconds");
 	
