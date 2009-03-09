@@ -245,7 +245,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 				break;
 				}
 			
-				hamming_result.setText("Access Denied");
+				hamming_result.setText("No Match Found");
 				hamming_result.setEnabled(true);
 				panelValidate.setBackground(Color.RED);
 				panelValidate.repaint();
