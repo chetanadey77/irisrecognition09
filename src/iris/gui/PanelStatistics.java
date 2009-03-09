@@ -201,9 +201,9 @@ public void displayGraph()
 	DecimalFormat _1dp = new DecimalFormat("0.0");
 	DecimalFormat _3dp = new DecimalFormat("0.000");
 	System.out.println("Loading Images");
-	int bits=1;
-	double sm_box=9.0,bg_box=22.0;
-	double lambda = 1.9, scale = 2.05;
+	int bits=2;
+	double sm_box=9.0,bg_box=29.0;
+	double lambda = 1.9, scale = 2.4;
 	GaborParameters abPar= new GaborParameters(sm_box,bg_box,3);
 	GaborParameters wPar = new GaborParameters(lambda/(2.0*sm_box),lambda/(2.0*sm_box*scale),3);
 	GaborParameters x0Par= new GaborParameters(bg_box, 360-bg_box , (int) (360.0 - bg_box*2));

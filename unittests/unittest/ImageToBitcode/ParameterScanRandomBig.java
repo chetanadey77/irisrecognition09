@@ -92,7 +92,7 @@ System.out.print(bits+", "+sm_box+", "+bg_box+", "+_3dp.format(lambda)+", "+_3dp
 		{			
 			hamm = BitCode.hammingDistance(bc[i],bc[j]);
 			//if (names[i].compareTo(names[j])!=0)
-			//{
+			//{---
 				if (hamm>highest) highest=hamm;
 				if (hamm<lowest) lowest=hamm;
 				if (match[i][j])
