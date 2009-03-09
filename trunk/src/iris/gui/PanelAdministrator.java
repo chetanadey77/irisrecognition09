@@ -74,6 +74,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
     static BitCode[] bc = new BitCode[2];
     static EyeDataType eyeData;
     static Boolean eyeLoaded;
+    static Boolean added;
 
 	
     
@@ -124,6 +125,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	UnwrappedEye  = new BufferedImage(512,128,BufferedImage.TYPE_INT_RGB);
              	ValidateBitCode = new BufferedImage(512,128,BufferedImage.TYPE_BYTE_GRAY);
              	
+                
              	
                          
                            
@@ -236,6 +238,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		iconBitCode.setImage(ValidateBitCode);
         imageBitCode.setIcon(iconBitCode);
         imageBitCode.repaint();
+        added = true;
+        
 		}
 	
        else if (ev.getActionCommand()=="Delete All"){
@@ -261,6 +265,10 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		
 	else if (ev.getActionCommand()=="Add to Database"){
 		
+		if(added == false){
+			hamming_result.setText("Already Added");
+			return;
+		}
 		if(eyeLoaded == false){
 			hamming_result.setText("No Image Loaded");
 			return;
@@ -274,8 +282,35 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
                 null,
                 null,
                 "Write Text Here");
-		
-	
+		if(s.length()==0) {
+				hamming_result.setText("No ID Entered");
+				hamming_result.setEnabled(true);
+	}
+				else if (s.length()>=6) {
+				hamming_result.setText("ID too long");
+				hamming_result.setEnabled(true);
+				}
+				else {
+					try {
+						databaseWrapper db = new databaseWrapper();
+						db.addId(s);
+						db.addLeft(s, bc[0]);
+						hamming_result.setText("Id '" + s + "' entered into database");
+					} catch (DbException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						hamming_result.setText("ID already in use");
+						e.printStackTrace();
+						return;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					added = false;
+				
+				}
 	}
 	}    
 
