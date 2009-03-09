@@ -26,7 +26,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.JFrame;
@@ -51,6 +53,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	static JLabel imageEye;
 	static JLabel imageUnwrappedEye;
 	static JLabel imageBitCode;
+	JPopupMenu enterid;
 	
 	static JButton getimage;
 	static JButton deleteEntry;
@@ -73,7 +76,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
     static Boolean eyeLoaded;
 
 	
-    JPanel panelAdministrator;
+    
     
 	public PanelAdministrator(int FRAME_WIDTH,int FRAME_HEIGHT) {
 		    
@@ -85,6 +88,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              JPanel panelData;
              JPanel panelUnwrap;
              JPanel panelBitcode;
+             JPanel panelAdministrator;
+             
              
              
 //           create panel 
@@ -94,6 +99,10 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
                  panelData = new JPanel();
                  panelUnwrap = new JPanel();
                  panelBitcode = new JPanel();
+                 panelAdministrator = new JPanel();
+                 enterid = new JPopupMenu();
+                 JTextField enter = new JTextField(30);
+                 enterid.add(enter);
              	imageEye = new  JLabel();
              	imageUnwrappedEye = new  JLabel();
              	imageBitCode = new  JLabel();
@@ -102,8 +111,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	iconBitCode = new ImageIcon();
              	eyeLoaded = false;
              	getimage = new JButton("Load image");
-             	deleteEntry = new JButton("Delete");
-             	addEntry = new JButton("Add");
+             	deleteEntry = new JButton("Delete All");
+             	addEntry = new JButton("Add to Database");
              	getimage.setSize(320, 30);
              	getimage.setEnabled(true);
              	deleteEntry.setSize(320, 30);
@@ -114,6 +123,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	Eye = new BufferedImage(320,280,BufferedImage.TYPE_INT_RGB);
              	UnwrappedEye  = new BufferedImage(512,128,BufferedImage.TYPE_INT_RGB);
              	ValidateBitCode = new BufferedImage(512,128,BufferedImage.TYPE_BYTE_GRAY);
+             	
+             	
                          
                            
             
@@ -181,7 +192,6 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              background.setBackground(Color.WHITE);
              background.setPreferredSize(new Dimension(FRAME_WIDTH,FRAME_HEIGHT));
              add(background);
-             background.setPreferredSize(new java.awt.Dimension(602, 95));
              hamming_result.setEnabled(false);
              background.add(panelWhole);
              background.add(hamming_result);
@@ -200,12 +210,12 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		long startTime = 0;
     	//System.out.println( ev.getActionCommand()+"  "+ev.getClass()+" "+ev.getSource());
     	
-		if (ev.getActionCommand()=="Load image to be deleted"){
+		if (ev.getActionCommand()=="Load image"){
     	
     	iconEye = gtImage();
     	startTime=System.currentTimeMillis(); //calculate runtime
         imageEye.setIcon(iconEye);
-        eyeLoaded = false;
+        eyeLoaded = true;
         Eye.getGraphics().drawImage( iconEye.getImage(),0,0,null);
         eyeData = LocateIris.find_iris(Eye);
         UnWrapper uw = new UnWrapper();
@@ -227,11 +237,47 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
         imageBitCode.setIcon(iconBitCode);
         imageBitCode.repaint();
 		}
-	}
-       // else if (ev.getActionCommand()=="Delete from Database"){
-       // else id (ev.getActionCommand()=="Add to Database"){
+	
+       else if (ev.getActionCommand()=="Delete All"){
        
-        
+       try {
+		Boolean success;
+    	databaseWrapper db = new databaseWrapper();
+		success = db.DeleteAll();
+		if(success == true)
+		hamming_result.setText("All Entries Deleted");
+		else hamming_result.setText("Delete All not successful");
+		hamming_result.setEnabled(true);
+	} catch (DbException e) {
+		//TODO
+		e.printStackTrace();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    
+       
+       }
+		
+	else if (ev.getActionCommand()=="Add to Database"){
+		
+		if(eyeLoaded == false){
+			hamming_result.setText("No Image Loaded");
+			return;
+		}
+		
+		String s = (String)JOptionPane.showInputDialog(
+                this,
+                "Enter ID: ",
+                "Adding to Database",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                null,
+                "Write Text Here");
+		
+	
+	}
+	}    
 
 	private ImageIcon gtImage() {
         JFileChooser filedialog = new  JFileChooser();
