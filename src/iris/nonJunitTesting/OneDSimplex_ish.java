@@ -26,14 +26,18 @@ public class OneDSimplex_ish {
 	static GaborParameters _wPar;
 	static GaborParameters _x0Par;
 	static GaborParameters _y0Par;
+	static int findDistanceCount;
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		findDistanceCount=0;
 		// TODO Auto-generated method stub
 		System.out.println("Loading Images");
 		String directory = "images/automatic/";
+		eyes =new BufferedImage[300];
+		names = new String[300];
 		count = load_images(eyes,names,directory);
 		match = new boolean[count][count];
 		for(int i=0;i<count;i++)
@@ -42,33 +46,100 @@ public class OneDSimplex_ish {
 				else match[i][j]=false;
 		eyed = find_pupils(eyes,count);
 		bits =2;
-		FourDparamSpace sol = new FourDparamSpace(9,27,5.7,1.9);
+		FourDparamSpace sol = new FourDparamSpace(9,14,5.7,1.9);
 		FourDparamSpace width = new FourDparamSpace(4,4,0.4,0.4);
-		int mu = 4;
-		
+		double hamSol = findDistance(sol, bits);
+		System.out.println("Starting point :-");
+		System.out.println(sol.toString() + "   result     "+hamSol);
+		findDistanceCount=0;
+		for (int mu = 0;mu<4;mu++)//number of times to reduce width
+		{
+			for (int repeat=0;repeat<3;repeat++)//number of times to try again on a failed improvement
+			{
+				boolean improved_solution = true;
+				while (improved_solution)
+				{
+					improved_solution=false;
+					FourDparamSpace delta = nextPoint(sol,width);
+					FourDparamSpace newsol = FourDparamSpace.add(sol,delta);
+					double hamNewSol = findDistance(newsol,bits);
+					FourDparamSpace init_sol = sol.copy();
+					if (hamNewSol>hamSol)//if new point is better try to extrapolate it
+					{
+						improved_solution = true;
+						while ( hamNewSol>hamSol)
+						{
+							hamSol = hamNewSol;
+							sol = newsol.copy();
+							delta = FourDparamSpace.multiply(delta, 2);
+							newsol    = FourDparamSpace.add(init_sol,delta);
+							hamNewSol = findDistance(newsol, bits);
+						}
+					} else 
+					{
+						newsol = FourDparamSpace.subtract(sol,delta);
+						hamNewSol = findDistance(newsol, bits);
+						if (hamNewSol>hamSol)//reflect new point & try to extrapolate it
+						{
+							improved_solution = true;
+							while (hamSol < hamNewSol)
+							{
+								hamSol = hamNewSol;
+								sol = newsol.copy();
+								delta = FourDparamSpace.multiply(delta, 2);
+								newsol    = FourDparamSpace.subtract(init_sol,delta);
+								hamNewSol = findDistance(newsol, bits);
+							}
+						}else
+						{					//try and interpolate
+							for (int i =4;i>0;i--)
+							{
+							//	delta = FourDparamSpace.divide(delta, 2);
+								newsol = FourDparamSpace.subtract(sol,FourDparamSpace.divide(delta, (int) Math.pow((double)i,2.0)));
+								hamNewSol = findDistance(newsol, bits);
+								if (hamNewSol>hamSol) 
+									{
+									improved_solution = true;
+									hamSol = hamNewSol;
+									sol=newsol.copy();
+								}
+								else break;
+							}
+						}
+			
+			
+					}
+					System.out.println(sol.toString() + "  calculations "+findDistanceCount+ "   result  "+hamSol);
+				}//end while improved
+				//System.out.println(sol.toString() + "  calculations "+findDistanceCount+ "   result     "+hamSol);
+			}// next repeat
+			width = FourDparamSpace.divide(width,2);
+		}// next mu
 	}
 	
 	public static FourDparamSpace nextPoint(FourDparamSpace sol, FourDparamSpace width)
 	{
 		Random generator = new Random();
 		FourDparamSpace c = new FourDparamSpace();
-		while (!FourDparamSpace.isValid(c))
+		FourDparamSpace delta = new FourDparamSpace();
+		while (!FourDparamSpace.isValid(c) ||
+				( delta._minBox==0 && delta._maxBox==0 && delta._lambda==0.0 && delta._scale==0))
 		{
-			c._minBox = sol._minBox + generator.nextInt(width._minBox*2+1) - width._minBox;
-			c._maxBox = sol._maxBox + generator.nextInt(width._maxBox*2+1) - width._maxBox;
-			c._lambda = sol._lambda + generator.nextDouble()*width._lambda*2 - width._lambda;
-			c._scale = sol._scale + generator.nextDouble()*width._scale*2 - width._scale;
+			delta._minBox = generator.nextInt(width._minBox*2+1) - width._minBox;
+			delta._maxBox = generator.nextInt(width._maxBox*2+1) - width._maxBox;
+			delta._lambda = generator.nextDouble()*width._lambda*2 - width._lambda;
+			delta._scale  = generator.nextDouble()*width._scale*2 - width._scale;
+			c = FourDparamSpace.add(sol,delta);
 		}
-		return c;
-			
+		return delta;
 	}
+	
 	public static EyeDataType[] find_pupils(BufferedImage[] bi,int count)
 	{
 		EyeDataType[] ed = new EyeDataType[count];
 		for (int i = 0; i < count; i++)
 		{
 			ed[i] = LocateIris.find_iris(bi[i]);
-		
 		}
 		return ed;
 	}
@@ -78,15 +149,13 @@ public class OneDSimplex_ish {
 		ImageSaverLoader isl = new ImageSaverLoader(); 
 		File folder = new File(directory);
 		File[] listOfFiles = folder.listFiles();
-		bi =new BufferedImage[listOfFiles.length];
-		names = new String[listOfFiles.length];
 		int count=0;
 		for (int i = 0; i < listOfFiles.length; i++)
 		{
 			if (listOfFiles[i].isFile())
 			{
 				names[count] = listOfFiles[i].getName();
-				bi[count] = isl.loadImage(directory,names[count]);
+				bi[count] = isl.loadImage("/"+directory,names[count]);
 				count++;
 			}
 		}
@@ -103,6 +172,8 @@ public class OneDSimplex_ish {
 	}
 	static public double findDistance(FourDparamSpace p, int bits)
 	{
+		if (!FourDparamSpace.isValid(p)) return -2.0;
+		findDistanceCount++;
 		double lowest_fail=1.0,weakest_match=0.0;
 		double highest = 0.0,lowest=1.0;
 		double hamm;
