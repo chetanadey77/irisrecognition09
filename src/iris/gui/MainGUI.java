@@ -43,9 +43,11 @@ class MainFrame extends JFrame
 		PanelStatistics panelStatistics = new PanelStatistics(FRAME_WIDTH,FRAME_HEIGHT);
 		PanelValidate panelValidate = new PanelValidate(FRAME_WIDTH,FRAME_HEIGHT);
 		PanelAdministrator panelAdminister = new PanelAdministrator(FRAME_WIDTH,FRAME_HEIGHT);
+		PanelAbout panelAbout = new PanelAbout(FRAME_WIDTH,FRAME_HEIGHT);
 		JTabbedPane tabbedMainFrame = new JTabbedPane();
 		getContentPane().setLayout(null);	
 		getContentPane().add(tabbedMainFrame);
+		tabbedMainFrame.addTab("About", panelAbout);
 		tabbedMainFrame.addTab("Compare Two",null,panelCT,null);
 		tabbedMainFrame.addTab("Statistics",null,panelStatistics,null);
 		tabbedMainFrame.addTab("Validate Id",null,panelValidate);
