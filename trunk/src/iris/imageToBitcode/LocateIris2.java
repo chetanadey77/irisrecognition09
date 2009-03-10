@@ -38,13 +38,14 @@ public class Edge {
         /* Convolution. */
     	int xx, yy, sum=0;
     	for(xx=-1; xx<=1; xx++)
+    		/* Is this the right way to access grayscale value of a pixel? */
     		for(yy=-1; yy<=1; yy++) sum += bi.getRGB(x+xx, y+yy)*k[xx+1][yy+1];
     	return sum;
     }
     
     
     /* Create Sobel edge map. */
-    public int[][] map(BufferedImage bi, int threshold){
+    public BufferedImage map(BufferedImage bi, int threshold){
     	
     	/* Sobel kernels. */
     	int[][] kx = 
@@ -61,15 +62,15 @@ public class Edge {
     	/* Edgemap size. */
     	int H = bi.getHeight();
     	int W = bi.getWidth();
-    	int[][] edgeMap = new int[H-2][W-2];
+    	bufferedImage edgeMap = new BufferedImage(H-2, W-2, BufferedImage.TYPE_INT_RGB);
     	
     	/* Convolve each inside pixel. */
     	for(x=1; x<bi.getWidth()-1; x++){
     		for(y=1; y<bi.getHeight()-1; y++){
     			sx = convolve(x, y, kx);
     			sy = convolve(x, y, ky);
-    		    if(Math.sqrt(sx*sx+sy*sy) >= threshold) edgeMap[x-1][y-1] = 0;
-    		    else edgeMap[x-1][y-1] = 255;
+    		    if(Math.sqrt(sx*sx+sy*sy) >= threshold) edgeMap.setRGB(x-1, y-1, 0);
+    		    else edgeMap.setRGB(x, y, 255);
     		}
     	}  	
     	return edgeMap;
