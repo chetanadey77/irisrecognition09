@@ -275,7 +275,7 @@ public class databaseWrapper {
 		        
 	         public void addId(String id) throws SQLException{
 	        	
-	        	stmt.executeUpdate("INSERT INTO iris (id) VALUES('" + id + "');");
+	        	stmt.executeUpdate("INSERT INTO iris (id,acc) VALUES('" + id + "', true);");
 	        }
 	         
 	         /**
@@ -395,6 +395,14 @@ public class databaseWrapper {
 	        	 
 	         }
 	         
+	         public Boolean getAccess() throws SQLException{
+	        	 
+	        	 Boolean result = rs.getBoolean("acc");
+	        	 return result;
+	        	 
+	        	 
+	         }
+	         
 	         /**
 				 * A method that returns a fresh resultset of all records held in the database.
 				 * @author Seb Smith & Andrew Durnin
@@ -413,16 +421,26 @@ public class databaseWrapper {
 	        	 
 	        	 }
 	         
+	         public void DeleteOne(String id) throws SQLException{
+	        	 
+	        	 stmt.executeUpdate("DELETE FROM iris WHERE id ='" +id + "'");
+	        	 
+	        	 
+	         }
 	         
 	         public Boolean DeleteAll() throws SQLException{
 	        	 
 	        	 stmt.executeUpdate("DELETE FROM iris");
 	        	 return true;
 	        	 
-	        	 
 	         }
 	         
-	         
+	         public void setAccess(String id, Boolean value) throws SQLException{
+	        	 
+	        	 stmt.executeUpdate("UPDATE iris SET acc = " + value + " WHERE id = '" + id + "'");
+	        	 
+	        	 
+	         }
 	         
 	        
 	        
