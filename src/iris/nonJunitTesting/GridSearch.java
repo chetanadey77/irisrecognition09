@@ -40,12 +40,12 @@ public class GridSearch {
 			System.err.println("Argument not integer");
 			System.exit(1);
 		}
-		System.out.println(id);
-		/*
+		//System.out.println(id);
+		
 		findDistanceCount=0;
 		
 		// TODO Auto-generated method stub
-		System.out.println("Loading Images");
+		//System.out.println("Loading Images");
 		String directory = "/homes/en108/workspace/IrisRecognition/images/automatic/";
 		eyes =new BufferedImage[300];
 		names = new String[300];
@@ -59,14 +59,14 @@ public class GridSearch {
 		double hamSol;
 		double max_hammSol = -2.0;
 		FourDparamSpace maxSol =null;
-		
+		double lambda=0.0;
 		for (bits = 1;bits <=2;bits++)
 		{
 			for(int boxmin=3;boxmin<25;boxmin++)
 			{
-				for(int boxmax=3;boxmax<25;boxmax++)
+				for(int boxmax=boxmin+2;boxmax<45;boxmax++)
 				{
-					for(double lambda=.8;lambda<3.8;lambda+=0.01)
+					lambda = (double)id /100.0 +0.8;
 					{
 						for(double scale = 0.9;scale<1.1;scale+=0.1)
 						{
@@ -85,7 +85,7 @@ public class GridSearch {
 		
 		
 	System.out.println("Bits "+bits+" "+maxSol.toString() + "  calculations "+findDistanceCount+ "   result  "+max_hammSol);
-		*/
+		
 	}
 	public static FourDparamSpace randomStart()
 	{
