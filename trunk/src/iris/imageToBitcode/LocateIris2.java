@@ -30,16 +30,18 @@ import java.awt.image.BufferedImage;
  * 
  * then (i,j) will be taken to be an edge.  
  */     
-public class Edge {
+public class LocateIris2 {
     
     /* Convolve image with kernels. */
     private int convolve(int x, int y, int[][] k) {
-    	
+    	BufferedImage bi = null;
         /* Convolution. */
     	int xx, yy, sum=0;
     	for(xx=-1; xx<=1; xx++)
     		/* Is this the right way to access grayscale value of a pixel? */
     		for(yy=-1; yy<=1; yy++) sum += bi.getRGB(x+xx, y+yy)*k[xx+1][yy+1];
+    		/* yes but bi is an instance of BufferedImage, you need to pass it in*/
+    	
     	return sum;
     }
     
@@ -62,7 +64,7 @@ public class Edge {
     	/* Edgemap size. */
     	int H = bi.getHeight();
     	int W = bi.getWidth();
-    	bufferedImage edgeMap = new BufferedImage(H-2, W-2, BufferedImage.TYPE_INT_RGB);
+    	BufferedImage edgeMap = new BufferedImage(H-2, W-2, BufferedImage.TYPE_INT_RGB);
     	
     	/* Convolve each inside pixel. */
     	for(x=1; x<bi.getWidth()-1; x++){
