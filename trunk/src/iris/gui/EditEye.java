@@ -63,7 +63,7 @@ class EditDialog extends JDialog
         
         {      
         	super(owner, "Find the pupil and iris",true);
-        		bi = LocateIris.houghx(bi);
+        		bi = LocateIris.edgeDetection(bi);
         		sbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
         		
         		fixedsbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());

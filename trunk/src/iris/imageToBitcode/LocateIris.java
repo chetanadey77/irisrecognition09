@@ -37,7 +37,7 @@ public class LocateIris {
     }
 	public static BufferedImage houghx(BufferedImage bi)
     {
-    	int[] matrix = {-1,0,1,-2,0,1,-1,0,1} ;
+    	int[] matrix = {-1,0,1,-2,0,2,-1,0,1} ;
     	int shift = 1024, scale =1,c;
     	BufferedImage nbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
     	for (int x=1; x<bi.getWidth()-1;x++)
@@ -59,6 +59,55 @@ public class LocateIris {
     	return nbi;
     	
     }
+public static BufferedImage houghy(BufferedImage bi)
+    {
+    	int[] matrix = {-1,-2,-1,0,0,0,1,2,1} ;
+    	int shift = 1024, scale =1,c;
+    	BufferedImage nbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
+    	for (int x=1; x<bi.getWidth()-1;x++)
+    		for (int y=1;y<bi.getHeight()-1;y++)
+    		{
+    			c = 	matrix[0] * (bi.getRGB(x-1,y-1) & 255) +
+				matrix[1] * (bi.getRGB(x,y-1) & 255) +
+				matrix[2] * (bi.getRGB(x+1,y-1) & 255) +
+				matrix[3] * (bi.getRGB(x-1,y) & 255) +
+				matrix[4] * (bi.getRGB(x,y) & 255) +
+				matrix[5] * (bi.getRGB(x+1,y) & 255) +
+				matrix[6] * (bi.getRGB(x-1,y+1) & 255) +
+    				matrix[7] * (bi.getRGB(x,y+1) & 255) +
+    				matrix[8] * (bi.getRGB(x+1,y+1) & 255);
+    			c = Math.abs(c) / scale;
+    			if (c>255) c=255;
+    			nbi.setRGB(x, y, c*0x10101);
+    		}
+    	return nbi;
+    	
+    }
+public static BufferedImage edgeDetection(BufferedImage bi)
+{
+	bi= gaussian_blur(bi,3);
+	int[] matrix = {-1,0,1,-2,0,2,-1,0,1} ;
+	int shift = 1024, scale =1,c;
+	BufferedImage nbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
+	for (int x=1; x<bi.getWidth()-1;x++)
+		for (int y=1;y<bi.getHeight()-1;y++)
+		{
+			c = matrix[0] * (bi.getRGB(x-1,y-1) & 255) +
+				matrix[1] * (bi.getRGB(x,y-1) & 255) +
+				matrix[2] * (bi.getRGB(x+1,y-1) & 255) +
+				matrix[3] * (bi.getRGB(x-1,y) & 255) +
+				matrix[4] * (bi.getRGB(x,y) & 255) +
+				matrix[5] * (bi.getRGB(x+1,y) & 255) +
+				matrix[6] * (bi.getRGB(x-1,y+1) & 255) +
+				matrix[7] * (bi.getRGB(x,y+1) & 255) +
+				matrix[8] * (bi.getRGB(x+1,y+1) & 255);
+			c = Math.abs(c) / scale;
+			if (c>9) c=255; else c=0;
+			nbi.setRGB(x, y, c*0x10101);
+		}
+	return nbi;
+	
+}
     public static CircleType find_circle(BufferedImage bi, int pixel_blur, char octant,Bounds bounds)
     {
     	BufferedImage bigb= gaussian_blur(bi,pixel_blur);
