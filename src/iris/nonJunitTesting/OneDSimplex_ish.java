@@ -45,16 +45,16 @@ public class OneDSimplex_ish {
 				if (names[i].substring(0,3).compareTo(names[j].substring(0,3))==0) match[i][j] =true;
 				else match[i][j]=false;
 		eyed = find_pupils(eyes,count);
-		bits =2;
-		FourDparamSpace sol = new FourDparamSpace(9,14,5.7,1.9);
+		bits =1;
+		FourDparamSpace sol = new FourDparamSpace(9,30,1.75,2.9);
 		FourDparamSpace width = new FourDparamSpace(4,4,0.4,0.4);
 		double hamSol = findDistance(sol, bits);
 		System.out.println("Starting point :-");
 		System.out.println(sol.toString() + "   result     "+hamSol);
 		findDistanceCount=0;
-		for (int mu = 0;mu<4;mu++)//number of times to reduce width
+		for (int mu = 0;mu<5;mu++)//number of times to reduce width
 		{
-			for (int repeat=0;repeat<3;repeat++)//number of times to try again on a failed improvement
+			for (int repeat=0;repeat<19;repeat++)//number of times to try again on a failed improvement
 			{
 				boolean improved_solution = true;
 				while (improved_solution)
