@@ -139,7 +139,7 @@ public class OneDSimplex_ish {
 			
 			
 					}
-					System.out.println(sol.toString() + "  calculations "+findDistanceCount+ "   result  "+hamSol);
+					System.out.println("Bits "+bits+" "+sol.toString() + "  calculations "+findDistanceCount+ "   result  "+hamSol);
 				}//end while improved
 				//System.out.println(sol.toString() + "  calculations "+findDistanceCount+ "   result     "+hamSol);
 			}// next repeat
@@ -188,9 +188,9 @@ public class OneDSimplex_ish {
 	public static int load_images(BufferedImage[] bi,String[] names,String directory)
 	{
 		ImageSaverLoader isl = new ImageSaverLoader(); 
-		System.out.println(directory);
+		//System.out.println(directory);
 		File folder = new File(directory);
-		System.out.println(folder);
+		//System.out.println(folder);
 		File[] listOfFiles = folder.listFiles();
 		int count=0;
 		for (int i = 0; i < listOfFiles.length; i++)
