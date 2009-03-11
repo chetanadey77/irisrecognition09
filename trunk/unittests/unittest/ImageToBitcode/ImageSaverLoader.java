@@ -41,7 +41,17 @@ public class ImageSaverLoader {
 		} 
 		return bimg;
 	}
-	
+	public BufferedImage loadImageAbPath(String folder, String filename)
+	{
+		BufferedImage bimg = null;
+		try { 
+			File f = new File(folder + filename);
+			bimg = ImageIO.read(f);  
+		} catch (Exception e) {  
+			e.printStackTrace();  
+		} 
+		return bimg;
+	}
 	public BufferedImage loadImage(String filename)
 	{
 		return this.loadImage("/images/", filename);
