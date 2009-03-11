@@ -33,9 +33,10 @@ public class OneDSimplex_ish {
 	 */
 	public static void main(String[] args) {
 		findDistanceCount=0;
+		
 		// TODO Auto-generated method stub
 		System.out.println("Loading Images");
-		String directory = "images/automatic/";
+		String directory = "/homes/en108/workspace/IrisRecognition/images/automatic/";
 		eyes =new BufferedImage[300];
 		names = new String[300];
 		count = load_images(eyes,names,directory);
@@ -45,8 +46,15 @@ public class OneDSimplex_ish {
 				if (names[i].substring(0,3).compareTo(names[j].substring(0,3))==0) match[i][j] =true;
 				else match[i][j]=false;
 		eyed = find_pupils(eyes,count);
-		bits =1;
-		FourDparamSpace sol = new FourDparamSpace(9,30,1.75,2.9);
+		Random generator = new Random();
+		bits = generator.nextInt(2)+1;
+		FourDparamSpace[] orthog = new FourDparamSpace[4];
+		orthog[0] = new FourDparamSpace(1,0,0.0,0.0);
+		orthog[1] = new FourDparamSpace(0,1,0.0,0.0);
+		orthog[2] = new FourDparamSpace(0,0,0.000001,0.0);
+		orthog[3] = new FourDparamSpace(0,0,0.0,0.000001);
+			
+		FourDparamSpace sol = randomStart();//new FourDparamSpace(9,30,1.75,2.9);
 		FourDparamSpace width = new FourDparamSpace(4,4,0.4,0.4);
 		double hamSol = findDistance(sol, bits);
 		System.out.println("Starting point :-");
@@ -105,6 +113,28 @@ public class OneDSimplex_ish {
 								}
 								else break;
 							}
+							if (!improved_solution)
+							{
+								for (int i =0;i<4;i++)
+								{
+									newsol = FourDparamSpace.add(init_sol,orthog[i]);
+									hamNewSol = findDistance(newsol, bits);
+									if (hamNewSol>hamSol) 
+									{
+										improved_solution = true;
+										hamSol = hamNewSol;
+										sol=newsol.copy();
+									}
+									newsol = FourDparamSpace.subtract(init_sol,orthog[i]);
+									hamNewSol = findDistance(newsol, bits);
+									if (hamNewSol>hamSol) 
+									{
+										improved_solution = true;
+										hamSol = hamNewSol;
+										sol=newsol.copy();
+									}
+								}
+							}
 						}
 			
 			
@@ -115,6 +145,17 @@ public class OneDSimplex_ish {
 			}// next repeat
 			width = FourDparamSpace.divide(width,2);
 		}// next mu
+	}
+	public static FourDparamSpace randomStart()
+	{
+		FourDparamSpace sol=new FourDparamSpace();
+		Random generator = new Random();
+		sol._minBox = generator.nextInt(38)+2;
+		sol._maxBox = generator.nextInt(45-sol._minBox)+2+sol._minBox;
+		sol._lambda = generator.nextDouble() * 4.0 +1.0;
+		sol._scale =  generator.nextDouble() * 4.0 +0.750;
+		return sol;
+		
 	}
 	
 	public static FourDparamSpace nextPoint(FourDparamSpace sol, FourDparamSpace width)
@@ -147,7 +188,9 @@ public class OneDSimplex_ish {
 	public static int load_images(BufferedImage[] bi,String[] names,String directory)
 	{
 		ImageSaverLoader isl = new ImageSaverLoader(); 
+		System.out.println(directory);
 		File folder = new File(directory);
+		System.out.println(folder);
 		File[] listOfFiles = folder.listFiles();
 		int count=0;
 		for (int i = 0; i < listOfFiles.length; i++)
@@ -155,7 +198,8 @@ public class OneDSimplex_ish {
 			if (listOfFiles[i].isFile())
 			{
 				names[count] = listOfFiles[i].getName();
-				bi[count] = isl.loadImage("/"+directory,names[count]);
+				//System.out.println(names[count]);
+				bi[count] = isl.loadImageAbPath(directory,names[count]);
 				count++;
 			}
 		}
@@ -261,4 +305,6 @@ System.out.println(", "+_3dp.format(weakest_match) + ", "+_3dp.format(lowest_fai
 }
 }
 */
+
+
 
