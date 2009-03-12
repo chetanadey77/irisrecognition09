@@ -60,6 +60,7 @@ public class GridSearch {
 		double max_hammSol = -2.0;
 		FourDparamSpace maxSol =null;
 		double lambda=0.0;
+		int bits_sol=0;
 		for (bits = 1;bits <=2;bits++)
 		{
 			for(int boxmin=3;boxmin<25;boxmin++)
@@ -76,6 +77,7 @@ public class GridSearch {
 							{
 								max_hammSol=hamSol;
 								maxSol = sol.copy();
+								bits_sol=bits;
 							}
 						}
 					}
@@ -84,7 +86,7 @@ public class GridSearch {
 		}
 		
 		
-	System.out.println("Bits "+bits+" "+maxSol.toString() + "  calculations "+findDistanceCount+ "   result  "+max_hammSol);
+	System.out.println("Bits "+bits_sol+" "+maxSol.toString() + "  calculations "+findDistanceCount+ "   result  "+max_hammSol);
 		
 	}
 	public static FourDparamSpace randomStart()
