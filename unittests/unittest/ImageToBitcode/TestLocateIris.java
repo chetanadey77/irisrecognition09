@@ -32,7 +32,7 @@ public class TestLocateIris {
 	{
 		EyeDataType ed = new EyeDataType();
 		BufferedImage eyeImage;
-		String load_path = "images/";
+		String load_path = "images/new/";
 		String file;
 		int rmin=200, xmin=400, ymin=400;
 		int rmax = 0, xmax=0, ymax = 0;
@@ -50,7 +50,12 @@ public class TestLocateIris {
 				System.out.println(file);
 				eyeImage = isl.loadImage("/" + load_path, file);
 				//for(int n=0;i<10;i++)
+				//System.out.println("here");
+				
 				ed=LocateIris.find_iris(eyeImage);
+				//eyeImage= LocateIris.gaussian_blur(eyeImage,7);
+				//eyeImage = LocateIris.edgeDetection(eyeImage);
+				//System.out.println("here");
                 x = ed.inner.x;
                 y = ed.inner.y;
                 r = ed.inner.radius;
@@ -68,7 +73,7 @@ public class TestLocateIris {
         	 	//g.setFont(new Font("SansSerif",Font.BOLD,18));
         	 	g.drawString(message,10,40);
         	 	
-           	 	isl.saveImage(eyeImage,"/unittests/testImages/pupil_centres/",file);
+           	 	isl.saveImage(eyeImage,"/unittests/testImages/new_pupil_centres/",file);
            	 	
            	 	if ( x>xmax) xmax=x;
            	 	if ( r>rmax) rmax=r;
