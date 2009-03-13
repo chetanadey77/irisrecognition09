@@ -12,6 +12,9 @@ public class Utility_methods_and_testing {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+		//DO NOT USE THIS CODE WITHOUT ASKING EDMUND NOON
+		
+		
 		String load_path = "images/new";
 		String save_path = "images/automatic/";
 		String compare_path = "unittests/testImages/new_pupil_centres/";
