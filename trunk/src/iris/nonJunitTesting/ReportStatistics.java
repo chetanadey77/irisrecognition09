@@ -50,6 +50,7 @@ public class ReportStatistics{
 			System.err.println("Argument not integer");
 			System.exit(1);
 		}
+//		int small = 
 		displayGraph(7.0, 23.0,1.7,3.286, 1+id,id);
 
 	}
@@ -241,7 +242,7 @@ public class ReportStatistics{
 		 	g.drawString(message,10,20);
 		 	String message2 = "Overlap  "+ overlap+ " out of total "+total_match;
 		 	g.drawString(message,10,40);
-		 	isl.saveImageAbPath(biGraph,"/homes/en108/workspace/IrisRecognition/unittests/testImages/Hamming_Graph"+overlap+"_"+code+".gif");
+		 	isl.saveImageAbPath(biGraph,"/homes/en108/workspace/IrisRecognition/unittests/testImages/","Hamming_Graph"+overlap+"_"+code+".gif");
 		}
 				
 		
