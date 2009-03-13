@@ -1,6 +1,6 @@
 package unittest.ImageToBitcode;
 
-import iris.bitcodeMatcher.BitCode;
+import iris.imageToBitcode.BitCode;
 import iris.imageToBitcode.BitcodeGenerator;
 import java.awt.image.BufferedImage;
 

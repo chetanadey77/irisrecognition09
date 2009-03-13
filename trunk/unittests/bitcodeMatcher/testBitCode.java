@@ -1,7 +1,7 @@
 package bitcodeMatcher;
 
 import static org.junit.Assert.*;
-import iris.bitcodeMatcher.BitCode;
+import iris.imageToBitcode.BitCode;
 
 import org.junit.Before;
 import org.junit.Test;
