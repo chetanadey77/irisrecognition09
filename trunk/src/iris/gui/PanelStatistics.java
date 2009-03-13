@@ -201,9 +201,9 @@ public void displayGraph()
 	DecimalFormat _1dp = new DecimalFormat("0.0");
 	DecimalFormat _3dp = new DecimalFormat("0.000");
 	System.out.println("Loading Images");
-	int bits=2;
-	double sm_box=9.0,bg_box=29.0;
-	double lambda = 1.9, scale = 2.4;
+	int bits=1;
+	double sm_box=9.0,bg_box=26.0;
+	double lambda = 1.552, scale = 1.892;
 	GaborParameters abPar= new GaborParameters(sm_box,bg_box,3);
 	GaborParameters wPar = new GaborParameters(lambda/(2.0*sm_box),lambda/(2.0*sm_box*scale),3);
 	GaborParameters x0Par= new GaborParameters(bg_box, 360-bg_box , (int) (360.0 - bg_box*2));
@@ -221,8 +221,12 @@ public void displayGraph()
 	}
 	File folder = new File(directory);
 	File[] listOfFiles = folder.listFiles();
-	BufferedImage[] eye =new BufferedImage[listOfFiles.length];
-	EyeDataType[] ed= new EyeDataType[listOfFiles.length];
+	//BufferedImage[] eye =new BufferedImage[listOfFiles.length];
+	//EyeDataType[] ed= new EyeDataType[listOfFiles.length];
+	BitcodeGenerator b1 = new BitcodeGenerator(wPar, abPar, x0Par, y0Par, 360,100,bits);
+	BitCode[] bc = new BitCode[listOfFiles.length];
+	BufferedImage eye ;
+	EyeDataType ed;
 	String[] names = new String[listOfFiles.length];
 	int count=0;
 	for (int i = 0; i < listOfFiles.length; i++)
@@ -230,8 +234,10 @@ public void displayGraph()
 		if (listOfFiles[i].isFile())
 		{
 			names[count] = listOfFiles[i].getName();
-			eye[count] = isl.loadImage(isl_load_path,names[count]);
-			ed[count] = LocateIris.find_iris(eye[count]);
+			System.out.println( count + "  "+names[count]);
+			eye = isl.loadImage(isl_load_path,names[count]);
+			ed = LocateIris.find_iris(eye);
+			bc[count]=b1.getFastBitcode(eye,ed);
 			//c1.inner.radius+=1;
 			count++;
 		}
@@ -240,11 +246,11 @@ public void displayGraph()
 	double highest = 0.0,lowest=1.0;
 	double hamm;
 
-	System.out.println("Calculating Bitcodes");
-	BitcodeGenerator b1 = new BitcodeGenerator(wPar, abPar, x0Par, y0Par, 360,100,bits);
+	System.out.println("Bitcodes already calculated");
+	//BitcodeGenerator b1 = new BitcodeGenerator(wPar, abPar, x0Par, y0Par, 360,100,bits);
 	//b1.initialiseParams(wPar, abPar, x0Par, y0Par, 360,100,bits);
-	BitCode[] bc = new BitCode[count];
-	for(int i =0;i<count;i++) bc[i]=b1.getFastBitcode(eye[i],ed[i]);
+	
+	//for(int i =0;i<count;i++) bc[i]=b1.getFastBitcode(eye[i],ed[i]);
 	System.out.println("Calculating Hamming Numbers");
 
 	for (int i=0;i<count;i++)
