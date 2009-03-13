@@ -25,9 +25,9 @@ public class ImageSaverLoader {
 		}
 	}
 	
-	public void saveImageAbPath(BufferedImage bimg, String filename)
+	public void saveImageAbPath(BufferedImage bimg,String directory, String filename)
 	{
-		this.saveImage(bimg, filename);
+		this.saveImage(bimg,directory, filename);
 	}
 	public void saveImage(BufferedImage bimg, String filename)
 	{
