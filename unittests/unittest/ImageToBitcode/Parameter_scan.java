@@ -1,5 +1,5 @@
 package unittest.ImageToBitcode;
-import iris.bitcodeMatcher.BitCode;
+import iris.imageToBitcode.BitCode;
 import iris.imageToBitcode.BitcodeGenerator;
 import iris.imageToBitcode.EyeDataType;
 import iris.imageToBitcode.GaborParameters;

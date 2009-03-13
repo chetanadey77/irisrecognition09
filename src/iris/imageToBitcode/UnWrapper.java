@@ -1,6 +1,5 @@
 package iris.imageToBitcode;
 
-import iris.bitcodeMatcher.BitCode;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -220,6 +219,7 @@ public class UnWrapper {
 	{
 		return originalWithGuides(eyeImage, eye.inner.x, eye.inner.y, eye.inner.radius, eye.outer.x, eye.outer.y, eye.outer.radius);
 	}
+	
 	/**
 	 * Returns the original eye image with colored guides (for visual analysis in GUI) 
 	 * @param eyeImage original image of an eye

@@ -2,7 +2,6 @@ package iris.imageToBitcode;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import iris.bitcodeMatcher.BitCode;
 
 /**
  * A class that uses Gabor filters to generate a bitcode from an image of an iris

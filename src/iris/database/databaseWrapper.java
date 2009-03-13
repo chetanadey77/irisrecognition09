@@ -1,6 +1,6 @@
 package iris.database;
 
-import iris.bitcodeMatcher.BitCode;
+import iris.imageToBitcode.BitCode;
 
 import java.io.IOException;
 import java.sql.Array;

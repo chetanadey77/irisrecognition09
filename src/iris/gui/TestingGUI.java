@@ -1,6 +1,6 @@
 package iris.gui;
 
-import iris.bitcodeMatcher.BitCode;
+import iris.imageToBitcode.BitCode;
 import iris.imageToBitcode.BitcodeGenerator;
 import iris.imageToBitcode.EyeDataType;
 
