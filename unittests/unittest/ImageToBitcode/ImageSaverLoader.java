@@ -24,15 +24,16 @@ public class ImageSaverLoader {
 			e.printStackTrace();
 		}
 	}
+	public void saveImageAbPath(BufferedImage bimg, String folder, String filename)
+	{
+		File outputFile = new File( folder + filename);
+		try {
+			ImageIO.write(bimg, "GIF", outputFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
-	public void saveImageAbPath(BufferedImage bimg,String directory, String filename)
-	{
-		this.saveImage(bimg,directory, filename);
-	}
-	public void saveImage(BufferedImage bimg, String filename)
-	{
-		this.saveImage(bimg,"/unittests/testImages/", filename);
-	}
 
 	public BufferedImage loadImage(String folder, String filename)
 	{
