@@ -155,7 +155,7 @@ public class BitcodeGenerator {
 				
 				//cos(-2*pi*w(x-x0 + y-y0))
 				gaborReal[series][x+ab][y+ab] = (int)(65536.0 * k * Math.cos( tmpVal));// * wPar.upLim);
-				gaborImaginary[series][x+ab][y+ab] = (int)(65536 * k * Math.sin( tmpVal));
+				gaborImaginary[series][x+ab][y+ab] = (int)(65536.0 * k * Math.sin( tmpVal));
 			//these are 65536 times too big, but we only care about the sign!
 				}
 			
