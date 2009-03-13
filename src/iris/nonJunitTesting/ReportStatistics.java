@@ -241,7 +241,7 @@ public class ReportStatistics{
 		 	g.drawString(message,10,20);
 		 	String message2 = "Overlap  "+ overlap+ " out of total "+total_match;
 		 	g.drawString(message,10,40);
-		 	isl.saveImage(biGraph, "Hamming_Graph"+code+".gif");
+		 	isl.saveImageAbPath(biGraph,"/homes/en108/workspace/IrisRecognition/unittests/testImages/Hamming_Graph"+overlap+"_"+code+".gif");
 		}
 				
 		
