@@ -24,14 +24,26 @@ public class LocateIris {
     			matrix[x+pixels+(y+pixels)*(2*pixels+1)]=(float)Math.exp(-(double)(x*x+y*y)/(sigma_sq*2.0));
     			normalise += matrix[x+pixels+(y+pixels)*(2*pixels+1)];   	
     		}
-    	for (int x = -pixels; x<=pixels;x++)
+    	/*for (int x = -pixels; x<=pixels;x++)
     		for (int y = -pixels; y<=pixels;y++)
     		{
     			matrix[x+pixels+(y+pixels)*(2*pixels+1)]= matrix[x+pixels+(y+pixels)*(2*pixels+1)] / normalise;   	
     		}
     	BufferedImageOp op = new ConvolveOp(new Kernel(2*pixels+1, 2*pixels+1,matrix));
     	BufferedImage nbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
-    	op.filter(bi,nbi);
+    	op.filter(bi,nbi);*/
+    	double total=0.0;
+    	BufferedImage nbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
+    	for (int x = pixels; x<(bi.getWidth()-pixels);x++)
+    		for (int y = pixels; y<bi.getHeight()-pixels;y++)
+    		{
+    			total=0.0;
+    			for(int r=0;r<(pixels*2+1)*(pixels*2+1);r++)
+    			{
+    				total+= matrix[r] * (double)(bi.getRGB((r % (2*pixels+1))-pixels +x, (r / (2*pixels+1))-pixels+y)&255);
+    			}
+    			nbi.setRGB(x, y, (int)(total/normalise) *0x10101);
+    		}
     	return nbi;
     	
     }
@@ -85,24 +97,37 @@ public static BufferedImage houghy(BufferedImage bi)
     }
 public static BufferedImage edgeDetection(BufferedImage bi)
 {
-	bi= gaussian_blur(bi,3);
-	int[] matrix = {-1,0,1,-2,0,2,-1,0,1} ;
-	int shift = 1024, scale =1,c;
+	bi= gaussian_blur(bi,4);
+	int[] matrixX = {-1,0,1,-2,0,2,-1,0,1} ;
+	int[] matrixY = {-1,-2,-1,0,0,0,1,2,1} ;
+	int shift = 1024, scale =1,c,d;
 	BufferedImage nbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
 	for (int x=1; x<bi.getWidth()-1;x++)
 		for (int y=1;y<bi.getHeight()-1;y++)
 		{
-			c = matrix[0] * (bi.getRGB(x-1,y-1) & 255) +
-				matrix[1] * (bi.getRGB(x,y-1) & 255) +
-				matrix[2] * (bi.getRGB(x+1,y-1) & 255) +
-				matrix[3] * (bi.getRGB(x-1,y) & 255) +
-				matrix[4] * (bi.getRGB(x,y) & 255) +
-				matrix[5] * (bi.getRGB(x+1,y) & 255) +
-				matrix[6] * (bi.getRGB(x-1,y+1) & 255) +
-				matrix[7] * (bi.getRGB(x,y+1) & 255) +
-				matrix[8] * (bi.getRGB(x+1,y+1) & 255);
-			c = Math.abs(c) / scale;
-			if (c>9) c=255; else c=0;
+			c = matrixX[0] * (bi.getRGB(x-1,y-1) & 255) +
+				matrixX[1] * (bi.getRGB(x,y-1) & 255) +
+				matrixX[2] * (bi.getRGB(x+1,y-1) & 255) +
+				matrixX[3] * (bi.getRGB(x-1,y) & 255) +
+				matrixX[4] * (bi.getRGB(x,y) & 255) +
+				matrixX[5] * (bi.getRGB(x+1,y) & 255) +
+				matrixX[6] * (bi.getRGB(x-1,y+1) & 255) +
+				matrixX[7] * (bi.getRGB(x,y+1) & 255) +
+				matrixX[8] * (bi.getRGB(x+1,y+1) & 255);
+			
+			d = matrixY[0] * (bi.getRGB(x-1,y-1) & 255) +
+				matrixY[1] * (bi.getRGB(x,y-1) & 255) +
+				matrixY[2] * (bi.getRGB(x+1,y-1) & 255) +
+				matrixY[3] * (bi.getRGB(x-1,y) & 255) +
+				matrixY[4] * (bi.getRGB(x,y) & 255) +
+				matrixY[5] * (bi.getRGB(x+1,y) & 255) +
+				matrixY[6] * (bi.getRGB(x-1,y+1) & 255) +
+				matrixY[7] * (bi.getRGB(x,y+1) & 255) +
+				matrixY[8] * (bi.getRGB(x+1,y+1) & 255);
+			
+			//c = Math.abs(c) / scale;
+			d = c*c;
+			if (d>525) c=0; else c=255;
 			nbi.setRGB(x, y, c*0x10101);
 		}
 	return nbi;
@@ -110,7 +135,11 @@ public static BufferedImage edgeDetection(BufferedImage bi)
 }
     public static CircleType find_circle(BufferedImage bi, int pixel_blur, char octant,Bounds bounds)
     {
-    	BufferedImage bigb= gaussian_blur(bi,pixel_blur);
+    	BufferedImage bigb;
+    	//BufferedImage bigb= LocateIris2.map(bi,75);
+    	if (octant == (char) 102)  bigb= edgeDetection(bi);
+    	else bigb= gaussian_blur(bi,pixel_blur);
+    	
     	//if (octant == (char) 126) bigb = gaussian_blur(bi,pixel_blur);
     	//else bigb = houghx(bi);
     	int[][] array_image = new int[bigb.getWidth()][bigb.getHeight()];

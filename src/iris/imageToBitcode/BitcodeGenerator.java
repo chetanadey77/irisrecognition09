@@ -137,8 +137,11 @@ public class BitcodeGenerator {
 		gaborReal = new int[bitcodeShiftNum][(int)abPar.upLim*2+1][(int)abPar.upLim*2+1];
 		gaborImaginary= new int[bitcodeShiftNum][(int)abPar.upLim*2+1][(int)abPar.upLim*2+1];
 		double k,tmpVal;
+		
 		for(int series=0;series<bitcodeShiftNum;series++)
 		{
+			int cos_bias=0;
+			int cos_bias_count=0;
 			int ab= (int) abPar.get_StepN(series);
 			double lw = wPar.get_StepN(series);
 			int ab2 = ab*ab;
@@ -154,11 +157,15 @@ public class BitcodeGenerator {
 				
 				//cos(-2*pi*w(x-x0 + y-y0))
 				gaborReal[series][x+ab][y+ab] = (int)(65536.0 * k * Math.cos( tmpVal));// * wPar.upLim);
+				cos_bias  += gaborReal[series][x+ab][y+ab];
+				cos_bias_count++;
 				gaborImaginary[series][x+ab][y+ab] = (int)(65536.0 * k * Math.sin( tmpVal));
 			//these are 65536 times too big, but we only care about the sign!
 				}
-			
-				
+			//need to make the real term average to zero
+			for(int x = -ab; x <= ab; x++)
+				for(int y =-ab; y <=ab; y++)
+					gaborReal[series][x+ab][y+ab] =gaborReal[series][x+ab][y+ab] - cos_bias/cos_bias_count;
 		}	
 				
 		

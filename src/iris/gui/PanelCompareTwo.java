@@ -180,6 +180,8 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
         eyeLoaded[n] = true;
         biEye[n].getGraphics().drawImage( iconEye[n].getImage(),0,0,null);
         eyeData[n] = LocateIris.find_iris(biEye[n]);
+        System.out.println("inner "+eyeData[n].inner.x+" "+eyeData[n].inner.y+" "+eyeData[n].inner.radius+" " 
+        		+ eyeData[n].outer.x+" "+eyeData[n].outer.y+" "+eyeData[n].outer.radius+" ");
         UnWrapper uw = new UnWrapper();
         BufferedImage bi=uw.originalWithGuides(biEye[n],eyeData[n]);
         iconEye[n].setImage(bi);
@@ -192,7 +194,7 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
         imageUnwrappedEye[n].setIcon(iconUnwrappedEye[n]);
         imageUnwrappedEye[n].repaint();
 		BitcodeGenerator b = new BitcodeGenerator();
-		bc[n] =  b.getBitcode(biEye[n],eyeData[n]);
+		bc[n] =  b.getFastBitcode(biEye[n],eyeData[n]);
 		//System.out.println(bc[n].getBitcodeSize());
 		biBitCode[n] = bc[n].getBitCodeImage(512,128,32);
 		iconBitCode[n].setImage(biBitCode[n]);
