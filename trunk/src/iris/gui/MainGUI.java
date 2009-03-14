@@ -1,8 +1,13 @@
 package iris.gui;
 
+import iris.database.databaseWrapper.DbException;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -31,7 +36,7 @@ public class MainGUI {
 class MainFrame extends JFrame
 {
 	static final int FRAME_WIDTH = 900;
-    static final int FRAME_HEIGHT = 850;
+    static final int FRAME_HEIGHT = 770;
 
 	MainFrame()
 	{
@@ -43,7 +48,7 @@ class MainFrame extends JFrame
 		PanelStatistics panelStatistics = new PanelStatistics(FRAME_WIDTH,FRAME_HEIGHT);
 		PanelValidate panelValidate = new PanelValidate(FRAME_WIDTH,FRAME_HEIGHT);
 		PanelAdministrator panelAdminister = new PanelAdministrator(FRAME_WIDTH,FRAME_HEIGHT);
-		PanelAbout panelAbout = new PanelAbout(FRAME_WIDTH,FRAME_HEIGHT);
+		PanelAbout panelAbout = new PanelAbout(FRAME_WIDTH, FRAME_HEIGHT);
 		JTabbedPane tabbedMainFrame = new JTabbedPane();
 		getContentPane().setLayout(null);	
 		getContentPane().add(tabbedMainFrame);
@@ -54,6 +59,7 @@ class MainFrame extends JFrame
 		tabbedMainFrame.addTab("Database Administration", null,panelAdminister,null);
 		tabbedMainFrame.setBounds(0, 0, FRAME_WIDTH,FRAME_HEIGHT);
 		tabbedMainFrame.setVisible(true);
+		
 	
 			
 	}

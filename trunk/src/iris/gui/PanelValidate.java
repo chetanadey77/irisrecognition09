@@ -48,7 +48,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 	static ImageIcon iconBitCode;
 	
 	
-    static JTextField hamming_result = new JTextField(30);
+    static JTextField hamming_result = new JTextField(50);
         
     static BufferedImage Eye;
     static BufferedImage OriginalEye;
@@ -263,7 +263,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 				break;
 				}
 				else if (access == false){
-				hamming_result.setText("Identity Verified as :" +id +": Hamming Distance "+hd + "WARNING: ID SUSPENDED");
+				hamming_result.setText("Identity Verified as '" +id +"' : Hamming Distance: "+hd + " : WARNING: ID SUSPENDED");
 				panelButtons.setBackground(Color.yellow);
 				panelButtons.repaint();
 				break;
