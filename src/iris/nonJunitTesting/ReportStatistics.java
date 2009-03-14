@@ -198,7 +198,7 @@ public class ReportStatistics{
 					{
 						if (hamm>weakest_match) weakest_match = hamm;
 						HammingMatch[(int)(100.0*hamm)]++;
-						System.out.println(names[i]+"  "+names[j]+"   "+_3dp.format(hamm));
+						//System.out.println(names[i]+"  "+names[j]+"   "+_3dp.format(hamm));
 					} else
 					{
 						if (hamm<lowest_fail) lowest_fail = hamm;
@@ -240,14 +240,14 @@ public class ReportStatistics{
 			for (int i=0;i<100;i++)
 			{	
 				drawORBox(biGraph, i * imWidth/100, Math.max(0,imHeight-1- HammingMatch[i]),(i+1) * imWidth/100 -1, imHeight-1, 0xff0000);
-				drawORBox(biGraph, i * imWidth/100, Math.max(0,imHeight-1- HammingNoMatch[i]),(i+1) * imWidth/100 -1, imHeight-1, 0xff);
+				drawORBox(biGraph, i * imWidth/100, Math.max(0,imHeight-1- HammingNoMatch[i]/10),(i+1) * imWidth/100 -1, imHeight-1, 0xff);
 			}
 			Graphics g  = biGraph.createGraphics();
 		 	String message = "Highest Match "+ _3dp.format(weakest_match) + " Lowest non match "+_3dp.format(lowest_fail);
 		 	//g.setFont(new Font("SansSerif",Font.BOLD,18));
 		 	g.drawString(message,10,20);
 		 	String message2 = "Overlap  "+ overlap+ " out of total "+total_match;
-		 	g.drawString(message,10,40);
+		 	g.drawString(message2,10,40);
 		 	isl.saveImageAbPath(biGraph,"/homes/en108/workspace/IrisRecognition/unittests/testImages/","Hamming_Graph"+overlap+"_"+code+".gif");
 		}
 				
