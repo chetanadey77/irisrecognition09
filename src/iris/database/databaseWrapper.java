@@ -50,8 +50,9 @@ public class databaseWrapper {
 	        }
 	    
 	        try {
-	          conn = DriverManager.getConnection ("jdbc:postgresql://localhost:1432","g08v36205_u","6IxtbnTGoI");
-	          stmt = conn.createStatement();
+	          conn = DriverManager.getConnection ("jdbc:postgresql://localhost:1422","g08v36205_u","6IxtbnTGoI");
+	          stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+	        	        ResultSet.CONCUR_READ_ONLY);
 	        } catch (Exception e) {
 	               System.err.println("Exception: " + e + "\n" + e.getMessage() );
 	        }
@@ -412,7 +413,7 @@ public class databaseWrapper {
 				 */
 	         
 	         
-	         private ResultSet getNewSet() throws SQLException{
+	         public ResultSet getNewSet() throws SQLException{
 	        	 
 	        	ResultSet rset = stmt.executeQuery("SELECT * FROM iris");
 	        	 
@@ -440,6 +441,14 @@ public class databaseWrapper {
 	        	 stmt.executeUpdate("UPDATE iris SET acc = " + value + " WHERE id = '" + id + "'");
 	        	 
 	        	 
+	         }
+	         
+	         public int getNumberRecords() throws SQLException{
+	        	 
+	        	 rs.last();
+	        	 int result = rs.getRow();
+	        	 return result;
+	         
 	         }
 	         
 	        

@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 
@@ -29,18 +30,24 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.JFrame;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 import org.jdesktop.layout.GroupLayout;
 
 
 public class PanelAdministrator extends javax.swing.JPanel implements ActionListener {
 
+	
 	static JLabel imageEye;
 	static JLabel imageUnwrappedEye;
 	static JLabel imageBitCode;
+	static JLabel recordsCount;
 	
 	
 	static JButton getimage;
@@ -50,10 +57,14 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	static JButton suspend;
 	static JButton restore;
 	static JButton reset;
+	static JButton dbinfo;
 	
 	static ImageIcon iconEye;
 	static ImageIcon iconUnwrappedEye;
 	static ImageIcon iconBitCode;
+	
+	static JTable table;
+	static TableModel dataModel;
 	
 	
     static JTextField hamming_result = new JTextField(30);
@@ -67,13 +78,23 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
     static BitCode[] bc = new BitCode[2];
     static EyeDataType eyeData;
     static Boolean eyeLoaded;
-    static Boolean added;
+    static Boolean added = false;
+    static Boolean displayed;
+    
+    static JPanel paneldbinfo;
+    static JPanel panelTable;
+    static JScrollPane scrollpane;
+    static JPanel background;
 
-	
+    static int databaseSize;
+    static databaseWrapper db;
+    
+    String[] contents;
     
     
 	public PanelAdministrator(int FRAME_WIDTH,int FRAME_HEIGHT) {
-			
+		
+		
  			
               JPanel panelEyeImage;
               JPanel panelWhole;
@@ -82,6 +103,19 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
               JPanel panelBitcode;
               JPanel panelAdministrator;
               JPanel panelButtons;
+              
+              
+              
+              try {
+				db = new databaseWrapper();
+			
+              } catch (DbException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			} catch (SQLException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
               
  		
 //           create panel 
@@ -93,15 +127,104 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
                 panelBitcode = new JPanel();
                 panelAdministrator = new JPanel();
                 panelButtons = new JPanel();
-                 
+                paneldbinfo = new JPanel();
+
+                
+                
+               
+					dataModel = new AbstractTableModel() {
+		      	          public int getColumnCount() { return 2; }
+		      	          public int getRowCount() { 
+		      	        	  int result = 0;
+		      	        	  
+							try {
+								result =  db.getNumberRecords();
+								
+							} catch (SQLException e) {
+								
+								e.printStackTrace();
+							}
+							return result;}
+		      	        
+		      	          public Object getValueAt(int row, int col) {
+		      	        	String id = null;
+		      	        	Boolean status = null;
+		      	        		
+			      	        	  if(col==0){
+			      	        		  try {
+										db.rs.absolute(row+1);
+										id = db.getId();
+										
+										
+									} catch (SQLException e) {
+										e.printStackTrace();
+									}
+			      	        	  	  
+			      	        		  //id = "id " + row;
+			      	        	  }
+			      	        	  
+			      	        	  else if(col==1){
+			      	        		  
+			      	        		 try {
+										db.rs.absolute(row+1);
+										status = db.getAccess();
+				      	        		if(status==true)
+				      	        			id = "Access Active";
+				      	        		else id = "Access Suspended";
+				      	        		
+										//id = status.toString();
+									} catch (SQLException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+			      	        		 
+			      	        		//id = "status"+row;
+			      	        	  }
+			      	        	  ;
+								return id;  }
+		      	      };
+		      	      
+		      	    table = new JTable(dataModel);
+		            table.getColumnModel().getColumn(0).setHeaderValue("ID");
+		            table.getColumnModel().getColumn(1).setHeaderValue("Status");
+		            
+					
+                
+                
+                
+              
+               
+                scrollpane = new JScrollPane(table);
+                scrollpane.setPreferredSize(new Dimension(300,300));
+                scrollpane.setVisible(true);
+                
+                
+                try {
+					int i = db.getNumberRecords();
+                	contents = new String[i];
+                	int c;
+                	for(c = 0; c<i; c++){
+                		db.rs.absolute(c+1);
+                		contents[c] = db.getId();
+                }
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                
+				
+				
+				
                 JTextField enter = new JTextField(30);
                 imageEye = new  JLabel();
              	imageUnwrappedEye = new  JLabel();
              	imageBitCode = new  JLabel();
+             	recordsCount = new JLabel();
              	iconEye = new ImageIcon();
              	iconUnwrappedEye = new ImageIcon();
              	iconBitCode = new ImageIcon();
              	eyeLoaded = false;
+             	displayed = false;
              	getimage = new JButton("Load image");
              	deleteEntry = new JButton("Delete All");
              	addEntry = new JButton("Add to Database");
@@ -109,6 +232,9 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	restore = new JButton("Restore Access");
              	suspend = new JButton("Suspend Access");
              	reset = new JButton("Reset");
+             	dbinfo = new JButton("Refresh Database details");
+             
+             	
              	
              	getimage.setSize(320, 30);
              	getimage.setEnabled(true);
@@ -123,15 +249,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	OriginalEye = new BufferedImage(320,280,BufferedImage.TYPE_INT_RGB);
              	Eye = new BufferedImage(320,280,BufferedImage.TYPE_INT_RGB);
              	
-             	//UnwrappedEye  = new BufferedImage(512,128,BufferedImage.TYPE_INT_RGB);
-             	//ValidateBitCode = new BufferedImage(512,128,BufferedImage.TYPE_BYTE_GRAY);
              	
-                
-             	
-                         
-                           
-            
-             //set images to alternate squares of grey and white
+                //set images to alternate squares of grey and white
              	int square_size=10;
              	int grey = 0xf0f0f0;
              	int white = 0xffffff;
@@ -145,17 +264,13 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              
              
              	iconEye.setImage(OriginalEye);
-             	//iconUnwrappedEye.setImage(UnwrappedEye);
-             	//iconBitCode.setImage(ValidateBitCode);
-             
              	imageEye.setIcon(iconEye);
-             	//imageUnwrappedEye.setIcon(iconUnwrappedEye);
-             	//imageBitCode.setIcon(iconBitCode);
-             	
+             
              	panelEyeImage.setLayout(new BorderLayout());
              	panelEyeImage.setBackground(Color.WHITE);
              	panelEyeImage.add(getimage,BorderLayout.NORTH);
              	panelEyeImage.add(imageEye,BorderLayout.SOUTH);
+             	//panelEyeImage.add(recordsCount);
              	panelButtons.setLayout(new GridLayout());
              	panelButtons.add(deleteEntry);
              	panelButtons.add(addEntry);
@@ -164,27 +279,14 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	panelButtons.add(restore);
              	panelEyeImage.add(reset);
              	
-             	//panelUnwrap.setLayout(new BorderLayout());
-             	//panelUnwrap.setBackground(Color.WHITE);
-             	//panelUnwrap.add(new JLabel("Unwrapped iris"),BorderLayout.NORTH);
-             	//panelUnwrap.add(imageUnwrappedEye,BorderLayout.SOUTH);
-             	//panelBitcode.setLayout(new BorderLayout());
-             	//panelBitcode.setBackground(Color.WHITE);
-             	//panelBitcode.add(new JLabel("Bitcode"),BorderLayout.NORTH);
-             	//panelBitcode.add(imageBitCode,BorderLayout.SOUTH);
-             	//panelData.setLayout(new BorderLayout());
-             	//panelData.setBackground(Color.WHITE);
-             	//panelData.add(panelUnwrap,BorderLayout.NORTH);
-             	//panelData.add(panelBitcode,BorderLayout.SOUTH);
              	
-             	//panelWhole[n].setLayout(new GridLayout(1,2));
+             	
              	panelWhole.setBackground(Color.WHITE);
              	panelWhole.setLayout(new BorderLayout());
              	panelWhole.add(panelEyeImage,BorderLayout.WEST);
-             	//panelWhole.add(panelData,BorderLayout.EAST);
              	panelWhole.add(panelAdministrator,BorderLayout.SOUTH);
-             
-             JPanel background = new JPanel();
+             	
+             background = new JPanel();
              background.setBackground(Color.WHITE);
              background.setPreferredSize(new Dimension(FRAME_WIDTH,FRAME_HEIGHT));
              add(background);
@@ -192,6 +294,10 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              background.add(panelWhole);
              background.add(hamming_result);
              background.add(panelButtons);
+             //background.add(paneldbinfo);
+             background.add(dbinfo);
+             background.add(scrollpane);
+             background.setAutoscrolls(true);
              
              getimage.addActionListener(this);
              deleteEntry.addActionListener(this);
@@ -200,7 +306,11 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              reset.addActionListener(this);
              restore.addActionListener(this);
              suspend.addActionListener(this);
-		
+             dbinfo.addActionListener(this);
+             
+            
+            
+           
 		
 	}
 	
@@ -236,21 +346,32 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		iconBitCode.setImage(ValidateBitCode);
         imageBitCode.setIcon(iconBitCode);
         imageBitCode.repaint();
-        added = true;
+        added = false
+        ;
         
 		}
 	
        else if (ev.getActionCommand()=="Delete All"){
        
        try {
+    	   int confirm = JOptionPane.showConfirmDialog(
+                   this,
+                   "Are you sure you wish to delete all records?");
+        
+    	if (confirm==0){
+    	
 		Boolean success;
     	databaseWrapper db = new databaseWrapper();
 		success = db.DeleteAll();
 		hamming_result.setEnabled(true);
-		if(success == true)
+		if(success == true){
 	    hamming_result.setText("All Entries Deleted");
+		}}
 				
-		else hamming_result.setText("Delete All not successful");
+		else if(confirm == 1) hamming_result.setText("No Entries Deleted");
+		else if(confirm == -1) hamming_result.setText("Delete All Cancelled");
+		
+    	
 		
 	} catch (DbException e) {
 		//TODO
@@ -267,7 +388,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		
 		hamming_result.setEnabled(true);
 		
-		if(added == false){
+		if(added == true){
 			hamming_result.setText("Already Added");
 			return;
 		}
@@ -287,6 +408,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		if(s.length()==0) {
 				hamming_result.setText("No ID Entered");
 				hamming_result.setEnabled(true);
+				
 	}
 				else if (s.length()>=6) {
 				hamming_result.setText("ID too long");
@@ -295,9 +417,27 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 				else {
 					try {
 						databaseWrapper db = new databaseWrapper();
+						int size = db.getNumberRecords();
 						db.addId(s);
 						db.addLeft(s, bc[0]);
 						hamming_result.setText("Id '" + s + "' entered into database");
+						String[] updated = new String[size+1];
+						updated[size] = s;
+						
+						for(int i = 0; i<contents.length; i++)
+							updated[i] = contents[i];
+						
+						System.out.println(updated[size]);
+						
+						contents = updated.clone();
+						
+						System.out.println(contents
+								[size]);
+						
+						
+						
+						
+						
 					} catch (DbException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -310,7 +450,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						e.printStackTrace();
 					}
 					
-					added = false;
+					added = true;
 				
 				}
 	}
@@ -328,16 +468,43 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	                "Write ID Here");
 			
 			if(id.length()<11){
-			databaseWrapper db = new databaseWrapper();
-			db.DeleteOne(id);
-			hamming_result.setText("ID " + id + " deleted from database");
+			
+			
+			
+			int i;
+			for(i=0;i<contents.length;i++){
+				
+				if(contents[i].contains(id)){
+					databaseWrapper db = new databaseWrapper();
+					db.DeleteOne(id);
+					hamming_result.setText("ID " + id + " deleted from database");
+					
+					for(;i<contents.length-1;i++){
+						
+						contents[i] = contents[i+1];
+						
+					}
+					
+					
+					
+					break;
+					
+					
+					
+					
+				}
+			
+				hamming_result.setText("ID not found");
+				
+			}
+			
 			}
 			else hamming_result.setText("ID too long");
 			} catch (DbException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			hamming_result.setText("ID not found");
+			
 			e.printStackTrace();
 		}
 		
@@ -350,13 +517,18 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	iconEye.setImage(OriginalEye);
 	imageEye.setIcon(iconEye);
 	imageEye.repaint();
+	recordsCount.setText("");
+	added = true;
 	
 	
 	}
 	
 	else if (ev.getActionCommand()=="Suspend Access"){
 		
+		
+		
 		hamming_result.setEnabled(true);
+		
 	
 		try {
 			String id = (String)JOptionPane.showInputDialog(
@@ -368,9 +540,20 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	                null,
 	                "Write ID Here");
 			if(id.length()<11){
-			databaseWrapper db = new databaseWrapper();
-			db.setAccess(id, false);
-			hamming_result.setText("ID " + id + " has access suspended");
+		int i;
+		int size = contents.length;
+		Boolean found = false;
+		for(i=0;i<size;i++){
+					
+					if(contents[i].contains(id)){
+					
+						databaseWrapper db = new databaseWrapper();
+						db.setAccess(id, false);
+						hamming_result.setText("ID " + id + " has access suspended");
+						found = true;
+					}
+		}	if(found == false) hamming_result.setText("ID not in database");
+	
 			}
 			else hamming_result.setText("ID too long");
 		} catch (DbException e) {
@@ -396,11 +579,25 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	                null,
 	                "Write ID Here");
 			if(id.length()<11){
-			databaseWrapper db = new databaseWrapper();
-			db.setAccess(id, true);
-			hamming_result.setText("ID " + id + " has access restored");
-			}
+				int size = contents.length;
+				int i;
+				for(i=0;i<size;i++){
+					
+					if(contents[i].contains(id)){
+					
+						databaseWrapper db = new databaseWrapper();
+						db.setAccess(id, true);
+						hamming_result.setText("ID " + id + " has access restored");
+						break;
+					}
+				
+					hamming_result.setText("ID not in database");
+				
+				}
+				
+				}
 			else hamming_result.setText("ID too long");
+			
 		} catch (DbException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -408,7 +605,76 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 			hamming_result.setText("Database Error");
 			e.printStackTrace();
 		}}
-	}
+		
+	else if (ev.getActionCommand()=="Refresh Database details"){
+		    
+		try {
+			final databaseWrapper dbUpdate = new databaseWrapper();
+		
+		
+		TableModel dataModel = new AbstractTableModel() {
+	          public int getColumnCount() { return 2; }
+	          public int getRowCount() { 
+	        	  int result = 0;
+	        	  
+				try {
+					result =  dbUpdate.getNumberRecords();
+				} catch (SQLException e) {
+					
+					e.printStackTrace();
+				}
+				return result;}
+	        
+	          public Object getValueAt(int row, int col) {
+	        	String id = null;
+	        	Boolean status = null;
+	        		
+    	        	  if(col==0){
+    	        		  try {
+							dbUpdate.rs.absolute(row+1);
+							id = dbUpdate.getId();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+    	        	  	  
+    	        		  //id = "id " + row;
+    	        	  }
+    	        	  
+    	        	  else if(col==1){
+    	        		  
+    	        		 try {
+							db.rs.absolute(row+1);
+							status = dbUpdate.getAccess();
+	      	        		if(status==true)
+	      	        			id = "Access Active";
+	      	        		else id = "Access Suspended";
+	      	        		
+							//id = status.toString();
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+    	        		 
+    	        		//id = "status"+row;
+    	        	  }
+    	        	  ;
+					return id;  }
+	      };
+		    
+		    table.setModel(dataModel);
+		    table.getColumnModel().getColumn(0).setHeaderValue("ID");
+            table.getColumnModel().getColumn(1).setHeaderValue("Status");
+		} catch (DbException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+				
+			}}
+	
 	private ImageIcon gtImage() {
         JFileChooser filedialog = new  JFileChooser();
         try{
@@ -422,3 +688,5 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
         ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
         return icon;    
 	}}
+
+
