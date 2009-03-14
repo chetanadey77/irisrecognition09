@@ -50,9 +50,15 @@ public class ReportStatistics{
 			System.err.println("Argument not integer");
 			System.exit(1);
 		}
-//		int small = 
-		displayGraph(7.0, 23.0,1.7,3.286, 1+id,id);
 
+ 		int small = (id % 5 ) * 2 + 5;
+ 		int big  =  ((id / 5 ) % 10 )*(25 - small)/10 + small + 2;
+ 		int lamid = (id /50);
+ 		double lambda = (double) lamid * 0.025 +1.5;
+ 		double scale  = (double) big / (double) small;
+ 		displayGraph((double) small, (double) big,lambda,scale, 2,id);
+ 
+		
 	}
 	
 			ReportStatistics(int Width, int Height)
@@ -160,7 +166,7 @@ public class ReportStatistics{
 			if (listOfFiles[i].isFile())
 			{
 				names[count] = listOfFiles[i].getName();
-				System.out.println( count + "  "+names[count]);
+				//System.out.println( count + "  "+names[count]);
 				eye = 	isl.loadImageAbPath(directory,names[count]);
 				ed = LocateIris.find_iris(eye);
 				bc[count]=b1.getFastBitcode(eye,ed);
@@ -227,7 +233,7 @@ public class ReportStatistics{
 			}
 		}
 		System.out.println("Overlap  "+ overlap+ " out of total "+total_match);
-		if (overlap < 2000){
+		if (overlap < 100){
 			System.out.println("Creating Graph");
 			int imHeight = 600,imWidth=300;
 			BufferedImage biGraph = new BufferedImage(imWidth,imHeight,BufferedImage.TYPE_INT_RGB);
