@@ -1,25 +1,38 @@
 package iris.gui;
 
-import java.awt.Color;
-import java.awt.Graphics;
 
-import javax.swing.JPanel;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.io.*;
+
 
 public class DrawLogo extends JPanel {
-  public void paintComponent(Graphics g) {
-    super.paintComponent(g);
-    g.setColor(Color.blue);
-    g.drawRect(0, 0, 400, 400);
-    int thickness = 4;
+    Image image = null;
+    
+    public DrawLogo() {    
+    }
 
-    //for (int i = 0; i <= thickness; i++)
-      //g.draw3DRect(200 - i, 10 - i, 80 + 2 * i, 30 + 2 * i, true);
-    //for (int i = 0; i < thickness; i++)
-      //g.draw3DRect(200 - i, 50 - i, 80 + 2 * i, 30 + 2 * i, false);
+    public DrawLogo(Image image) {
+        this.image = image;
+    }
+   
 
-    //g.drawOval(10, 100, 80, 30);
-  }
-
-  
-}
-           
+    public void setImage(Image image){
+        this.image = image;
+    }
+    
+    public Image getImage(Image image){
+        return image;
+    }
+    
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g); //paint background
+        if (image != null) { 
+            int height = this.getSize().height;
+            int width = this.getSize().width;         
+            //g.drawImage(image,0,0, width, height, this);
+            g.drawImage(image, 0, 0, this); //original image size 
+         }  //end if
+    } //end paint
+} //end class
