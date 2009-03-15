@@ -7,10 +7,16 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+
+import com.sun.imageio.plugins.common.ImageUtil;
 
 public class MainGUI {
 
@@ -48,7 +54,7 @@ class MainFrame extends JFrame
 		PanelStatistics panelStatistics = new PanelStatistics(FRAME_WIDTH,FRAME_HEIGHT);
 		PanelValidate panelValidate = new PanelValidate(FRAME_WIDTH,FRAME_HEIGHT);
 		PanelAdministrator panelAdminister = new PanelAdministrator(FRAME_WIDTH,FRAME_HEIGHT);
-		PanelAbout panelAbout = new PanelAbout(FRAME_WIDTH, FRAME_HEIGHT);
+		PanelAbout panelAbout = new PanelAbout();
 		JTabbedPane tabbedMainFrame = new JTabbedPane();
 		getContentPane().setLayout(null);	
 		getContentPane().add(tabbedMainFrame);
