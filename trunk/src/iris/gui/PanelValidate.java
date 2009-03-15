@@ -1,19 +1,17 @@
 package iris.gui;
 
+import iris.database.databaseWrapper;
+import iris.database.databaseWrapper.DbException;
 import iris.imageToBitcode.BitCode;
 import iris.imageToBitcode.BitcodeGenerator;
 import iris.imageToBitcode.EyeDataType;
 import iris.imageToBitcode.LocateIris;
 import iris.imageToBitcode.UnWrapper;
-import iris.database.databaseWrapper;
-import iris.database.databaseWrapper.DbException;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -28,13 +26,15 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-import javax.swing.JFrame;
 
-import org.jdesktop.layout.GroupLayout;
+/**
+ * 
+ */
 
 public class PanelValidate extends javax.swing.JPanel implements ActionListener {
 
+	
+	private static final long serialVersionUID = -1280204992778919543L;
 	static JLabel imageEye;
 	static JLabel imageUnwrappedEye;
 	static JLabel imageBitCode;
@@ -165,7 +165,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
              	panelData.add(panelUnwrap,BorderLayout.NORTH);
              	panelData.add(panelBitcode,BorderLayout.SOUTH);
              	
-             	//panelWhole[n].setLayout(new GridLayout(1,2));
+             	
              	panelWhole.setBackground(Color.WHITE);
              	panelWhole.setLayout(new BorderLayout());
              	panelWhole.add(panelEyeImage,BorderLayout.WEST);
@@ -181,7 +181,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
              background.add(panelWhole);
              background.add(hamming_result);
              background.add(panelButtons);
-           //  background.add(panelWhole);
+           
              
              getimage.addActionListener(this);
              validate.addActionListener(this);
@@ -194,7 +194,6 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 	public void actionPerformed(ActionEvent ev){
 		
 		long startTime = 0;
-    	//System.out.println( ev.getActionCommand()+"  "+ev.getClass()+" "+ev.getSource());
     	
 		if (ev.getActionCommand()=="Load image to be validated"){
     	
@@ -211,7 +210,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
         imageEye.repaint();
         
         
-        BufferedImage biUnwrapped = uw.unWrapWithGuides(Eye,eyeData,128,512);//biUnwrappedEye[n].getWidth(),biUnwrappedEye[n].getHeight());
+        BufferedImage biUnwrapped = uw.unWrapWithGuides(Eye,eyeData,128,512);
         iconUnwrappedEye.setImage(biUnwrapped);
         imageUnwrappedEye.setIcon(iconUnwrappedEye);
         imageUnwrappedEye.repaint();
@@ -228,7 +227,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
         	hamming_result.setEnabled(true);
 			
         BitCode left;
-        //BitCode right;
+       
       
         
         try {
@@ -238,8 +237,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
         	Boolean access;
         	double hd;
         	
-        	//if(!db.rs.next())
-        	//	hamming_result.setText("Database Empty");
+        	
         	
 			while(db.rs.next()){
         	
@@ -249,8 +247,6 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 			bc[1] = left;
 			byte[] testing = db.toByteArray(bc[0]);
 			System.out.println(Arrays.toString(testing));
-			//right = db.getRightCode(id);
-			//eyeLoaded = true;
 			
 			hd = BitCode.hammingDistance(bc[0],bc[1]);
         	
@@ -318,7 +314,6 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
         }
         catch (IOException e) {}
         filedialog.showOpenDialog(this.getParent());
-        //System.out.println(filedialog.getSelectedFile().getPath());
         ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
         return icon;    }
 	}

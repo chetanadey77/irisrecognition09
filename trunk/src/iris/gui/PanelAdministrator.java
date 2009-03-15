@@ -1,27 +1,23 @@
 package iris.gui;
 
+import iris.database.databaseWrapper;
+import iris.database.databaseWrapper.DbException;
 import iris.imageToBitcode.BitCode;
 import iris.imageToBitcode.BitcodeGenerator;
 import iris.imageToBitcode.EyeDataType;
 import iris.imageToBitcode.LocateIris;
 import iris.imageToBitcode.UnWrapper;
-import iris.database.databaseWrapper;
-import iris.database.databaseWrapper.DbException;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -29,21 +25,21 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-import javax.swing.JFrame;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import org.jdesktop.layout.GroupLayout;
-
+/**
+ * 
+ */
 
 public class PanelAdministrator extends javax.swing.JPanel implements ActionListener {
 
 	
+
+	private static final long serialVersionUID = 1L;
 	static JLabel imageEye;
 	static JLabel imageUnwrappedEye;
 	static JLabel imageBitCode;
@@ -86,7 +82,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
     static JScrollPane scrollpane;
     static JPanel background;
 
-    static int databaseSize;
+    
     static databaseWrapper db;
     
     String[] contents;
@@ -110,10 +106,10 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 				db = new databaseWrapper();
 			
               } catch (DbException e) {
-    				// TODO Auto-generated catch block
+    				
     				e.printStackTrace();
     			} catch (SQLException e) {
-    				// TODO Auto-generated catch block
+    				
     				e.printStackTrace();
     			}
               
@@ -130,10 +126,15 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
                 paneldbinfo = new JPanel();
 
                 
-                
+                /**
+				 * 
+				 */
                
 					dataModel = new AbstractTableModel() {
-		      	          public int getColumnCount() { return 2; }
+		      	         
+						private static final long serialVersionUID = 1L;
+
+						public int getColumnCount() { return 2; }
 		      	          public int getRowCount() { 
 		      	        	  int result = 0;
 		      	        	  
@@ -160,7 +161,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 										e.printStackTrace();
 									}
 			      	        	  	  
-			      	        		  //id = "id " + row;
+			      	        		 
 			      	        	  }
 			      	        	  
 			      	        	  else if(col==1){
@@ -172,13 +173,13 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 				      	        			id = "Access Active";
 				      	        		else id = "Access Suspended";
 				      	        		
-										//id = status.toString();
+										
 									} catch (SQLException e) {
-										// TODO Auto-generated catch block
+										
 										e.printStackTrace();
 									}
 			      	        		 
-			      	        		//id = "status"+row;
+			      	        		
 			      	        	  }
 			      	        	  ;
 								return id;  }
@@ -208,14 +209,14 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
                 		contents[c] = db.getId();
                 }
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
                 
 				
 				
 				
-                JTextField enter = new JTextField(30);
+               
                 imageEye = new  JLabel();
              	imageUnwrappedEye = new  JLabel();
              	imageBitCode = new  JLabel();
@@ -270,7 +271,6 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	panelEyeImage.setBackground(Color.WHITE);
              	panelEyeImage.add(getimage,BorderLayout.NORTH);
              	panelEyeImage.add(imageEye,BorderLayout.SOUTH);
-             	//panelEyeImage.add(recordsCount);
              	panelButtons.setLayout(new GridLayout());
              	panelButtons.add(deleteEntry);
              	panelButtons.add(addEntry);
@@ -294,7 +294,6 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              background.add(panelWhole);
              background.add(hamming_result);
              background.add(panelButtons);
-             //background.add(paneldbinfo);
              background.add(dbinfo);
              background.add(scrollpane);
              background.setAutoscrolls(true);
@@ -318,7 +317,6 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	public void actionPerformed(ActionEvent ev){
 		
 		long startTime = 0;
-    	//System.out.println( ev.getActionCommand()+"  "+ev.getClass()+" "+ev.getSource());
     	
 		if (ev.getActionCommand()=="Load image"){
     	
@@ -335,13 +333,12 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
         imageEye.repaint();
         
         
-        BufferedImage biUnwrapped = uw.unWrapWithGuides(Eye,eyeData,128,512);//biUnwrappedEye[n].getWidth(),biUnwrappedEye[n].getHeight());
+        BufferedImage biUnwrapped = uw.unWrapWithGuides(Eye,eyeData,128,512);
         iconUnwrappedEye.setImage(biUnwrapped);
         imageUnwrappedEye.setIcon(iconUnwrappedEye);
         imageUnwrappedEye.repaint();
 		BitcodeGenerator b = new BitcodeGenerator();
 		bc[0] =  b.getBitcode(Eye,eyeData);
-		//System.out.println(bc[n].getBitcodeSize());
 		ValidateBitCode = bc[0].getBitCodeImage(512,128,32);
 		iconBitCode.setImage(ValidateBitCode);
         imageBitCode.setIcon(iconBitCode);
@@ -374,10 +371,10 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
     	
 		
 	} catch (DbException e) {
-		//TODO
+	
 		e.printStackTrace();
 	} catch (SQLException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	}
     
@@ -439,14 +436,14 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						
 						
 					} catch (DbException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					} catch (SQLException e) {
 						hamming_result.setText("ID already in use");
 						e.printStackTrace();
 						return;
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 					
@@ -485,14 +482,9 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						
 					}
 					
-					
-					
 					break;
 					
-					
-					
-					
-				}
+					}
 			
 				hamming_result.setText("ID not found");
 				
@@ -501,7 +493,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 			}
 			else hamming_result.setText("ID too long");
 			} catch (DbException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (SQLException e) {
 			
@@ -557,7 +549,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 			}
 			else hamming_result.setText("ID too long");
 		} catch (DbException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (SQLException e) {
 			hamming_result.setText("Database Error");
@@ -599,7 +591,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 			else hamming_result.setText("ID too long");
 			
 		} catch (DbException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (SQLException e) {
 			hamming_result.setText("Database Error");
@@ -637,7 +629,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 							e.printStackTrace();
 						}
     	        	  	  
-    	        		  //id = "id " + row;
+    	        		  
     	        	  }
     	        	  
     	        	  else if(col==1){
@@ -649,13 +641,13 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	      	        			id = "Access Active";
 	      	        		else id = "Access Suspended";
 	      	        		
-							//id = status.toString();
+							
 						} catch (SQLException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}
     	        		 
-    	        		//id = "status"+row;
+    	        		
     	        	  }
     	        	  ;
 					return id;  }
@@ -665,10 +657,9 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		    table.getColumnModel().getColumn(0).setHeaderValue("ID");
             table.getColumnModel().getColumn(1).setHeaderValue("Status");
 		} catch (DbException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -683,7 +674,6 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
         }
         catch (IOException e) {}
         filedialog.showOpenDialog(this.getParent());
-        //System.out.println(filedialog.getSelectedFile().getPath());
         
         ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
         return icon;    
