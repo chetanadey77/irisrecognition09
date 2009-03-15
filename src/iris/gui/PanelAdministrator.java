@@ -421,8 +421,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						db.addId(s);
 						db.addLeft(s, bc[0]);
 						hamming_result.setText("Id '" + s + "' entered into database");
-						String[] updated = new String[size+1];
-						updated[size] = s;
+						String[] updated = new String[contents.length+1];
+						updated[contents.length] = s;
 						
 						for(int i = 0; i<contents.length; i++)
 							updated[i] = contents[i];
