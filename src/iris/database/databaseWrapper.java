@@ -4,7 +4,6 @@ import iris.imageToBitcode.BitCode;
 
 import java.io.IOException;
 import java.sql.Array;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
-import java.util.BitSet;
 
 import org.junit.Test;
 
@@ -112,17 +110,6 @@ public class databaseWrapper {
 			
 		
 			
-			private Blob bitcodeToBlob(BitCode bitcode) {  
-			    
-				byte[] byteArray = toByteArray(bitcode);  
-			    
-				//Blob blob = conn.createBlob(); 
-			    
-				//blob.setBytes(1, byteArray);  
-			  
-			    return null;  
-			}  
-			
 			
 			/**
 			 * A method that allows a user to add a bitcode to the database for the left iris using the Array format.
@@ -132,7 +119,7 @@ public class databaseWrapper {
 			
 			
 		   
-		    public void addLeft(String id, BitCode bitcode) throws SQLException, IOException{
+		@Test   public void addLeft(String id, BitCode bitcode) throws SQLException, IOException{
 	        
 			byte[] code = this.toByteArray(bitcode);
 	    	String insert = new String();
@@ -147,7 +134,7 @@ public class databaseWrapper {
             }
 
             stmt.executeUpdate("UPDATE iris SET l = '{" + insert + "}' WHERE id = '" + id + "'");             
-	    	//org.junit.Assert.assertFalse(count==0);
+	    	org.junit.Assert.assertFalse(count==0);
 		   
 		   }
 		   
@@ -196,7 +183,7 @@ public class databaseWrapper {
 			 * @version 1.0
 			 */
 	       
-		    public void addRight(String id, BitCode bitcode) throws SQLException, IOException{
+		  @Test  public void addRight(String id, BitCode bitcode) throws SQLException, IOException{
 		        
 				byte[] code = this.toByteArray(bitcode);
 		    	String insert = new String();
@@ -211,28 +198,11 @@ public class databaseWrapper {
 	            }
 
 	            stmt.executeUpdate("UPDATE iris SET r = '{" + insert + "}' WHERE id = '" + id + "'");             
-		    	//org.junit.Assert.assertFalse(count==0);
+		    	org.junit.Assert.assertFalse(count==0);
 			   
 			   }
 	        
-	        /**
-			 * A method that allows a user to add a bitcode to the database for the right iris using the byte array format.
-			 * @author Seb Smith & Andrew Durnin
-			 * @version 1.0
-			 */
-	        
-	        
-	        private void addRight(byte[] insert, String id) throws SQLException{
-	        	 
-	        	 
-	        	 
-	        	 PreparedStatement ps = conn.prepareStatement("UPDATE iris SET rig = ? WHERE id = '" + id + "'");
-	        	 ps.setBytes(1, insert);
-	        	 ps.executeUpdate();
-	        	 ps.close();
-	        	 
-	        	 }
-	        
+	      
 	        /**
 			 * A method that allows a user to add a bitcode to the database for the right iris using the BitCode Class.
 			 * @author Seb Smith & Andrew Durnin
@@ -335,8 +305,7 @@ public class databaseWrapper {
 	        	 r = rs.getArray("l");
 	        	 Integer[] result = (Integer[])r.getArray();
 	        	 
-	        	 //byte[] result_array = rs.getBytes("l");
-	        	// id = rs.getString("id");
+	        
 	        	 
 	        	 byte[] bitarray = new byte[result.length];
 	        	 for(int i = 0; i<result.length;i++){
@@ -371,9 +340,7 @@ public class databaseWrapper {
 	        	 r = rs.getArray("r");
 	        	 Integer[] result = (Integer[])r.getArray();
 	        	 
-	        	 //byte[] result_array = rs.getBytes("l");
-	        	// id = rs.getString("id");
-	        	 
+	        
 	        	 byte[] bitarray = new byte[result.length];
 	        	 for(int i = 0; i<result.length;i++){
 	        		 
@@ -388,6 +355,15 @@ public class databaseWrapper {
 	        	 return bitcode;
 	        	 }
 	         
+	         /**
+				 * A method that allows the retreival of the id String where the resultset is currently positioned
+				 * 				 
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+		         * @throws SQLException 
+		         * @return String
+				 */
+	         
 	         
 	         public String getId() throws SQLException{
 	        	 
@@ -395,6 +371,15 @@ public class databaseWrapper {
 	        	 return id;
 	        	 
 	         }
+	         
+	         /**
+				 * A method that allows the retreival of the access status where the resultset is currently positioned
+				 * 				 
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+		         * @throws SQLException 
+		         * @return Boolean
+				 */
 	         
 	         public Boolean getAccess() throws SQLException{
 	        	 
@@ -409,7 +394,7 @@ public class databaseWrapper {
 				 * @author Seb Smith & Andrew Durnin
 				 * @version 1.0
 		         * @throws SQLException 
-		         * @return BitCode
+		         * @return ResultSet
 				 */
 	         
 	         
@@ -422,12 +407,28 @@ public class databaseWrapper {
 	        	 
 	        	 }
 	         
+	         /**
+				 * A method that allows a user to delete a specific record in the database
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+		         * @throws SQLException 
+		         * @return void
+				 */
+	         
 	         public void DeleteOne(String id) throws SQLException{
 	        	 
 	        	 stmt.executeUpdate("DELETE FROM iris WHERE id ='" +id + "'");
 	        	 
 	        	 
 	         }
+	         
+	         /**
+				 * A method that allows a user to delete all records in the database
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+		         * @throws SQLException 
+		         * @return Boolean
+				 */
 	         
 	         public Boolean DeleteAll() throws SQLException{
 	        	 
@@ -436,12 +437,30 @@ public class databaseWrapper {
 	        	 
 	         }
 	         
+	         /**
+				 * A method that allows a user to to set the access status where the resultset is currently positioned
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+		         * @throws SQLException 
+		         * @return void
+				 */
+	         
 	         public void setAccess(String id, Boolean value) throws SQLException{
 	        	 
 	        	 stmt.executeUpdate("UPDATE iris SET acc = " + value + " WHERE id = '" + id + "'");
 	        	 
 	        	 
 	         }
+	         
+	         /**
+				 * A method that allows a user to obtain the size of the current database
+				 * 
+				 * @author Seb Smith & Andrew Durnin
+				 * @version 1.0
+		         * @throws SQLException 
+		         * @return int
+				 */
+	         
 	         
 	         public int getNumberRecords() throws SQLException{
 	        	 
@@ -453,9 +472,9 @@ public class databaseWrapper {
 	         
 	        
 	        
-	        public ResultSet rs;
-	        private static Connection conn;
-	        private static Statement stmt;
+	        public ResultSet rs;				//The resultset set up in constructor
+	        private static Connection conn;		//Connection automatically set up on construction
+	        private static Statement stmt;	
 	   
 	        
 	            
