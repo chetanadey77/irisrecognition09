@@ -1,36 +1,48 @@
 package iris.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
+import java.awt.*;
+import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-import javax.swing.JFrame;
+import javax.swing.*;
 
-		
+public class PanelAbout extends JPanel {
+  protected  Image ci;
+  
+  public PanelAbout() {
+	  BufferedImage loadim = null;
+		try {
+			loadim = ImageIO.read(new File("Iris_Recognition_About.gif"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		ci = loadim;
+  }
+  public void setImage(Image si) {
+    this.ci=si;
+    validate();
+    repaint();
 
-	public class PanelAbout extends JPanel{
-		
-		static public JLabel logo;
+  }
+  public Image getDisplayedImage() {
+    return this.ci;
+  }
 
-		   public PanelAbout(int FRAME_WIDTH, int FRAME_HEIGHT) {
-		    	
-		    	this.setPreferredSize(new Dimension(FRAME_WIDTH,FRAME_HEIGHT));
-		    	setLayout(new GridLayout());
-		    	setVisible(true);
-		    	
-		   }
-		}
-	
+  public void update(Graphics g) {
+	    if (ci!=null) {
+	      g.drawImage(ci, 0,0,this.getSize().width,this.getSize().height, this);
+	    } else {
+	      Color c=g.getColor();
+	      g.setColor(Color.white);
+	      g.fillRect(0,0,this.getWidth(), this.getHeight());
+	      g.setColor(c);
+	    }
+	  }
+  public void paint (Graphics g) {
+    update(g);
+  }
+}
