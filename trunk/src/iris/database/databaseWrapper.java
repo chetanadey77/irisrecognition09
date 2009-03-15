@@ -50,7 +50,7 @@ public class databaseWrapper {
 	        }
 	    
 	        try {
-	          conn = DriverManager.getConnection ("jdbc:postgresql://localhost:1422","g08v36205_u","6IxtbnTGoI");
+	          conn = DriverManager.getConnection ("jdbc:postgresql://localhost:1432","g08v36205_u","6IxtbnTGoI");
 	          stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
 	        	        ResultSet.CONCUR_READ_ONLY);
 	        } catch (Exception e) {
