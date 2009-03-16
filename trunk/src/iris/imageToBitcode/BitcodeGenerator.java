@@ -290,7 +290,7 @@ public class BitcodeGenerator {
 	{
 		
 		int h=100, width= 360;
-		BufferedImage bimage = new BufferedImage(width,h*5,BufferedImage.TYPE_INT_RGB);
+		BufferedImage bimage = new BufferedImage(width,h*7,BufferedImage.TYPE_INT_RGB);
 		for(int i=0;i<width;i++)
 			for(int j=0;j<h*5;j++)
 				bimage.setRGB(i, j, 0);
@@ -308,6 +308,11 @@ public class BitcodeGenerator {
 		xmax = Math.ceil(x0+a);
 		ymin = Math.floor(y0-b);
 		ymax = Math.ceil(y0+b);
+		double[][] real_part = new double[(int)xmax-(int)xmin +2][(int)ymax-(int)ymin+2];
+		double total=0;
+		double total_neg=0;
+		double total_pos=0;
+		int total_count=0;
 		int colour=0;
 		//System.out.println("x "+xmin+" to "+xmax+"  y "+ymin+" to "+ymax);
 		for(double x = xmin; x <= xmax; x++)
@@ -315,8 +320,12 @@ public class BitcodeGenerator {
 			for(double y =ymin; y <=ymax; y++)
 			{	
 				k = Math.exp( -Math.PI * (Math.pow( x - x0, 2) / a2 + Math.pow( y - y0, 2) / b2) );
-				tmpVal =  -w * 2 * Math.PI * ( x-x0 ); 
-				imPart = Math.sin( tmpVal );
+System.out.println(w);
+
+			tmpVal =  -w * 2 * Math.PI * ( x-x0 ); 
+			System.out.println(tmpVal);
+
+			imPart = Math.sin( tmpVal );
 				rePart = Math.cos( tmpVal );
 				bimage.setRGB((int)x,(int) y, 0x10101* (int)(255.0*k));
 				bimage.setRGB((int)x,(int) y+h, 0x10101* (int)(127.0*imPart+128.0));
@@ -326,10 +335,34 @@ public class BitcodeGenerator {
 				bimage.setRGB((int)x,(int) y+3*h, colour);
 				if (rePart<0) colour = -0x10000 *(int)(255.0*k*rePart);
 				else colour = (int)(255.0*k*rePart);
+				real_part[(int)(x - xmin)][(int)(y-ymin)] = k*rePart;
+				total_count++;
+				if (real_part[(int)(x-xmin)][(int)(y-ymin)]>0.0) total_pos+=real_part[(int)(x-xmin)][(int)(y-ymin)];
+				else total_neg-=real_part[(int)(x-xmin)][(int)(y-ymin)];
+				total +=real_part[(int)(x-xmin)][(int)(y-ymin)];
 				bimage.setRGB((int)x,(int) y+4*h, colour);
 			}
 		}
-		
+		System.out.println( total);
+		System.out.println( total_count);
+		System.out.println( total_pos);
+		System.out.println( total_neg);
+		for(double x = xmin; x <= xmax; x++)
+		{
+			for(double y =ymin; y <=ymax; y++)
+			{	
+				rePart = real_part[(int)(x-xmin)][(int)(y-ymin)] - total/(double) total_count;
+				if (rePart<0) colour = -0x10000 *(int)(255.0*rePart);
+				else colour = (int)(255.0*rePart);
+				bimage.setRGB((int)x,(int) y+5*h, colour);
+				rePart = real_part[(int)(x-xmin)][(int)(y-ymin)];
+				if (rePart<0) rePart = rePart * total_pos / total_neg;
+				if (rePart<0) colour = -0x10000 *(int)(255.0*rePart);
+				else colour = (int)(255.0*rePart);
+				bimage.setRGB((int)x,(int) y+6*h, colour);
+				
+			}
+		}
 		return bimage;
 	}
 }
