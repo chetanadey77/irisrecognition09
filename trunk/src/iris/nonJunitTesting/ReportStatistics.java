@@ -43,6 +43,8 @@ public class ReportStatistics{
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		DecimalFormat _1dp = new DecimalFormat("0.0");
+		DecimalFormat _3dp = new DecimalFormat("0.000");
 		int id=0;
 		try {
 			id  = Integer.parseInt(args[0]);
@@ -51,11 +53,12 @@ public class ReportStatistics{
 			System.exit(1);
 		}
 
- 		int small = (id % 5 ) * 2 + 5;
- 		int big  =  ((id / 5 ) % 10 )*(25 - small)/10 + small + 2;
- 		int lamid = (id /50);
- 		double lambda = (double) lamid * 0.025 +1.5;
+ 		int small = (id % 10 )  + 2;
+ 		int big  =  ((id / 10 ) % 10 )*(25 - small)/10 + small + 2;
+ 		int lamid = (id /100);
+ 		double lambda = (double) lamid * 0.01 +1.5;
  		double scale  = (double) big / (double) small;
+ 		System.out.println(small+", "+big+", "+_3dp.format(lambda)+", "+_3dp.format(scale));
  		displayGraph((double) small, (double) big,lambda,scale, 2,id);
  
 		
@@ -237,7 +240,7 @@ public class ReportStatistics{
 			}
 		}
 		System.out.println("Overlap  "+ overlap+ " out of total "+total_match);
-		if (overlap < 100){
+		if (overlap < 170){
 			System.out.println("Creating Graph");
 			int imHeight = 600,imWidth=300;
 			BufferedImage biGraph = new BufferedImage(imWidth,imHeight,BufferedImage.TYPE_INT_RGB);
