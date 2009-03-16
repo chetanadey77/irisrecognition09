@@ -23,7 +23,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import unittest.ImageToBitcode.ImageSaverLoader;
-
+/**
+ * This class displays graphs or tables of statistics of test subsets of the data
+ * @author en108
+ *
+ */
 public class PanelStatistics extends JPanel implements ActionListener{
 	static JLabel 	imageGraph = new  JLabel();
 
@@ -58,14 +62,19 @@ public class PanelStatistics extends JPanel implements ActionListener{
 		drawTable.addActionListener(this);
 		drawGraph.addActionListener(this);
 	}
+	/**
+	 * Handles all button presses on the Panel
+	 */
 	public void actionPerformed(ActionEvent ev)
     {	
     	//System.out.println( ev.getActionCommand()+"  "+ev.getClass()+" "+ev.getSource());
     	if (ev.getActionCommand()=="Table") displayTable();
     	else if (ev.getActionCommand()=="Graph") displayGraph();
     	
-    
     }
+	/**
+	 * displays a table of all pairwise Hamming distances of the test set
+	 */
 	public void displayTable()
 	{
 		int sign = 1;
@@ -101,68 +110,23 @@ public class PanelStatistics extends JPanel implements ActionListener{
 		testParam( wPar, abPar,x0Par,y0Par, names,eye, ed,true, count,sign);
 		text.setEnabled(true);
 	}
-		/*
-		DecimalFormat _1dp = new DecimalFormat("0.0");
-		DecimalFormat _3dp = new DecimalFormat("0.000");
-		
-		double lowest_fail=1.0,weakest_match=0.0;
-		double highest = 0.0,lowest=1.0;
-		ImageSaverLoader isl = new ImageSaverLoader(); 
-		String directory = "images/automatic/smalltest/";
-		String isl_load_path = "/"+ directory;
-		
-		
-		double hamm_base;
-		
-		GaborParameters wPar, abPar, x0Par, y0Par;
-		//As I read the docs, "setFileFilter(FileFilter)" allows you to "filter out files from the user's view", i.e. to control what the user sees, and "setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)" allows the user to "just select directories".
-		File folder = new File(directory);
-		//File folder2 = new File(directory);
-		double sm_box=17.0,bg_box=38.0;
-		double lambda = 2.0;
-		double w_min=lambda/(2.0* sm_box), w_max=lambda/(2.0*bg_box);
-		abPar= new GaborParameters(sm_box,bg_box,3);
-		wPar = new GaborParameters(lambda/(2.0*sm_box),lambda/(2.0*bg_box),3);
-		x0Par= new GaborParameters(bg_box, 360-bg_box , (int) (360.0 - bg_box*2));
-		y0Par= new GaborParameters(sm_box, bg_box, 3);
-		
-		
-		File[] listOfFiles = folder.listFiles();
-		BufferedImage[] eye =new BufferedImage[listOfFiles.length];
-		EyeDataType[] ed= new EyeDataType[listOfFiles.length];
-		String[] names = new String[listOfFiles.length];
-		BitCode[] bc = new BitCode[listOfFiles.length];
-		int count=0;
-		for (int i = 0; i < listOfFiles.length; i++)
-		{
-			if (listOfFiles[i].isFile())
-			{
-				names[count] = listOfFiles[i].getName();
-				eye[count] = isl.loadImage(isl_load_path,names[count]);
-				ed[count] = LocateIris.find_iris(eye[count]);
-				//c1.inner.radius+=1;
-				count++;
-			}
-		}
-		
-		for(int sign = 2;sign>0;sign--)
-			for (int amin=5;amin<30;amin+=4)
-				for (int amax=Math.max(amin+6,14);amax<45;amax+=7)
-					for( lambda=1.9;lambda<3.0;lambda+=0.3)
-						for(double scale = 1.0;scale<(double)amax/(double)amin;scale+=0.35)
-						{
-							abPar.set(amin,amax,3);
-							wPar.set(lambda/(2.0*amin),lambda/(2.0*amin*scale),3);
-							x0Par.set(amax, 360+amax , 360 );
-							y0Par.set(amin,amax, 3);
-							System.out.print(sign+", "+amin+", "+amax+" ,"+_3dp.format(lambda)+", "+_3dp.format(scale)+",    ");
-							hamm_base = testParam( wPar, abPar,x0Par,y0Par, names,eye, ed,false, count,sign);
-							System.out.println(",    "+_3dp.format(hamm_base));
-						}
-		
-		
-	}*/
-public double testParam(GaborParameters wPar,GaborParameters abPar,
+	/**
+	 * This method tests a set of eyes with the provided Gabor parameters and returns 
+	 * the difference between the hamming distances of the highest match and lowest fail
+	 * 
+	 * @param wPar  The first of the four Gabor parameters sets
+	 * @param abPar
+	 * @param x0Par
+	 * @param y0Par The fourth
+	 * @param names String Array of file names
+	 * @param eye Array of buffered Images
+	 * @param ed Array of centre data
+	 * @param display_table true to display table
+	 * @param count size of the above arrays
+	 * @param bits 2 to use real and imaginary filter, 1 just to use imaginary
+	 * @return
+	 */
+	public double testParam(GaborParameters wPar,GaborParameters abPar,
 		GaborParameters x0Par,GaborParameters y0Par, String[] names,
 		BufferedImage[] eye,EyeDataType[] ed,boolean display_table,int count,int bits)
 	{
@@ -209,7 +173,9 @@ public double testParam(GaborParameters wPar,GaborParameters abPar,
 	if (!display_table)text.append(_3dp.format(lowest)+", "+_3dp.format(highest)+", " + _3dp.format(weakest_match)+", "+_3dp.format(lowest_fail)+"\n");
 	return (lowest_fail-weakest_match);
 }
-
+/**
+ *  Draws a graph of the chosen test set
+ */
 public void displayGraph()
 {
 	DecimalFormat _1dp = new DecimalFormat("0.0");
@@ -311,6 +277,16 @@ public void displayGraph()
 			
 	
 }
+/**
+ * Draws a box by OR ing the colour onto the img
+ * with corners of the box set by x1,y1 < x2,y2 
+ * @param img
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ * @param colour
+ */
 private void drawORBox(BufferedImage img,int x1,int y1,int x2,int y2,int colour)
 {
 	for (int i=x1;i<=x2;i++)

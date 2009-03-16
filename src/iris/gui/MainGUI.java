@@ -17,7 +17,13 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import com.sun.imageio.plugins.common.ImageUtil;
-
+/**
+ * A class that creates an instance of MainFrame
+ * and adds it to the EventQueue
+ * 
+ * @author en108
+ *
+ */
 public class MainGUI {
 
 	/**
@@ -37,7 +43,14 @@ public class MainGUI {
 	}
 
 }
-
+/**
+ * MainFrame is an extension of JFrame and it contains a 
+ * JTabbedPane() each of which has a PannelObject. The content
+ * for each of these is a separate Panel class.
+ * 
+ * @author en108
+ *
+ */
 
 class MainFrame extends JFrame
 {
