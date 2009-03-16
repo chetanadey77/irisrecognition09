@@ -1,6 +1,5 @@
 package iris.imageToBitcode;
 
-import iris.gui.CircleType;
 
 public class EyeDataType {
 	   public CircleType inner;
