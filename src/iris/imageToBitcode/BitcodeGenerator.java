@@ -115,11 +115,29 @@ public class BitcodeGenerator {
 		return bitcode;
 
 	}
+	/**
+	 * Overloading without the need to specify the number of bits which will default to 2
+	 * @param _wPar Gabor parameter 1
+	 * @param _abPar Gabor parameter 2
+	 * @param _x0Par Gabor parameter 3
+	 * @param _y0Par Gabor parameter 4
+	 * @param _unwrWidth width of unwrapped image
+	 * @param _unwrHeight height of image
+	 */
 	public void initialiseParams(GaborParameters _wPar,GaborParameters _abPar, GaborParameters _x0Par, GaborParameters _y0Par, int _unwrWidth, int _unwrHeight)
 	{
 		initialiseParams( _wPar,_abPar,  _x0Par, _y0Par,  _unwrWidth, _unwrHeight,2);
 	}
-
+	/**
+	 * 
+	 * @param _wPar Gabor parameter 1
+	 * @param _abPar Gabor parameter 2
+	 * @param _x0Par Gabor parameter 3
+	 * @param _y0Par Gabor parameter 4
+	 * @param _unwrWidth width of unwrapped image
+	 * @param _unwrHeight height of image
+	 * @param _bitsPerBox 1 for one and 2 for two (1 ignores the real part)
+	 */
 	public void initialiseParams(GaborParameters _wPar,GaborParameters _abPar, GaborParameters _x0Par, GaborParameters _y0Par, int _unwrWidth, int _unwrHeight,int _bitsPerBox)
 	{
 		unwrWidth = _unwrWidth;
@@ -247,6 +265,13 @@ public class BitcodeGenerator {
 			bitcode.addBit(sumIm >= 0.0);
 		}
 	}
+	/**
+	 * Does the same as getBitcode, but faster.Uses integer arithmetic
+	 * @param eyeImage image of eye to be converted
+	 * @param eye data for cetre of pulil and iris
+	 * @return Bitcode
+	 */
+	
 	public BitCode getFastBitcode(BufferedImage eyeImage,EyeDataType eye)
 	{
 		xp = eye.inner.x; yp = eye.inner.y; rp = eye.inner.radius;
@@ -284,7 +309,15 @@ public class BitcodeGenerator {
 		return bitcode;
 	}
 
-	
+	/**
+	 * Only for testing and report purposes, and for visually seeing the Gabor Wavelet
+	 * 
+	 * @param eyeImage
+	 * @param x0  is the centre of the wavelet box
+	 * @param y0  is the centre fo the wavelet box	
+	 * @param step which of the boxes to draw
+	 * @return buffered image with the gaussian, cos term sine term, and some biassed cos terms
+	 */
 
 	public BufferedImage drawWavelet(BufferedImage eyeImage,int x0,int y0,int step)
 	{

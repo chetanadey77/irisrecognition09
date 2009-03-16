@@ -1,7 +1,6 @@
 package iris.imageToBitcode;
 import java.util.ArrayList;
 
-import iris.gui.CircleType;
 public class CircleList {
 	public CircleList(int max_elements)
 	{
