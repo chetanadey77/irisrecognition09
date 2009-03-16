@@ -203,12 +203,15 @@ public class ReportStatistics{
 					{
 						if (hamm<lowest_fail) lowest_fail = hamm;
 						HammingNoMatch[(int)(100.0*hamm)]++;
+						System.out.println(_3dp.format(hamm*100.0));
 					}
 					
 				//}
 				//if (display_table) text.append(_3dp.format(hamm)+"  ");
 			}
 		}
+		
+		System.out.println("Matching");
 		int total_match=0;
 		int overlap=0;
 		for (int i=0;i<count;i++)
@@ -225,6 +228,7 @@ public class ReportStatistics{
 						total_match++;
 						hamm = BitCode.hammingDistance(bc[i],bc[j]);
 						if (hamm>lowest_fail) overlap++;
+						System.out.println(_3dp.format(hamm*100.0));
 						//System.out.println(names[i]+"  "+names[j]+"   "+_3dp.format(hamm));
 					} 
 					
