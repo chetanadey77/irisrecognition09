@@ -1,7 +1,5 @@
 package iris.imageToBitcode;
 
-
-
 /**
  * A class that converts from r-theta cooridinates into x-y space given the centerpoint
  * and radii of pupil and iris.
@@ -15,13 +13,14 @@ package iris.imageToBitcode;
  * position along (r goes from 0 to 1, 0 at iris inner boundary and 
  * 1 at iris outer boundary), and similarly for the iris (xi,yi).
  * 
- * @author Arnar B. Jï¿½nsson, Mark Howe
+ * @author Arnar B. Jónsson, Mark Howe
  * @version 1.0
  */
 
 public class CoordConverter {
 
 	double xp, yp, rp, xi, yi, ri;
+	
 	/**
 	 * @param xPup center point of pupil (x)
 	 * @param yPup center point of pupil (y)
@@ -50,7 +49,6 @@ public class CoordConverter {
 		theta = Math.toRadians(theta);
 		double xpTheta = xp + rp*Math.cos(theta);
 		double xiTheta = xi + ri*Math.cos(theta);
-		//r=rescale(r,theta);
 		return (int) Math.round(((1-r)*xpTheta + r*xiTheta));
 	}
 	
@@ -64,44 +62,7 @@ public class CoordConverter {
 		theta = Math.toRadians(theta);
 		double ypTheta = yp + rp*Math.sin(theta);
 		double yiTheta = yi + ri*Math.sin(theta);
-		
-		//r=rescale(r,theta); see comment below.
 		return (int) ((1-r)*ypTheta + r*yiTheta);
-	}
-	
-	/*
-	 * The idea (which I got from a paper I still have) is that in addition to the equations marked (1) and (2) in the comment 
-	 * at the top of this file, the radius variable r should, somehow, also have a rescaling factor applied to it so as to take 
-	 * into account the fact that the iris and pupil are not concentric. I am not sure what they are getting at here but it might 
-	 * be worth getting clarification on. It might make a difference.
-	 */
-	private double rescale(double _r,double _theta)
-	{	
-		double ox = xp - xi; // used in re-scaling formula, measure the offset of the two centres.
-		double oy = yp - yi;
-		
-		double pi = Math.PI;
-		
-		double tanSlope; // tanSlope = tan(oy/ox) 
-		// separate out the special case case where ox = 0, which makes atan = pi/2.
-		if(ox!=0) tanSlope = Math.atan(oy/ox);
-		else tanSlope = pi/2;
-		
-		int sign; // separate out + and - cases in re-scaling formula.		
-		if(ox<=0) sign = -1;
-		else sign = 1;
-		if(ox==0 && oy>0) sign = 1;
-		double alpha, beta; // used in re-scaling formula
-		double radians = 2*pi*_theta;			
-		beta = Math.cos(pi-tanSlope-radians);	
-		alpha = ox*ox + oy*oy;
-		double sralpha = Math.sqrt(alpha);
-		double irissq = ri*ri;
-		
-		double rScale;
-		rScale = sralpha*beta + sign*Math.sqrt(alpha*beta*beta - alpha - irissq);
-		
-		return rScale*_r;
 	}
 	
 }

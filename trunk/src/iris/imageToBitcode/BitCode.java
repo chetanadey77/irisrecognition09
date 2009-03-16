@@ -84,7 +84,7 @@ public class BitCode extends BitSet {
 	
 	/**
 	 * 
-	 * @return returns distribution of bits (0=all zeros, 1.0=all ones, 0.5=even amount of ones and zeros)
+	 * @return distribution of bits (0=all zeros, 1.0=all ones, 0.5=even amount of ones and zeros)
 	 */
 	public float getBitDistribution()
 	{
@@ -97,7 +97,7 @@ public class BitCode extends BitSet {
 	}
 	
 	/**
-	 * Return an image 
+	 * Visualisation of a bitcode
 	 * @param width
 	 * @param height
 	 * @param number_of_bits_high
@@ -118,6 +118,12 @@ public class BitCode extends BitSet {
 		return bi;
 	}
 	
+	/**
+	 * Hamming distance between two bitcodes
+	 * @param ba bitcode A
+	 * @param bb bitcode B
+	 * @return hamming distance ranging from 0.0 (identical) to 1.0 (opposite) 
+	 */
 	public static double hammingDistance(BitCode ba, BitCode bb)
 	{	
 		int rotation = 14;//number of degrees (from -rotation to +rotation)
@@ -158,7 +164,6 @@ public class BitCode extends BitSet {
 			if (min_hamming>hc) min_hamming=hc;
 			//need to include the masks in the above
 		}
-		
 		
 		return min_hamming;
 	}

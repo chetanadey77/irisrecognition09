@@ -8,9 +8,8 @@ package iris.imageToBitcode;
  * In the future it might have eyelid location and possibly eye lash location and specularity
  * locations
  * 
- * 
- * @author en108
- *
+ * @author Edmun Noon
+ * @version 1.0
  */
 public class EyeDataType {
 	   public CircleType inner;

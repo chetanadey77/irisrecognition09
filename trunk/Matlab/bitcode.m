@@ -1,6 +1,6 @@
 function bitcode(img,a,b,w,x0,y0)
 % sample call:
-% bitcode(img,100,200,0.1,0,0)
+% bitcode(img,50,50,0.05,50,100)
 
 [height,width] = size(img);
 z = zeros(height,width);
@@ -15,10 +15,13 @@ for i=1:height
 end
 
 [x,y] = meshgrid(0:width-1,0:height-1);
-surf(x,y,z);
+% mesh
+mesh(x,y,z);
 view(2)
 axis equal
-colorbar
+colorbar;
+
+axis equal;
 title(['Gabor wavelet:', ' \alpha=',num2str(a),  ' \beta=', num2str(b), ' \omega=', num2str(w), ' x_0=', num2str(x0), ' y_0=', num2str(y0) ])
 
 %b = sum;

@@ -17,13 +17,13 @@ public class TestUnWrapper {
 	@Test
 	public void testUnWrap() {
 		int xi,yi,ri,xp,yp,rp;
-		xi = 182; yi = 134; ri = 100;
-		xp = 182; yp = 134; rp = 37;
+		xi = 185; yi = 132; ri = 100;
+		xp = 183; yp = 133; rp = 39;
 		
 		ImageSaverLoader isl = new ImageSaverLoader();
-		BufferedImage img = isl.loadImage("002_1_1.gif");
+		BufferedImage img = isl.loadImage("001_1_1.gif");
 		
-		BufferedImage retImg = UnWrapper.unWrap(img,xp,yp,rp,xi,yi,ri,100,360);
+		BufferedImage retImg = UnWrapper.unWrap(img,xp,yp,rp,xi,yi,ri,100,360,90);
 		isl.saveImage(retImg, "unwrapped2.gif");
 	
 	}
