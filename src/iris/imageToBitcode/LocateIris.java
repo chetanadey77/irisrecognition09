@@ -1,16 +1,25 @@
 package iris.imageToBitcode;
 
 
-import unittest.ImageToBitcode.ImageSaverLoader;
+import iris.nonJunitTesting.CircleList;
 
-import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
-
+/**
+ * This class locates the pupil and outer iris boundary. It is currently 80% successful 
+ * on the set of images it has been tested with. 
+ * 
+ * 
+ * @author en108 
+ *
+ */
 public class LocateIris {
+	/**
+	 * Blurs an images using a standard convolution method with the width being 3 SD
+	 * and pixels wide
+	 * @param bi
+	 * @param pixels
+	 * @return new image
+	 */
 	public static BufferedImage gaussian_blur(BufferedImage bi,int pixels)
     {
     	float[] matrix = new float[(pixels*2+1)*(pixels*2+1)] ;
@@ -23,14 +32,6 @@ public class LocateIris {
     			matrix[x+pixels+(y+pixels)*(2*pixels+1)]=(float)Math.exp(-(double)(x*x+y*y)/(sigma_sq*2.0));
     			normalise += matrix[x+pixels+(y+pixels)*(2*pixels+1)];   	
     		}
-    	/*for (int x = -pixels; x<=pixels;x++)
-    		for (int y = -pixels; y<=pixels;y++)
-    		{
-    			matrix[x+pixels+(y+pixels)*(2*pixels+1)]= matrix[x+pixels+(y+pixels)*(2*pixels+1)] / normalise;   	
-    		}
-    	BufferedImageOp op = new ConvolveOp(new Kernel(2*pixels+1, 2*pixels+1,matrix));
-    	BufferedImage nbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
-    	op.filter(bi,nbi);*/
     	double total=0.0;
     	BufferedImage nbi = new BufferedImage(bi.getWidth(),bi.getHeight(),bi.getType());
     	for (int x = pixels; x<(bi.getWidth()-pixels);x++)
@@ -135,12 +136,10 @@ public static BufferedImage edgeDetection(BufferedImage bi)
     public static CircleType find_circle(BufferedImage bi, int pixel_blur, char octant,Bounds bounds)
     {
     	BufferedImage bigb;
-    	//BufferedImage bigb= LocateIris2.map(bi,75);
+    	
     	if (octant == (char) 102)  bigb= edgeDetection(bi);
     	else bigb= gaussian_blur(bi,pixel_blur);
-    	
-    	//if (octant == (char) 126) bigb = gaussian_blur(bi,pixel_blur);
-    	//else bigb = houghx(bi);
+    
     	int[][] array_image = new int[bigb.getWidth()][bigb.getHeight()];
     	for (int x=0;x<bigb.getWidth();x++)
     		for (int y=0;y<bigb.getHeight();y++)
@@ -174,8 +173,6 @@ public static BufferedImage edgeDetection(BufferedImage bi)
     			}
     		}
     	} 
-    	//for(int q=0; q<cl.get_size();q++)
-    	//	 bi = draw_part_circle(bi, cl.get_circle(q).x, cl.get_circle(q).y,cl.get_circle(q).radius, octant, 0xFFFFFF);
     	c.x = xo;
         c.y = yo;
         c.radius = ro;

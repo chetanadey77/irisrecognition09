@@ -1,4 +1,6 @@
-package iris.imageToBitcode;
+package iris.nonJunitTesting;
+import iris.imageToBitcode.CircleType;
+
 import java.util.ArrayList;
 
 public class CircleList {
