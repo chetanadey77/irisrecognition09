@@ -1,22 +1,10 @@
 package iris.gui;
 
-import iris.database.databaseWrapper.DbException;
-
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
-
-import com.sun.imageio.plugins.common.ImageUtil;
 /**
  * A class that creates an instance of MainFrame
  * and adds it to the EventQueue
