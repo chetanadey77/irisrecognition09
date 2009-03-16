@@ -27,7 +27,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * @author user1
+ * PanelCompareTwo extends JPanel and displays two images chosen by the user
+ * and then converts them to bitcode which is presented as a visual 
+ * representation. The hamming distance between the two is also shown.
+ * 
+ * @author en108
  *
  */
 public class PanelCompareTwo extends JPanel implements ActionListener{
@@ -55,7 +59,11 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
     
     
     static boolean[] eyeLoaded = new boolean[2];
-    
+    /**
+     * 
+     * @param FRAME_WIDTH  Width of the frame
+     * @param FRAME_HEIGHT Height fo the frame
+     */
     public PanelCompareTwo(int FRAME_WIDTH,int FRAME_HEIGHT)
         
         {       
@@ -168,6 +176,9 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
                     public void actionPerformed(ActionEvent arg0) {
                     	);*/
         }
+    /**
+     * This method deals with all button presses on this page
+     */
     public void actionPerformed(ActionEvent ev)
     {	int n=0;
     	//System.out.println( ev.getActionCommand()+"  "+ev.getClass()+" "+ev.getSource());
@@ -210,8 +221,12 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
         }
     }
 
-
- //   public static void ButtonAction 
+/**
+ * This method is not currently in use. It copies the iris out of an image of an eye
+ * @param bifrom The root image of the eye
+ * @param bito the modified image of just the iris
+ * @param ed The centre of the iris and pupil
+ */
     private static void copyIris(BufferedImage bifrom, BufferedImage bito, EyeDataType ed )
     {
     	int colour;
@@ -226,6 +241,10 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
         			bito.setRGB(x,y,colour);
         		}
     }
+    /**
+     * 
+     * @return an ImageIcon of an eye chosen by the user (using JFileUser)
+     */
     private ImageIcon gtImage() {
         JFileChooser filedialog = new  JFileChooser();
         try{
