@@ -42,7 +42,7 @@ public class MainGUI {
 class MainFrame extends JFrame
 {
 	static final int FRAME_WIDTH = 900;
-    static final int FRAME_HEIGHT = 770;
+    static final int FRAME_HEIGHT = 775;
 
 	MainFrame()
 	{

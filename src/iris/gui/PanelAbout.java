@@ -34,11 +34,11 @@ public class PanelAbout extends JPanel {
 
   public void update(Graphics g) {
 	    if (ci!=null) {
-	      g.drawImage(ci, 0,0,this.getSize().width,this.getSize().height, this);
+	      g.drawImage(ci, 0,0,this.ci.getWidth(this),this.ci.getHeight(this), this);
 	    } else {
 	      Color c=g.getColor();
 	      g.setColor(Color.white);
-	      g.fillRect(0,0,this.getWidth(), this.getHeight());
+	      g.fillRect(0,0,this.ci.getWidth(this), this.ci.getHeight(this));
 	      g.setColor(c);
 	    }
 	  }
