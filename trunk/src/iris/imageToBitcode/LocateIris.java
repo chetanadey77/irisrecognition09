@@ -47,6 +47,11 @@ public class LocateIris {
     	return nbi;
     	
     }
+	/**
+	 * This is not a Hough transform, more a Sobel filter in just the x axis
+	 * @param bi taken a input and the 
+	 * @return is another BufferedImage
+	 */
 	public static BufferedImage houghx(BufferedImage bi)
     {
     	int[] matrix = {-1,0,1,-2,0,2,-1,0,1} ;
@@ -71,6 +76,11 @@ public class LocateIris {
     	return nbi;
     	
     }
+	/**
+	 * This is not a Hough transform, more a Sobel filter in just the y axis
+	 * @param bi taken a input and the 
+	 * @return is another BufferedImage
+	 */
 public static BufferedImage houghy(BufferedImage bi)
     {
     	int[] matrix = {-1,-2,-1,0,0,0,1,2,1} ;
@@ -95,6 +105,12 @@ public static BufferedImage houghy(BufferedImage bi)
     	return nbi;
     	
     }
+/**
+ * edge detection in both directions, though at the moment the code is modified so that only the x axis is considered 
+ * as this is used for the the finding the edge of the outer edge of the iris
+ * @param bi
+ * @return
+ */
 public static BufferedImage edgeDetection(BufferedImage bi)
 {
 	bi= gaussian_blur(bi,4);
@@ -133,6 +149,15 @@ public static BufferedImage edgeDetection(BufferedImage bi)
 	return nbi;
 	
 }
+/**
+ * This returns the best circle it can find in the image bi, given pixel_blur. 
+ * It only looks at the part of the circle specified by octant
+ * @param bi
+ * @param pixel_blur
+ * @param octant
+ * @param bounds constrains the image search space
+ * @return
+ */
     public static CircleType find_circle(BufferedImage bi, int pixel_blur, char octant,Bounds bounds)
     {
     	BufferedImage bigb;
@@ -178,6 +203,16 @@ public static BufferedImage edgeDetection(BufferedImage bi)
         c.radius = ro;
     	return c;	
     }
+    /**
+     * Returns the sum over a partial loop centred on (cenx,ceny)
+     * of radius r and octant parts
+     * @param array_bi integer array of the smae size as the orriginal buffered image
+     * @param cenx
+     * @param ceny
+     * @param r
+     * @param octant
+     * @return
+     */
     public static double loop_integral(int[][] array_bi, int cenx, int ceny, int r, char octant)
     {
     	int total=0;
@@ -223,7 +258,17 @@ public static BufferedImage edgeDetection(BufferedImage bi)
     	if (count>0) return (double) (total) /(double)count;
     	else return 0;
     }
-    
+    /**
+     * This is used mainly by testing routines to draw thei eye image with the 
+     * circles drawn on them to show that the pupil location methods have worked
+     * @param bi
+     * @param cenx
+     * @param ceny
+     * @param r
+     * @param octant
+     * @param colour
+     * @return
+     */
     public static BufferedImage draw_part_circle(BufferedImage bi, int cenx, int ceny, int r, char octant,int colour)
     {
     	int total=0;
@@ -268,6 +313,11 @@ public static BufferedImage edgeDetection(BufferedImage bi)
     	
     	return bi;
     }
+    /**
+     * The main function, an image is passed and the centre details are returned
+     * @param bi image containing an eye
+     * @return centre information
+     */
     public static EyeDataType find_iris(BufferedImage bi)
     {
     	EyeDataType ed = new EyeDataType();
@@ -301,6 +351,11 @@ public static BufferedImage edgeDetection(BufferedImage bi)
     }
     
 }
+/**
+ * A small class to hold information to restrict the search area of the pupils and outer iris edges
+ * @author en108
+ *
+ */
 //controls how much of the image will be searched for a circle
 //in particular used to find pupil (which we know is inside iris)
 class Bounds
