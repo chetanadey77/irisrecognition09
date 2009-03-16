@@ -11,8 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -35,12 +37,24 @@ public class PanelStatistics extends JPanel implements ActionListener{
 	PanelStatistics(int Width, int Height)
 	{	
 		
+		try {
+			iconGraph = new ImageIcon("./unittests/testImages/Hamming_Graph.gif");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+
+	
+		imageGraph.setIcon(iconGraph);
+		imageGraph.setEnabled(true);
 		add(description);
 		add(drawTable);
 		add(drawGraph);
 		text.setEnabled(false);
 		add(text);
 		add(imageGraph);
+		imageGraph.repaint();
 		drawTable.addActionListener(this);
 		drawGraph.addActionListener(this);
 	}
