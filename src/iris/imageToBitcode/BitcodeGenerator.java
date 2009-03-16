@@ -1,6 +1,5 @@
 package iris.imageToBitcode;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
@@ -36,18 +35,11 @@ public class BitcodeGenerator {
 		// width and height of the unwrapped image. Up those numbers => more detail and longer runtime
 		int _unwrWidth = 360;
 		int _unwrHeight = 100;
-		//bitsPerBox=2;
+		
 		// set ranges and number of steps for omega, alpha, beta, x0 and y0
-		
-//		GaborParameters _wPar = new GaborParameters(0.19, 0.15, 3);
-//		GaborParameters _abPar = new GaborParameters(10, 15, 3);
-//		GaborParameters _x0Par = new GaborParameters(_abPar.upLim, _unwrWidth-_abPar.upLim , (int) (_unwrWidth-_abPar.upLim*2) );
-//		GaborParameters _y0Par = new GaborParameters(_abPar.lowLim, _abPar.upLim, 3);
-		
 		GaborParameters _wPar = new GaborParameters((1.0/17.0),(1.0/38.0) , 3);
 		GaborParameters _abPar = new GaborParameters(17, 38, 3);
 		GaborParameters _x0Par = new GaborParameters(_abPar.upLim, _unwrWidth+_abPar.upLim , (int) (_unwrWidth) );
-		//GaborParameters _x0Par = new GaborParameters(_abPar.upLim, _unwrWidth+_abPar.upLim, (int) (_unwrWidth-_abPar.upLim*2) );
 		GaborParameters _y0Par = new GaborParameters(_abPar.lowLim, _abPar.upLim, 3);
 
 		this.initialiseParams(_wPar, _abPar, _x0Par, _y0Par, _unwrWidth, _unwrHeight,2);
@@ -57,13 +49,14 @@ public class BitcodeGenerator {
 	{
 		this.initialiseParams(_wPar, _abPar, _x0Par, _y0Par, _unwrWidth, _unwrHeight,2);
 	}
-	
+
 	public BitcodeGenerator(GaborParameters _wPar,GaborParameters _abPar, GaborParameters _x0Par, GaborParameters _y0Par, int _unwrWidth, int _unwrHeight,int bits)
 	{
 		this.initialiseParams(_wPar, _abPar, _x0Par, _y0Par, _unwrWidth, _unwrHeight,bits);
 	}
+	
 	/**
-	 * 
+	 * Generate bitcode
 	 * @param eyeImage original image of an eye
 	 * @param eye iris boundary information
 	 * @return generated bitcode
@@ -71,7 +64,6 @@ public class BitcodeGenerator {
 	public BitCode getBitcode(BufferedImage eyeImage,EyeDataType eye)
 	{
 		return this.getBitcode(eyeImage, eye.inner.x,eye.inner.y,eye.inner.radius,eye.outer.x,eye.outer.y,eye.outer.radius);
-
 	}
 
 	/**
@@ -95,7 +87,7 @@ public class BitcodeGenerator {
 		// array of intensity values (used rather than BufferedImage for speed)
 		intensityArr = uw.unWrapByteArr(eyeImage, xp, yp, rp, xi, yi, ri, unwrHeight, unwrWidth,(int) (2.0 * abPar.upLim +1.0)); 
 		//unWrapped = uw.unWrapWithGuides(eyeImage, xp, yp, rp, xi, yi, ri, unwrHeight, unwrWidth);
-		
+
 
 		for (int x0I=0; x0I < x0Par.numVals-1; x0I++) {
 			for (int i=0; i < bitcodeShiftNum; i++ )	{
@@ -115,12 +107,13 @@ public class BitcodeGenerator {
 		return bitcode;
 
 	}
+	
 	/**
-	 * Overloading without the need to specify the number of bits which will default to 2
-	 * @param _wPar Gabor parameter 1
-	 * @param _abPar Gabor parameter 2
-	 * @param _x0Par Gabor parameter 3
-	 * @param _y0Par Gabor parameter 4
+	 * set the Gabor parameter ranges
+	 * @param _wPar omega
+	 * @param _abPar alpha and beta 
+	 * @param _x0Par x_0
+	 * @param _y0Par y_0
 	 * @param _unwrWidth width of unwrapped image
 	 * @param _unwrHeight height of image
 	 */
@@ -128,12 +121,13 @@ public class BitcodeGenerator {
 	{
 		initialiseParams( _wPar,_abPar,  _x0Par, _y0Par,  _unwrWidth, _unwrHeight,2);
 	}
+	
 	/**
-	 * 
-	 * @param _wPar Gabor parameter 1
-	 * @param _abPar Gabor parameter 2
-	 * @param _x0Par Gabor parameter 3
-	 * @param _y0Par Gabor parameter 4
+	 * set the Gabor parameter ranges
+	 * @param _wPar omega
+	 * @param _abPar alpha and beta 
+	 * @param _x0Par x_0
+	 * @param _y0Par y_0
 	 * @param _unwrWidth width of unwrapped image
 	 * @param _unwrHeight height of image
 	 * @param _bitsPerBox 1 for one and 2 for two (1 ignores the real part)
@@ -149,13 +143,11 @@ public class BitcodeGenerator {
 		y0Par = _y0Par;
 		if (_bitsPerBox==1 || _bitsPerBox==2) bitsPerBox = _bitsPerBox;
 		else bitsPerBox =2;
-		
-		
-		
+
 		gaborReal = new int[bitcodeShiftNum][(int)abPar.upLim*2+1][(int)abPar.upLim*2+1];
 		gaborImaginary= new int[bitcodeShiftNum][(int)abPar.upLim*2+1][(int)abPar.upLim*2+1];
 		double k,tmpVal;
-		
+
 		for(int series=0;series<bitcodeShiftNum;series++)
 		{
 			int cos_bias=0;
@@ -166,32 +158,25 @@ public class BitcodeGenerator {
 			for(int x = -ab; x <= ab; x++)
 				for(int y =-ab; y <=ab; y++)
 				{
-					
-				//e^(-pi((x-x0)^2/a^2 + (y-y0)^2/b^2) 
-				k = Math.exp( -Math.PI * (Math.pow( x , 2) / ab2 + Math.pow( y , 2) / ab2) );
-				//sin(-2*pi*w(x-x0 + y-y0))
-				tmpVal =  -lw * 2 * Math.PI * ( x ); 
-				
-				
-				//cos(-2*pi*w(x-x0 + y-y0))
-				gaborReal[series][x+ab][y+ab] = (int)(65536.0 * k * Math.cos( tmpVal));// * wPar.upLim);
-				cos_bias  += gaborReal[series][x+ab][y+ab];
-				cos_bias_count++;
-				gaborImaginary[series][x+ab][y+ab] = (int)(65536.0 * k * Math.sin( tmpVal));
-			//these are 65536 times too big, but we only care about the sign!
+					//e^(-pi((x-x0)^2/a^2 + (y-y0)^2/b^2) 
+					k = Math.exp( -Math.PI * (Math.pow( x , 2) / ab2 + Math.pow( y , 2) / ab2) );
+					//sin(-2*pi*w(x-x0 + y-y0))
+					tmpVal =  -lw * 2 * Math.PI * ( x ); 
+
+					//cos(-2*pi*w(x-x0 + y-y0))
+					gaborReal[series][x+ab][y+ab] = (int)(65536.0 * k * Math.cos( tmpVal));// * wPar.upLim);
+					cos_bias  += gaborReal[series][x+ab][y+ab];
+					cos_bias_count++;
+					gaborImaginary[series][x+ab][y+ab] = (int)(65536.0 * k * Math.sin( tmpVal));
+					//these are 65536 times too big, but we only care about the sign!
 				}
 			//need to make the real term average to zero
 			for(int x = -ab; x <= ab; x++)
 				for(int y =-ab; y <=ab; y++)
 					gaborReal[series][x+ab][y+ab] =gaborReal[series][x+ab][y+ab] - cos_bias/cos_bias_count;
 		}	
-				
-		
 	}
 
-	// -----------------------------------
-	// Gabor filters
-	// -----------------------------------
 	private void gaborFilter2D()
 	{
 		a2 = a*a;
@@ -211,25 +196,18 @@ public class BitcodeGenerator {
 		{
 			for(double y =ymin; y <=ymax; y++)
 			{
-
-				//imgVal = (double)intensityArr[(int) x][(int) y];
-
-				//Color c = new Color(unWrapped.getRGB((int)x, (int)y));
-				
-				//imgVal = (c.getRed() + c.getGreen() + c.getBlue())/3;
 				imgVal = intensityArr[(int)x][(int)y];
 				//e^(-pi((x-x0)^2/a^2 + (y-y0)^2/b^2) 
 				k = Math.exp( -Math.PI * (Math.pow( x - x0, 2) / a2 + Math.pow( y - y0, 2) / b2) );
 				//sin(-2*pi*w(x-x0 + y-y0))
 				tmpVal =  -w * 2 * Math.PI * ( x-x0 ); 
-				
+
 				imPart = Math.sin( tmpVal );
 				//cos(-2*pi*w(x-x0 + y-y0))
 				rePart = Math.cos( tmpVal);// * wPar.upLim);
 
 				sumRe +=  (double) imgVal * k * rePart;
 				sumIm +=  (double) imgVal * k * imPart; 
-			//System.out.println(rePart+" "+k*rePart);//+imPart);
 			}
 		}
 
@@ -237,41 +215,13 @@ public class BitcodeGenerator {
 		bitcode.addBit(sumIm >= 0.0);
 		//System.out.println(sumRe+" "+sumIm);
 	}
-
-	private void gaborFilter1D()
-	{
-		a2 = a*a;
-		b2 = b*b; 
-		double k,imPart,rePart,tmpVal;
-		double sumRe, sumIm;
-
-		for(double x = 0; x < unwrWidth-1; x++)
-		{
-			sumRe = sumIm = 0;
-			for(double y=0; y < unwrHeight-1; y++)
-			{
-				//e^(-pi((x-x0)^2/a^2 + (y-y0)^2/b^2) 
-				k = Math.exp( -Math.PI * (Math.pow( x - x0, 2) / a2 + Math.pow( y - y0, 2) / b2) );
-				//sin(-2*pi*w(x-x0 + y-y0))
-				tmpVal =  -w * 2 * Math.PI * ( x-x0 + y-y0); 
-				imPart = Math.sin( tmpVal );
-				//cos(-2*pi*w(x-x0 + y-y0))
-				rePart = Math.cos( tmpVal );
-
-				sumRe += (double)intensityArr[(int) x][(int) y] * k * imPart;
-				sumIm += (double)intensityArr[(int) x][(int) y] * k * rePart; 
-			}
-			bitcode.addBit(sumRe >= 0.0);
-			bitcode.addBit(sumIm >= 0.0);
-		}
-	}
+	
 	/**
 	 * Does the same as getBitcode, but faster.Uses integer arithmetic
 	 * @param eyeImage image of eye to be converted
 	 * @param eye data for cetre of pulil and iris
 	 * @return Bitcode
 	 */
-	
 	public BitCode getFastBitcode(BufferedImage eyeImage,EyeDataType eye)
 	{
 		xp = eye.inner.x; yp = eye.inner.y; rp = eye.inner.radius;
@@ -318,10 +268,9 @@ public class BitcodeGenerator {
 	 * @param step which of the boxes to draw
 	 * @return buffered image with the gaussian, cos term sine term, and some biassed cos terms
 	 */
-
 	public BufferedImage drawWavelet(BufferedImage eyeImage,int x0,int y0,int step)
 	{
-		
+
 		int h=100, width= 360;
 		BufferedImage bimage = new BufferedImage(width,h*7,BufferedImage.TYPE_INT_RGB);
 		for(int i=0;i<width;i++)
@@ -353,12 +302,12 @@ public class BitcodeGenerator {
 			for(double y =ymin; y <=ymax; y++)
 			{	
 				k = Math.exp( -Math.PI * (Math.pow( x - x0, 2) / a2 + Math.pow( y - y0, 2) / b2) );
-System.out.println(w);
+				System.out.println(w);
 
-			tmpVal =  -w * 2 * Math.PI * ( x-x0 ); 
-			System.out.println(tmpVal);
+				tmpVal =  -w * 2 * Math.PI * ( x-x0 ); 
+				System.out.println(tmpVal);
 
-			imPart = Math.sin( tmpVal );
+				imPart = Math.sin( tmpVal );
 				rePart = Math.cos( tmpVal );
 				bimage.setRGB((int)x,(int) y, 0x10101* (int)(255.0*k));
 				bimage.setRGB((int)x,(int) y+h, 0x10101* (int)(127.0*imPart+128.0));
@@ -393,7 +342,7 @@ System.out.println(w);
 				if (rePart<0) colour = -0x10000 *(int)(255.0*rePart);
 				else colour = (int)(255.0*rePart);
 				bimage.setRGB((int)x,(int) y+6*h, colour);
-				
+
 			}
 		}
 		return bimage;

@@ -1,10 +1,8 @@
 package iris.imageToBitcode;
 /**
- * Defines a cirlce location type, ie a centre (x,y) and a radius
- * 
- * 
- * @author en108
- *
+ * Defines a cirlce location type, ie a centre (x,y) and a radius 
+ * @author Edmund Noon
+ * @version 1.0
  */
 public class CircleType {
 	public int x;
