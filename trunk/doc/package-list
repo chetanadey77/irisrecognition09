@@ -1,1 +1,8 @@
+
+bitcodeMatcher
+iris.database
+iris.gui
+iris.guiBuilder
 iris.imageToBitcode
+iris.nonJunitTesting
+unittest.ImageToBitcode
