@@ -18,6 +18,7 @@ import org.junit.Test;
 
 /**
  * A class that allows access and manipulation of the central database
+ *
  * @author Seb Smith & Andrew Durnin
  * @version 1.0
  */
@@ -35,7 +36,6 @@ public class databaseWrapper {
 	 */
 	
 
-			     
 			public databaseWrapper() throws DbException, SQLException{
 	        
 			   System.out.println( "Setting up access point for Iris project");
@@ -62,9 +62,8 @@ public class databaseWrapper {
 			}
 
 			/**
-			 * A method that converts a BitCode object to a byte array
-			 * @author Seb Smith & Andrew Durnin
-			 * @version 1.0
+			 * converts a BitCode object to a byte array
+			 * @param BitCode
 			 * @return byte[]
 			 */
 		   
@@ -85,9 +84,8 @@ public class databaseWrapper {
 			}
 			
 			/**
-			 * A method that converts a byte array to a BitCode object
-			 * @author Seb Smith & Andrew Durnin
-			 * @version 1.0
+			 * converts a byte array to a BitCode object
+			 * @param byte[]
 			 * @return BitCode
 			 */
 		   
@@ -112,16 +110,15 @@ public class databaseWrapper {
 			
 			
 			/**
-			 * A method that allows a user to add a bitcode to the database for the left iris using the Array format.
-			 * @author Seb Smith & Andrew Durnin
-			 * @version 1.0
+			 * add a bitcode to the database for the left iris.
+			 * @param String, BitCode
 			 */
 			
 			
 		   
 		@Test   public void addLeft(String id, BitCode bitcode) throws SQLException, IOException{
 	        
-			byte[] code = this.toByteArray(bitcode);
+			byte[] code = databaseWrapper.toByteArray(bitcode);
 	    	String insert = new String();
 	    	int count;
 	    	
@@ -138,54 +135,19 @@ public class databaseWrapper {
 		   
 		   }
 		   
-		   /**
-			 * A method that allows a user to add a bitcode to the database for the left iris using the byte array format.
-			 * @author Seb Smith & Andrew Durnin
-			 * @version 1.0
-			 * @throws SQLException 
-			 */
-		   /*
-		   public void addLeft(String id, byte[] bitcode) throws SQLException{
-			   
-			   
-	        	 
-			   PreparedStatement ps = conn.prepareStatement("UPDATE iris SET l = ? WHERE id = '" + id + "'");
-			   ps.setBytes(1, bitcode);
-			   ps.executeUpdate();
-	           ps.close();
-			   
-		   }
-		   
-		   
-		   /**
-			 * A method that allows a user to add a bitcode to the database for the left iris using the BitCode class.
-			 * @author Seb Smith & Andrew Durnin
-			 * @version 1.0
-			 * @throws SQLException 
-			 */
-		   
-		   /*
-		   public void addLeft(String id, BitCode bitcode) throws SQLException{
-			   
-			   byte[] insert = this.toByteArray(bitcode);
-			   PreparedStatement ps = conn.prepareStatement("UPDATE iris SET l = ? WHERE id = '" + id + "'");
-	        	 ps.setBytes(1, insert);
-	        	 ps.executeUpdate();
-	        	 ps.close();
-			   
-			   
-			   }
-		   */
+		  
 		        
-		   /**
-			 * A method that allows a user to add a bitcode to the database for the right iris.
-			 * @author Seb Smith & Andrew Durnin
-			 * @version 1.0
-			 */
+		/**
+		 * add a bitcode to the database for the right iris.
+		 * @param String, BitCode
+		 * @throws SQLException
+		 * @throws IOException
+		 */
+		
 	       
 		  @Test  public void addRight(String id, BitCode bitcode) throws SQLException, IOException{
 		        
-				byte[] code = this.toByteArray(bitcode);
+				byte[] code = databaseWrapper.toByteArray(bitcode);
 		    	String insert = new String();
 		    	int count;
 		    	
@@ -204,9 +166,9 @@ public class databaseWrapper {
 	        
 	      
 	        /**
-			 * A method that allows a user to add a bitcode to the database for the right iris using the BitCode Class.
-			 * @author Seb Smith & Andrew Durnin
-			 * @version 1.0
+			 * add a bitcode to the database for the right iris using BYTEA.
+			 * @param String,byte[]
+			 * @throws SQLException
 			 */
 	        
 	        private void addRight(String id, byte[] bitcode) throws SQLException{
@@ -220,9 +182,8 @@ public class databaseWrapper {
 	        }
 	        
 	        /**
-			 * A method that allows a user to add a new row to the database with Id as primary key.
-			 * @author Seb Smith & Andrew Durnin
-			 * @version 1.0
+			 * add a new complete row to the database with Id as primary key.
+			 * @param String,byte[]
 	         * @throws SQLException 
 			 */
 	        
@@ -236,11 +197,11 @@ public class databaseWrapper {
 	        	
 	        	 
 	        	  }
+	         
 	        
 	         /**
-				 * A method that allows a user to add a new Id to the database.
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
+				 * add a new Id to the database.
+				 * @param String
 		         * @throws SQLException 
 				 */
 		        
@@ -250,12 +211,10 @@ public class databaseWrapper {
 	        }
 	         
 	         /**
-				 * A method that allows the retreival of the left iris bitcode for a given id,returned as a byte array.
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
-		         * @throws SQLException 
-		         * @return byte[]
-				 */
+	          * get a byte array for the left iris for next record in the database 
+		      * @throws SQLException 
+		      * @return byte[]
+			  */
 	         
 	         private byte[] getLeftArray(String id) throws SQLException{
 				
@@ -271,12 +230,11 @@ public class databaseWrapper {
 	         
 
 	         /**
-				 * A method that allows the retreival of the right iris bitcode for a given id, returned as a byte array.
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
-		         * @throws SQLException 
-		         * @return byte[]
-				 */
+	          * get a byte array for the right iris for the next record in the database 
+	          * @param String
+		      * @throws SQLException 
+		      * @return byte[]
+			  */
 	    
 	         private  byte[] getRightArray(String id) throws SQLException{
 	         
@@ -291,12 +249,10 @@ public class databaseWrapper {
             }
 	         
 	         /**
-				 * A method that allows the retreival of the left iris bitcode for a given id,returned as a BitCode object.
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
-		         * @throws SQLException 
-		         * @return BitCode
-				 */
+	          * get a BitCode object for the left iris for the next record in the database 
+		      * @throws SQLException 
+		      * @return BitCode[]
+			  */
     
 	        
 	         public BitCode getLeftCode() throws SQLException{
@@ -316,7 +272,7 @@ public class databaseWrapper {
 	        	 
 	        	 System.out.println(Arrays.toString(bitarray));
 	        	 
-	        	 BitCode bitcode = this.toBitCode(bitarray);
+	        	 BitCode bitcode = databaseWrapper.toBitCode(bitarray);
 	        	 
 	        	 return bitcode;
 	        	 
@@ -324,12 +280,11 @@ public class databaseWrapper {
 	            }
 	         
 	         /**
-				 * A method that allows the retreival of the right iris bitcode for a given id,returned as a BitCode object.
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
-		         * @throws SQLException 
-		         * @return BitCode
-				 */
+	          * get a BitCode object for the right iris for the next record in the database 
+		      * @throws SQLException 
+		      * @return BitCode[]
+			  */
+    
 	         
 	         
 	         
@@ -356,11 +311,8 @@ public class databaseWrapper {
 	        	 }
 	         
 	         /**
-				 * A method that allows the retreival of the id String where the resultset is currently positioned
-				 * 				 
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
-		         * @throws SQLException 
+				 * retreives the id String where the resultset is currently positioned
+				 * @throws SQLException 
 		         * @return String
 				 */
 	         
@@ -373,11 +325,8 @@ public class databaseWrapper {
 	         }
 	         
 	         /**
-				 * A method that allows the retreival of the access status where the resultset is currently positioned
-				 * 				 
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
-		         * @throws SQLException 
+				 * retreives the id status where the resultset is currently positioned
+				 * @throws SQLException 
 		         * @return Boolean
 				 */
 	         
@@ -390,10 +339,8 @@ public class databaseWrapper {
 	         }
 	         
 	         /**
-				 * A method that returns a fresh resultset of all records held in the database.
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
-		         * @throws SQLException 
+				 * retreives a fresh resultset
+				 * @throws SQLException 
 		         * @return ResultSet
 				 */
 	         
@@ -408,11 +355,9 @@ public class databaseWrapper {
 	        	 }
 	         
 	         /**
-				 * A method that allows a user to delete a specific record in the database
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
-		         * @throws SQLException 
-		         * @return void
+				 * delete a single specified entry in the database
+				 * @throws SQLException 
+		         * @param String
 				 */
 	         
 	         public void DeleteOne(String id) throws SQLException{
@@ -423,10 +368,8 @@ public class databaseWrapper {
 	         }
 	         
 	         /**
-				 * A method that allows a user to delete all records in the database
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
-		         * @throws SQLException 
+				 * delete all entries in the database
+				 * @throws SQLException 
 		         * @return Boolean
 				 */
 	         
@@ -438,11 +381,9 @@ public class databaseWrapper {
 	         }
 	         
 	         /**
-				 * A method that allows a user to to set the access status where the resultset is currently positioned
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
-		         * @throws SQLException 
-		         * @return void
+				 * change the access status of an existing database record
+				 * @throws SQLException 
+		         * @param String, Boolean
 				 */
 	         
 	         public void setAccess(String id, Boolean value) throws SQLException{
@@ -455,8 +396,6 @@ public class databaseWrapper {
 	         /**
 				 * A method that allows a user to obtain the size of the current database
 				 * 
-				 * @author Seb Smith & Andrew Durnin
-				 * @version 1.0
 		         * @throws SQLException 
 		         * @return int
 				 */
@@ -479,7 +418,12 @@ public class databaseWrapper {
 	        
 	            
 	            
-	   public class DbException extends Exception{}
+	   public class DbException extends Exception{
+		   
+		   public DbException(){
+		   System.out.println("DatabaseWrapper Error");
+		   }
+	   }
 
 	   }
 
