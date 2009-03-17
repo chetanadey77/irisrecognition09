@@ -28,8 +28,6 @@ public class databaseWrapper {
 
 	
 
-	
-
 			public databaseWrapper() throws DbException, SQLException{
 	        
 			   System.out.println( "Setting up access point for Iris project");
