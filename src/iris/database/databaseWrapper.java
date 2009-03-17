@@ -15,25 +15,19 @@ import java.util.Arrays;
 import org.junit.Test;
 
 
-
 /**
- * A class that allows access and manipulation of the central database
- *
- * @author Seb Smith & Andrew Durnin
+ * A class that sets up an access node to the database
+ * @author Seb Smith and Andrew Durnin
  * @version 1.0
+ * @throws DbException 
+ * @throws IOException 
+ * @throws SQLException  
  */
 
 public class databaseWrapper {
 
 	
-	/**
-	 * A class that sets up an access node to the database
-	 * @author Seb Smith and Andrew Durnin
-	 * @version 1.0
-	 * @throws DbException 
-	 * @throws IOException 
-	 * @throws SQLException  
-	 */
+
 	
 
 			public databaseWrapper() throws DbException, SQLException{
