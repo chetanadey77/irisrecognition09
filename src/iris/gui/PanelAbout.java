@@ -9,6 +9,14 @@ import java.io.IOException;
 
 import javax.swing.*;
 
+/**
+ * PanelAbout includes background information on the software and our logo
+ * 
+ * 
+ * @author ss1008
+ *
+ */
+
 public class PanelAbout extends JPanel {
   protected  Image ci;
   
