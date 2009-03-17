@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -184,14 +185,14 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
     	if (ev.getActionCommand()=="Load first image") n=0;
     	else if (ev.getActionCommand()=="Load second image") n=1;
     	else System.out.println("Error with the Main Frame Action Event Handler");
-    	iconEye[n] = gtImage();
+    	biEye[n] = gtImage();
     	long startTime=System.currentTimeMillis(); //calculate runtime
         imageEye[n].setIcon(iconEye[n]);
         eyeLoaded[n] = true;
-        biEye[n].getGraphics().drawImage( iconEye[n].getImage(),0,0,null);
+        //biEye[n].getGraphics().drawImage( iconEye[n].getImage(),0,0,null);
         eyeData[n] = LocateIris.find_iris(biEye[n]);
-        System.out.println("inner "+eyeData[n].inner.x+" "+eyeData[n].inner.y+" "+eyeData[n].inner.radius+" " 
-        		+ eyeData[n].outer.x+" "+eyeData[n].outer.y+" "+eyeData[n].outer.radius+" ");
+        //System.out.println("inner "+eyeData[n].inner.x+" "+eyeData[n].inner.y+" "+eyeData[n].inner.radius+" " 
+        //		+ eyeData[n].outer.x+" "+eyeData[n].outer.y+" "+eyeData[n].outer.radius+" ");
         UnWrapper uw = new UnWrapper();
         BufferedImage bi=uw.originalWithGuides(biEye[n],eyeData[n]);
         iconEye[n].setImage(bi);
@@ -205,7 +206,7 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
         imageUnwrappedEye[n].repaint();
 		BitcodeGenerator b = new BitcodeGenerator();
 		bc[n] =  b.getFastBitcode(biEye[n],eyeData[n]);
-		System.out.println(bc[n].getBitcodeSize());
+		//System.out.println(bc[n].getBitcodeSize());
 		biBitCode[n] = bc[n].getBitCodeImage(512,128,32);
 		iconBitCode[n].setImage(biBitCode[n]);
         imageBitCode[n].setIcon(iconBitCode[n]);
@@ -242,9 +243,9 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
     }
     /**
      * 
-     * @return an ImageIcon of an eye chosen by the user (using JFileUser)
+     * @return an BufferedImage of an eye chosen by the user (using JFileUser)
      */
-    private ImageIcon gtImage() {
+    private BufferedImage gtImage() {
         JFileChooser filedialog = new  JFileChooser();
         try{
         	File f = new File(new File("./images/automatic/").getCanonicalPath());
@@ -253,8 +254,17 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
         catch (IOException e) {}
         filedialog.showOpenDialog(this.getParent());
         //System.out.println(filedialog.getSelectedFile().getPath());
-        ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
-        return icon;    
+        BufferedImage bi = null;
+		try { 
+			File f = new File(filedialog.getSelectedFile().getPath());
+			bi = ImageIO.read(f);  
+		} catch (Exception e) {  
+			e.printStackTrace();  
+		} 
+		return bi;
+        //ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
+        //BufferedImage bi =new BufferedImage(filedialog.getSelectedFile().getPath());
+        //return icon;    
     }
 
 }
