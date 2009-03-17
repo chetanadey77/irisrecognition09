@@ -32,7 +32,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 /**
- * 
+ * PanelAdministrator provides database admin facilities
+ * @author ss1008
  */
 
 public class PanelAdministrator extends javax.swing.JPanel implements ActionListener {
@@ -312,6 +313,10 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
            
 		
 	}
+	
+	 /**
+     * Handles all button presses on this tab
+     */
 	
 	
 	public void actionPerformed(ActionEvent ev){
@@ -665,6 +670,11 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		
 				
 			}}
+	
+	 /**
+     * 
+     * @return an ImageIcon of an eye chosen by the user (using JFileUser)
+     */
 	
 	private ImageIcon gtImage() {
         JFileChooser filedialog = new  JFileChooser();

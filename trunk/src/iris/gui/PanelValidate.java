@@ -28,7 +28,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * 
+ * PanelValidate allows the user to validate an uploaded image against the database. It shows the bitcode and unwrapped version of any uploaded image.
+ * @author ss1008
  */
 
 public class PanelValidate extends javax.swing.JPanel implements ActionListener {
@@ -189,7 +190,9 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 		
 		
 	}
-	
+	 /**
+     * Handles all button presses on this tab
+     */
 	
 	public void actionPerformed(ActionEvent ev){
 		
@@ -305,6 +308,12 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 		else System.out.println("Error with the Main Frame Action Event Handler");
 		
 	}
+	
+
+	 /**
+    * 
+    * @return an ImageIcon of an eye chosen by the user (using JFileUser)
+    */
 
 	private ImageIcon gtImage() {
         JFileChooser filedialog = new  JFileChooser();
