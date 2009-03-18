@@ -23,6 +23,8 @@ public class BitcodeGenerator {
 	int[][] intensityArr;
 	int[][][] gaborReal;
 	int[][][] gaborImaginary;
+	int[][][] gaussFD;
+	int[][][] gaussSD;
 
 	int xp, yp, rp, xi, yi, ri;
 
@@ -37,8 +39,8 @@ public class BitcodeGenerator {
 		int _unwrHeight = 100;
 		
 		// set ranges and number of steps for omega, alpha, beta, x0 and y0
-		GaborParameters _wPar = new GaborParameters((1.0/17.0),(1.0/38.0) , 3);
-		GaborParameters _abPar = new GaborParameters(17, 38, 3);
+		GaborParameters _wPar = new GaborParameters((1.62/16.0),(1.62/36.0) , 3);
+		GaborParameters _abPar = new GaborParameters(8, 18, 3);
 		GaborParameters _x0Par = new GaborParameters(_abPar.upLim, _unwrWidth+_abPar.upLim , (int) (_unwrWidth) );
 		GaborParameters _y0Par = new GaborParameters(_abPar.lowLim, _abPar.upLim, 3);
 
@@ -146,14 +148,22 @@ public class BitcodeGenerator {
 
 		gaborReal = new int[bitcodeShiftNum][(int)abPar.upLim*2+1][(int)abPar.upLim*2+1];
 		gaborImaginary= new int[bitcodeShiftNum][(int)abPar.upLim*2+1][(int)abPar.upLim*2+1];
+		gaussFD = new int[bitcodeShiftNum][(int)abPar.upLim*2+1][(int)abPar.upLim*2+1];
+		gaussSD = new int[bitcodeShiftNum][(int)abPar.upLim*2+1][(int)abPar.upLim*2+1];
 		double k,tmpVal;
 
 		for(int series=0;series<bitcodeShiftNum;series++)
 		{
 			int cos_bias=0;
+			int cos_pos=0;
+			int cos_neg=0;
 			int cos_bias_count=0;
+			int gFD_bias = 0;
+			int gSD_bias = 0;
+			double gauss_scale = 1.0;
 			int ab= (int) abPar.get_StepN(series);
 			double lw = wPar.get_StepN(series);
+			double gauss=0.0;
 			int ab2 = ab*ab;
 			for(int x = -ab; x <= ab; x++)
 				for(int y =-ab; y <=ab; y++)
@@ -165,15 +175,33 @@ public class BitcodeGenerator {
 
 					//cos(-2*pi*w(x-x0 + y-y0))
 					gaborReal[series][x+ab][y+ab] = (int)(65536.0 * k * Math.cos( tmpVal));// * wPar.upLim);
+					if (gaborReal[series][x+ab][y+ab] >0) cos_pos += gaborReal[series][x+ab][y+ab];
+					else cos_neg -= gaborReal[series][x+ab][y+ab];
 					cos_bias  += gaborReal[series][x+ab][y+ab];
 					cos_bias_count++;
 					gaborImaginary[series][x+ab][y+ab] = (int)(65536.0 * k * Math.sin( tmpVal));
 					//these are 65536 times too big, but we only care about the sign!
+					gauss = Math.exp(-Math.PI * gauss_scale *(x*x +y*y)/ab2);
+					gaussFD[series][x+ab][y+ab] = 
+						(int)(-65536.0 * gauss * Math.PI * 2.0*gauss_scale * x/ab2);
+					gaussSD[series][x+ab][y+ab] = 
+						(int)(65536.0 *( gauss * 4.0 * Math.PI* Math.PI* gauss_scale * gauss_scale * x * x/(ab2*ab2) - 
+								2*Math.PI*gauss_scale*gauss/ab2));
+					gFD_bias += gaussFD[series][x+ab][y+ab];
+					gSD_bias += gaussSD[series][x+ab][y+ab];
+					
 				}
 			//need to make the real term average to zero
 			for(int x = -ab; x <= ab; x++)
 				for(int y =-ab; y <=ab; y++)
+				{
+					//first one is for subtracting the average
+					//second one scales the negative
 					gaborReal[series][x+ab][y+ab] =gaborReal[series][x+ab][y+ab] - cos_bias/cos_bias_count;
+					//if(gaborReal[series][x+ab][y+ab]<0) gaborReal[series][x+ab][y+ab] *= cos_pos/cos_neg;
+					gaussFD[series][x+ab][y+ab] = gaussFD[series][x+ab][y+ab] - gFD_bias/cos_bias_count;
+					gaussSD[series][x+ab][y+ab] = gaussSD[series][x+ab][y+ab] - gSD_bias/cos_bias_count;
+				}	
 		}	
 	}
 
@@ -258,7 +286,49 @@ public class BitcodeGenerator {
 		bitcode.setShiftNum(bitcodeShiftNum*bitsPerBox);
 		return bitcode;
 	}
+	/**
+	 * This is for comparison, it doesn't use Gabor filters, but the first and 
+	 * second derivative of the Gaussian instead
+	 * @param eyeImage
+	 * @param eye
+	 * @return
+	 */
+	public BitCode getFastGaussianCode(BufferedImage eyeImage,EyeDataType eye)
+	{
+		xp = eye.inner.x; yp = eye.inner.y; rp = eye.inner.radius;
+		xi = eye.outer.x; yi = eye.outer.y; ri = eye.outer.radius;
+		uw = new UnWrapper();
+		bitcode = new BitCode();
 
+		// array of intensity values (used rather than BufferedImage for speed)
+		intensityArr = uw.unWrapByteArr(eyeImage, xp, yp, rp, xi, yi, ri, unwrHeight, unwrWidth,(int) (2.0 * abPar.upLim +1.0)); 
+		int imgVal;
+		int[] ab = new int[bitcodeShiftNum];
+		for(int i =0; i< bitcodeShiftNum;i++) ab[i] = (int) abPar.get_StepN(i); 
+		int ab_max = (int) abPar.upLim;
+		int sumRe,sumIm;
+		for (int x0 =ab_max; x0 < unwrWidth+ab_max; x0++)
+		{
+			for (int i=0; i < bitcodeShiftNum; i++ )
+			{
+				sumRe = 0;
+				sumIm = 0;
+				for(int x = -ab[i]; x <= ab[i]; x++)
+				{
+					for(int y =-ab[i]; y <=ab[i]; y++)
+					{	
+						imgVal = intensityArr[x0 +x][y+ab[i]];
+						sumRe += imgVal*gaussFD[i][x+ab[i]][y+ab[i]];
+						sumIm += imgVal*gaussSD[i][x+ab[i]][y+ab[i]];
+					}
+				}
+				if (bitsPerBox==2) bitcode.addBit(sumRe >= 0);
+				bitcode.addBit(sumIm >= 0);
+			}
+		}
+		bitcode.setShiftNum(bitcodeShiftNum*bitsPerBox);
+		return bitcode;
+	}
 	/**
 	 * Only for testing and report purposes, and for visually seeing the Gabor Wavelet
 	 * 

@@ -52,7 +52,8 @@ public class ReportStatistics{
 			System.err.println("Argument not integer");
 			System.exit(1);
 		}
-
+		if (id<800) id +=450;
+		System.out.println(id);
  		int small = (id % 10 )  + 2;
  		int big  =  ((id / 10 ) % 10 )*(25 - small)/10 + small + 2;
  		int lamid = (id /100);
@@ -83,7 +84,7 @@ public class ReportStatistics{
 		 * @param bits
 		 * @return
 		 */
-	public double testParam(GaborParameters wPar,GaborParameters abPar,
+	/*public double testParam(GaborParameters wPar,GaborParameters abPar,
 			GaborParameters x0Par,GaborParameters y0Par, String[] names,
 			BufferedImage[] eye,EyeDataType[] ed,boolean display_table,int count,int bits)
 		{
@@ -130,7 +131,7 @@ public class ReportStatistics{
 		if (!display_table)text.append(_3dp.format(lowest)+", "+_3dp.format(highest)+", " + _3dp.format(weakest_match)+", "+_3dp.format(lowest_fail)+"\n");
 		return (lowest_fail-weakest_match);
 	}
-
+*/
 	public static void displayGraph(double sm_box,double bg_box,double lambda,double scale,int bits,int code )
 	{
 		DecimalFormat _1dp = new DecimalFormat("0.0");
@@ -146,6 +147,7 @@ public class ReportStatistics{
 		
 		ImageSaverLoader isl = new ImageSaverLoader(); 
 		String directory = "/homes/en108/workspace/IrisRecognition/images/automatic/";
+		//String directory = "images/automatic/";
 		String isl_load_path = "/"+ directory;
 		int HammingMatch[] = new int[100];
 		int HammingNoMatch[] = new int[100];
@@ -169,12 +171,16 @@ public class ReportStatistics{
 			if (listOfFiles[i].isFile())
 			{
 				names[count] = listOfFiles[i].getName();
-				//System.out.println( count + "  "+names[count]);
-				eye = 	isl.loadImageAbPath(directory,names[count]);
-				ed = LocateIris.find_iris(eye);
-				bc[count]=b1.getFastBitcode(eye,ed);
-				//c1.inner.radius+=1;
-				count++;
+				if (convert_to_int(names[count])<110)
+				{
+					//System.out.println( count + "  "+names[count]);
+					eye = 	isl.loadImageAbPath(directory,names[count]);
+					ed = LocateIris.find_iris(eye);
+					bc[count]=b1.getFastGaussianCode(eye,ed);
+					//c1.inner.radius+=1;
+					count++;
+					
+				}
 			}
 		}
 		double lowest_fail=1.0,weakest_match=0.0;
@@ -206,7 +212,7 @@ public class ReportStatistics{
 					{
 						if (hamm<lowest_fail) lowest_fail = hamm;
 						HammingNoMatch[(int)(100.0*hamm)]++;
-						System.out.println(_3dp.format(hamm*100.0));
+					//	System.out.println(_3dp.format(hamm*100.0));
 					}
 					
 				//}
@@ -231,7 +237,7 @@ public class ReportStatistics{
 						total_match++;
 						hamm = BitCode.hammingDistance(bc[i],bc[j]);
 						if (hamm>lowest_fail) overlap++;
-						System.out.println(_3dp.format(hamm*100.0));
+					//	System.out.println(_3dp.format(hamm*100.0));
 						//System.out.println(names[i]+"  "+names[j]+"   "+_3dp.format(hamm));
 					} 
 					
@@ -240,14 +246,14 @@ public class ReportStatistics{
 			}
 		}
 		System.out.println("Overlap  "+ overlap+ " out of total "+total_match);
-		if (overlap < 170){
+		if (overlap < 160){
 			System.out.println("Creating Graph");
 			int imHeight = 600,imWidth=300;
 			BufferedImage biGraph = new BufferedImage(imWidth,imHeight,BufferedImage.TYPE_INT_RGB);
 			for (int i=0;i<100;i++)
 			{	
 				drawORBox(biGraph, i * imWidth/100, Math.max(0,imHeight-1- HammingMatch[i]),(i+1) * imWidth/100 -1, imHeight-1, 0xff0000);
-				drawORBox(biGraph, i * imWidth/100, Math.max(0,imHeight-1- HammingNoMatch[i]/10),(i+1) * imWidth/100 -1, imHeight-1, 0xff);
+				drawORBox(biGraph, i * imWidth/100, Math.max(0,imHeight-1- HammingNoMatch[i]/300),(i+1) * imWidth/100 -1, imHeight-1, 0xff);
 			}
 			Graphics g  = biGraph.createGraphics();
 		 	String message = "Highest Match "+ _3dp.format(weakest_match) + " Lowest non match "+_3dp.format(lowest_fail);
@@ -255,10 +261,21 @@ public class ReportStatistics{
 		 	g.drawString(message,10,20);
 		 	String message2 = "Overlap  "+ overlap+ " out of total "+total_match;
 		 	g.drawString(message2,10,40);
-		 	isl.saveImageAbPath(biGraph,"/homes/en108/workspace/IrisRecognition/unittests/testImages/","Hamming_Graph"+overlap+"_"+code+".gif");
+		 	isl.saveImageAbPath(biGraph,"/homes/en108/workspace/IrisRecognition/unittests/testImages/","Hamming_Graph_gauss"+overlap+"_"+code+".gif");
 		}
 				
 		
+	}
+	private static int convert_to_int(String str)
+	{
+		int val=0;
+		try {
+			val  = Integer.parseInt(str.substring(0,3));
+		} catch (NumberFormatException e) {
+			System.err.println("Name not integer");
+			System.exit(1);
+		}
+		return val;
 	}
 	private static void  drawORBox(BufferedImage img,int x1,int y1,int x2,int y2,int colour)
 	{
