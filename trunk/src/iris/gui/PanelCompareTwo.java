@@ -206,6 +206,8 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
         imageUnwrappedEye[n].repaint();
 		BitcodeGenerator b = new BitcodeGenerator();
 		bc[n] =  b.getFastBitcode(biEye[n],eyeData[n]);
+		//bc[n] =  b.getFastGaussianCode(biEye[n],eyeData[n]);
+		//System.out.println( (double) (bc[n].cardinality())/(double)(bc[n].getBitcodeSize())) ;
 		//System.out.println(bc[n].getBitcodeSize());
 		biBitCode[n] = bc[n].getBitCodeImage(512,128,32);
 		iconBitCode[n].setImage(biBitCode[n]);
