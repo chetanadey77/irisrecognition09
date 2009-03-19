@@ -101,19 +101,24 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
                 	biUnwrappedEye[n]  = new BufferedImage(512,128,BufferedImage.TYPE_INT_RGB);
                 	biBitCode[n] = new BufferedImage(512,128,BufferedImage.TYPE_BYTE_GRAY);
                             
-                              
+                //set logo as background on OriginalEye	
+                 	
+                 	try {
+    					biEye[n] = javax.imageio.ImageIO.read(new File("Gray_logo.gif"));
+    				} catch (IOException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}  	
+                                      
                 
+                	
+                	
                 //set images to alternate squares of grey and white
                 	int square_size=10;
                 	int grey = 0xf0f0f0;
                 	int white = 0xffffff;
                 	int colour;
-                	for(int x =0;x<biEye[n].getWidth();x++)
-                		for(int y=0;y<biEye[n].getHeight();y++) 
-                		{
-                			colour=((x/square_size +y/square_size)%2==1)?grey:white;
-                			biEye[n].setRGB(x,y,colour);
-                		}
+                
                 	square_size=8;
                 	for(int x =0;x<biUnwrappedEye[n].getWidth();x++)
                     		for(int y=0;y<biUnwrappedEye[n].getHeight();y++) 
