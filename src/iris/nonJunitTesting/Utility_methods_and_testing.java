@@ -17,14 +17,14 @@ public class Utility_methods_and_testing {
 		
 		String load_path = "images/new";
 		String save_path = "images/automatic/";
-		String compare_path = "unittests/testImages/new_pupil_centres/";
+		String compare_path = "/vol/bitbucket/en108/pupilCentres/";
 		String file;
 		int rmin=200, xmin=400, ymin=400;
 		int rmax = 0, xmax=0, ymax = 0;
 		int x,y,r;
 		File imagefolder = new File(load_path);
 		File comparefolder = new File(compare_path);
-		/*
+		
 		File[] listOfFiles = imagefolder.listFiles();
 		File[] compareFiles = comparefolder.listFiles();
 		for (int i = 0; i < compareFiles.length; i++) 
@@ -48,7 +48,7 @@ public class Utility_methods_and_testing {
 					}
 				}
 			}
-		}*/
+		}
 
 	}
 }
