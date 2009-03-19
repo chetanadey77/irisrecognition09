@@ -203,7 +203,7 @@ System.out.println(names[i]+"  "+ names[j]);
 					{
 						if (hamm<lowest_fail) lowest_fail = hamm;
 						HammingNoMatch[(int)(100.0*hamm)]++;
-						//System.out.println(_3dp.format(hamm*100.0));
+						System.out.println(_3dp.format(hamm*100.0));
 					}
 					
 				//}
@@ -228,7 +228,7 @@ System.out.println(names[i]+"  "+ names[j]);
 						total_match++;
 						hamm = TwoEyedPerson.doubleHamming(tep[i], tep[j]);
 						if (hamm>lowest_fail) overlap++;
-						//System.out.println(_3dp.format(hamm*100.0));
+						System.out.println(_3dp.format(hamm*100.0));
 						//System.out.println(names[i]+"  "+names[j]+"   "+_3dp.format(hamm));
 					} 
 					
