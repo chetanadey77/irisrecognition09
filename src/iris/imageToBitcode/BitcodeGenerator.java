@@ -160,9 +160,9 @@ public class BitcodeGenerator {
 			int cos_bias_count=0;
 			int gFD_bias = 0;
 			int gSD_bias = 0;
-			double gauss_scale = 1.0;
 			int ab= (int) abPar.get_StepN(series);
 			double lw = wPar.get_StepN(series);
+			double gauss_scale = 0.5 + wPar.lowLim;
 			double gauss=0.0;
 			int ab2 = ab*ab;
 			for(int x = -ab; x <= ab; x++)
