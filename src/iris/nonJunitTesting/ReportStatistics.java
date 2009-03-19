@@ -146,7 +146,8 @@ public class ReportStatistics{
 		GaborParameters y0Par= new GaborParameters(sm_box, bg_box, 3);
 		
 		ImageSaverLoader isl = new ImageSaverLoader(); 
-		String directory = "/homes/en108/workspace/IrisRecognition/images/automatic/";
+		//String directory = "/homes/en108/workspace/IrisRecognition/images/automatic/";
+		String directory = "images/automatic/";
 		//String directory = "images/automatic/";
 		String isl_load_path = "/"+ directory;
 		int HammingMatch[] = new int[100];
