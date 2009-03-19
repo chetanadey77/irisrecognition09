@@ -52,12 +52,13 @@ public class ReportStatistics{
 			System.err.println("Argument not integer");
 			System.exit(1);
 		}
-		if (id<800) id +=450;
+		//if (id<800) id +=450;
 		System.out.println(id);
  		int small = (id % 10 )  + 2;
  		int big  =  ((id / 10 ) % 10 )*(25 - small)/10 + small + 2;
  		int lamid = (id /100);
- 		double lambda = (double) lamid * 0.01 +1.5;
+ 		//double lambda = (double) lamid * 0.01 +1.5;
+ 		double lambda = (double) lamid;
  		double scale  = (double) big / (double) small;
  		System.out.println(small+", "+big+", "+_3dp.format(lambda)+", "+_3dp.format(scale));
  		displayGraph((double) small, (double) big,lambda,scale, 2,id);
@@ -141,7 +142,8 @@ public class ReportStatistics{
 		//double sm_box=9.0,bg_box=26.0;
 		//double lambda = 1.552, scale = 1.892;
 		GaborParameters abPar= new GaborParameters(sm_box,bg_box,3);
-		GaborParameters wPar = new GaborParameters(lambda/(2.0*sm_box),lambda/(2.0*sm_box*scale),3);
+		//GaborParameters wPar = new GaborParameters(lambda/(2.0*sm_box),lambda/(2.0*sm_box*scale),3);
+		GaborParameters wPar = new GaborParameters(lambda/10,lambda/(2.0*sm_box*scale),3);
 		GaborParameters x0Par= new GaborParameters(bg_box, 360-bg_box , (int) (360.0 - bg_box*2));
 		GaborParameters y0Par= new GaborParameters(sm_box, bg_box, 3);
 		
@@ -213,7 +215,7 @@ public class ReportStatistics{
 					{
 						if (hamm<lowest_fail) lowest_fail = hamm;
 						HammingNoMatch[(int)(100.0*hamm)]++;
-					//	System.out.println(_3dp.format(hamm*100.0));
+						System.out.println(_3dp.format(hamm*100.0));
 					}
 					
 				//}
@@ -238,7 +240,7 @@ public class ReportStatistics{
 						total_match++;
 						hamm = BitCode.hammingDistance(bc[i],bc[j]);
 						if (hamm>lowest_fail) overlap++;
-					//	System.out.println(_3dp.format(hamm*100.0));
+						System.out.println(_3dp.format(hamm*100.0));
 						//System.out.println(names[i]+"  "+names[j]+"   "+_3dp.format(hamm));
 					} 
 					
@@ -247,7 +249,7 @@ public class ReportStatistics{
 			}
 		}
 		System.out.println("Overlap  "+ overlap+ " out of total "+total_match);
-		if (overlap < 160){
+		if (overlap < 180){
 			System.out.println("Creating Graph");
 			int imHeight = 600,imWidth=300;
 			BufferedImage biGraph = new BufferedImage(imWidth,imHeight,BufferedImage.TYPE_INT_RGB);
@@ -262,7 +264,7 @@ public class ReportStatistics{
 		 	g.drawString(message,10,20);
 		 	String message2 = "Overlap  "+ overlap+ " out of total "+total_match;
 		 	g.drawString(message2,10,40);
-		 	isl.saveImageAbPath(biGraph,"/homes/en108/workspace/IrisRecognition/unittests/testImages/","Hamming_Graph_gauss"+overlap+"_"+code+".gif");
+		 	isl.saveImageAbPath(biGraph,"/homes/en108/workspace/IrisRecognition/unittests/testImages/","Hamming_Graph_gauss_best"+overlap+"_"+code+".gif");
 		}
 				
 		
