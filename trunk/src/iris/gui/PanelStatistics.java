@@ -35,12 +35,12 @@ public class PanelStatistics extends JPanel implements ActionListener{
 	static JTextArea text = new JTextArea();
 	static ImageIcon iconGraph = new ImageIcon();
 
-	static JTextField description = new JTextField("In each case click the button and then chose a folder containing some eye images. It is not recomended to have more than 10 if you are drawing the chart.");
+	static JTextArea description = new JTextArea("In each case click the button and then chose a folder\n containing some eye images. It is not recomended to have more than 10 if you are drawing the chart.\n In any case this can take a long time.");
 	PanelStatistics(int Width, int Height)
 	{	
 		
 		try {
-			iconGraph = new ImageIcon("./unittests/testImages/Hamming_Graph.gif");
+			iconGraph = new ImageIcon("best_single.png");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,6 +51,7 @@ public class PanelStatistics extends JPanel implements ActionListener{
 		imageGraph.setIcon(iconGraph);
 		imageGraph.setEnabled(true);
 		add(description);
+		description.setRows(5);
 		add(drawTable);
 		add(drawGraph);
 		text.setEnabled(false);
