@@ -8,7 +8,8 @@ import java.awt.image.BufferedImage;
 
 public class DrawWavelet {
 	public static void main(String[] args) {
-		ImageSaverLoader isl = new ImageSaverLoader(); 
+	//Code has been moved out of 'production' release
+		/*	ImageSaverLoader isl = new ImageSaverLoader(); 
 		String load_path = "/images/automatic/";
 		BufferedImage eye1 = isl.loadImage(load_path,"005_2_1.gif");
 		BitcodeGenerator b1 = new BitcodeGenerator();
@@ -22,7 +23,7 @@ public class DrawWavelet {
 		b1.initialiseParams(wPar, abPar, x0Par, y0Par, 360,100,2);
 		int step=2;
 		BufferedImage res = b1.drawWavelet(eye1, 50, (int)abPar.get_StepN(step),step);
-		isl.saveImage(res, "wavelet.gif");
+		isl.saveImage(res, "wavelet.gif");*/
 		
 	}
 }
