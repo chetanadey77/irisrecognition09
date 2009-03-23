@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 /**
  * A class that creates an instance of MainFrame
  * and adds it to the EventQueue
@@ -22,8 +23,12 @@ public class MainGUI {
 		 EventQueue.invokeLater(new Runnable()
          {
                          public void run()
-                         {
-                                 MainFrame frame = new MainFrame();
+                         {	
+                        	 try{
+                        		 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                        	 } catch(Exception e){
+                        		 e.printStackTrace();  
+                        	 }   MainFrame frame = new MainFrame();
                                  frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                                  frame.setVisible(true);
                          }
