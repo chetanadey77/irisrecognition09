@@ -14,11 +14,11 @@ n = n./sum(n);
 
 hold on
 grid on
-ylabel('Distribution')
+ylabel('Density')
 xlabel('Hamming distance')
 title(strcat('Normalised histogram:',' ',titleText));
 
 
 plot(x./100,m,'b',x./100,n,'r',[0.33 0.33], [0 0.25],'g--');
-legend('Match', 'Not a match', 'Match limit');
+legend('Match', 'Not a match', 'Threshold');
 hold off
