@@ -252,7 +252,7 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
      * 
      * @return an BufferedImage of an eye chosen by the user (using JFileUser)
      */
-    public BufferedImage gtImage() {
+    private BufferedImage gtImage() {
         JFileChooser filedialog = new  JFileChooser();
         try{
         	File f = new File(new File("./images/automatic/smalltest/").getCanonicalPath());
