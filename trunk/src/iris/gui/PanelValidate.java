@@ -212,9 +212,8 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
     	
 		if (ev.getActionCommand()=="Load image to be validated"){
     	
-    	//iconEye = gtImage();
-    	//startTime=System.currentTimeMillis(); //calculate runtime
-        //imageEye.setIcon(iconEye);
+    	hamming_result.setText("");
+    	panelButtons.setBackground(Color.WHITE);
         eyeLoaded = false;
         Eye = gtImage();
         eyeData = LocateIris.find_iris(Eye);
@@ -270,12 +269,15 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 				
 				if(access == true){
 				hamming_result.setText("Identity Verified as '" +id +"' with Hamming Distance: "+hd);
+
 				panelButtons.setBackground(Color.GREEN);
 				panelButtons.repaint();
 				break;
 				}
 				else if (access == false){
+
 				hamming_result.setText("Identity Verified as '" +id +"' with Hamming Distance: "+hd +" : WARNING: ID SUSPENDED");
+
 				panelButtons.setBackground(Color.yellow);
 				panelButtons.repaint();
 				break;

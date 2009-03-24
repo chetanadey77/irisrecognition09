@@ -462,7 +462,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						output.append("Id '" + s + "' entered into database");
 						output.append("\n");
 						this.updateTable();
-						reset();
+						
 						String[] updated = new String[contents.length+1];
 						updated[contents.length] = s;
 						
@@ -645,7 +645,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		}}
 		
 	else if (ev.getActionCommand()=="Refresh Database details"){
-		
+		reset();
 		this.updateTable();
 		
 		}
@@ -759,12 +759,14 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 			
 			deleteOne.setEnabled(true);
 			
-			if(table.getValueAt(row, 1) == "Access Active")
+			if(table.getValueAt(row, 1) == "Access Active"){
 					suspend.setEnabled(true);
-			else restore.setEnabled(true);
+					restore.setEnabled(false);
+			}
+			else{ restore.setEnabled(true);
+			suspend.setEnabled(false);
 			
-			
-		}}
+		}}}
 
 	private void reset(){
 	iconEye.setImage(OriginalEye);
