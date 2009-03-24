@@ -225,7 +225,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
         imageUnwrappedEye.setIcon(iconUnwrappedEye);
         imageUnwrappedEye.repaint();
 		BitcodeGenerator b = new BitcodeGenerator();
-		bc[0] =  b.getBitcode(Eye,eyeData);
+		bc[0] =  b.getFastBitcode(Eye,eyeData);
 		//System.out.println(bc[n].getBitcodeSize());
 		ValidateBitCode = bc[0].getBitCodeImage(512,128,32);
 		iconBitCode.setImage(ValidateBitCode);
