@@ -344,7 +344,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
         imageUnwrappedEye.setIcon(iconUnwrappedEye);
         imageUnwrappedEye.repaint();
 		BitcodeGenerator b = new BitcodeGenerator();
-		bc[0] =  b.getBitcode(Eye,eyeData);
+		bc[0] =  b.getFastBitcode(Eye,eyeData);
 		ValidateBitCode = bc[0].getBitCodeImage(512,128,32);
 		iconBitCode.setImage(ValidateBitCode);
         imageBitCode.setIcon(iconBitCode);
