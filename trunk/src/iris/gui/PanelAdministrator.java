@@ -34,6 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -465,7 +466,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						output.append("Id '" + s + "' entered into database");
 						output.append("\n");
 						this.updateTable();
-						
+						reset();
 						String[] updated = new String[contents.length+1];
 						updated[contents.length] = s;
 						
@@ -528,8 +529,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 					db.DeleteOne(selected);
 					output.append("ID " + selected + " deleted from database");
 					output.append("\n");
+					this.updateTable();
 					reset();
-					
 					for(;i<contents.length-1;i++){
 						
 						contents[i] = contents[i+1];
@@ -557,7 +558,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 			
 			e.printStackTrace();
 		}
-		this.updateTable();
+		
 	}    
 	
 	else if (ev.getActionCommand()=="Reset"){
@@ -649,20 +650,21 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		}}
 		
 	else if (ev.getActionCommand()=="Refresh Database details"){
-		reset();
-		this.updateTable();
+		output.setText("");
 		
 		}
 	}
 	
 	private void updateTable(){
 		
-		
+	
 		try {
 			final databaseWrapper dbUpdate = new databaseWrapper();
 		
 		
-		TableModel dataModel = new AbstractTableModel() {
+		TableModel updatedataModel = new AbstractTableModel() {
+			
+			private static final long serialVersionUID = 1L;
 	         
 			public int getColumnCount() { return 2; }
 	          public int getRowCount() { 
@@ -712,7 +714,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 					return id;  }
 	      };
 		    
-		    table.setModel(dataModel);
+		    table.setModel(updatedataModel);
 		    table.getColumnModel().getColumn(0).setHeaderValue("ID");
             table.getColumnModel().getColumn(1).setHeaderValue("Status");
 		} catch (DbException e1) {
@@ -722,7 +724,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 			e1.printStackTrace();
 		}	
 		
-		
+
 		
 	}
 	
@@ -779,6 +781,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	deleteOne.setEnabled(false);
 	suspend.setEnabled(false);
 	restore.setEnabled(false);
+	addEntry.setEnabled(false);
 	added = true;
 	}
 	
