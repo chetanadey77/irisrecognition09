@@ -32,6 +32,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -93,8 +95,9 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
     
     static databaseWrapper db;
     
-    String[] contents;
+    static String[] contents;
     
+    static String selected;
     
 	public PanelAdministrator(int FRAME_WIDTH,int FRAME_HEIGHT) {
 		
@@ -196,7 +199,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		      	    table = new JTable(dataModel);
 		            table.getColumnModel().getColumn(0).setHeaderValue("ID");
 		            table.getColumnModel().getColumn(1).setHeaderValue("Status");
-		            
+		            table.setRowSelectionAllowed(true);
+		            table.getSelectionModel().addListSelectionListener(new RowListener());
 					
                 
                 
@@ -238,8 +242,11 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	deleteEntry = new JButton("Delete All");
              	addEntry = new JButton("Add to Database");
              	deleteOne = new JButton("Delete Entry");
+             	deleteOne.setEnabled(false);
              	restore = new JButton("Restore Access");
+             	restore.setEnabled(false);
              	suspend = new JButton("Suspend Access");
+             	suspend.setEnabled(false);
              	reset = new JButton("Reset");
              	dbinfo = new JButton("Refresh Database details");
              	refreshout  = new JButton("Clear History");
@@ -394,6 +401,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		if(success == true){
 	    output.append("All Entries Deleted");
 	    output.append("\n");
+	    this.updateTable();
 		}}
 				
 		else if(confirm == 1){ output.append("No Entries Deleted");
@@ -444,7 +452,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 				output.setEnabled(true);
 				
 	}
-				else if (s.length()>=6) {
+				else if (s.length()>10) {
 				output.append("ID too long");
 				output.append("\n");
 				output.setEnabled(true);
@@ -457,6 +465,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						db.addLeft(s, bc[0]);
 						output.append("Id '" + s + "' entered into database");
 						output.append("\n");
+						this.updateTable();
 						String[] updated = new String[contents.length+1];
 						updated[contents.length] = s;
 						
@@ -495,27 +504,25 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	else if (ev.getActionCommand()=="Delete Entry"){	
 	
 		try {
-			String id = (String)JOptionPane.showInputDialog(
-	                this,
-	                "Enter ID to be deleted: ",
-	                "Delete Entry",
-	                JOptionPane.PLAIN_MESSAGE,
-	                null,
-	                null,
-	                "Write ID Here");
+			   int confirm = JOptionPane.showConfirmDialog(
+	                   this,
+	                   "Are you sure you wish to delete " + selected + "?");
+	        
+	    	if (confirm==0){
 			
-			if(id.length()<11){
+			
 			
 			
 			
 			int i;
 			for(i=0;i<contents.length;i++){
 				
-				if(contents[i].contains(id)){
+				if(contents[i].contains(selected)){
 					databaseWrapper db = new databaseWrapper();
-					db.DeleteOne(id);
-					output.append("ID " + id + " deleted from database");
+					db.DeleteOne(selected);
+					output.append("ID " + selected + " deleted from database");
 					output.append("\n");
+					
 					
 					for(;i<contents.length-1;i++){
 						
@@ -535,7 +542,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 			
 			}
 			else{ output.append("ID too long");
-			output.append("\n");}
+			output.append("\n");
+			}
 			} catch (DbException e) {
 			
 			e.printStackTrace();
@@ -543,7 +551,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 			
 			e.printStackTrace();
 		}
-		
+		this.updateTable();
 	}    
 	
 	else if (ev.getActionCommand()=="Reset"){
@@ -587,6 +595,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						db.setAccess(id, false);
 						output.append("ID " + id + " has access suspended");
 						output.append("\n");
+						this.updateTable();
 						found = true;
 					}
 		}	if(found == false) output.append("ID not in database");
@@ -631,6 +640,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						db.setAccess(id, true);
 						output.append("ID " + id + " has access restored");
 						output.append("\n");
+						this.updateTable();
 						break;
 					}
 					
@@ -655,13 +665,22 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		}}
 		
 	else if (ev.getActionCommand()=="Refresh Database details"){
-		    
+		
+		this.updateTable();
+		
+		}
+	}
+	
+	private void updateTable(){
+		
+		
 		try {
 			final databaseWrapper dbUpdate = new databaseWrapper();
 		
 		
 		TableModel dataModel = new AbstractTableModel() {
-	          public int getColumnCount() { return 2; }
+	         
+			public int getColumnCount() { return 2; }
 	          public int getRowCount() { 
 	        	  int result = 0;
 	        	  
@@ -717,10 +736,11 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 			e1.printStackTrace();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-		}
+		}	
 		
-				
-			}}
+		
+		
+	}
 	
 	 /**
      * 
@@ -747,6 +767,27 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
         //ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
         //BufferedImage bi =new BufferedImage(filedialog.getSelectedFile().getPath());
         //return icon;    
-    }}
+    }
+	
+
+	private class RowListener implements ListSelectionListener {
+
+		public void valueChanged(ListSelectionEvent e) {
+			
+			int row = table.getSelectedRow();
+			selected = (String) table.getValueAt(row, 0);
+			
+			deleteOne.setEnabled(true);
+			
+			if(table.getValueAt(row, 1) == "Access Active")
+					suspend.setEnabled(true);
+			else restore.setEnabled(true);
+			
+			
+		}}
+
+
+
+}
 
 
