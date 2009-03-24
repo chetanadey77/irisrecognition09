@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -206,11 +207,11 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
     	
 		if (ev.getActionCommand()=="Load image to be validated"){
     	
-    	iconEye = gtImage();
-    	startTime=System.currentTimeMillis(); //calculate runtime
-        imageEye.setIcon(iconEye);
+    	//iconEye = gtImage();
+    	//startTime=System.currentTimeMillis(); //calculate runtime
+        //imageEye.setIcon(iconEye);
         eyeLoaded = false;
-        Eye.getGraphics().drawImage( iconEye.getImage(),0,0,null);
+        Eye = gtImage();
         eyeData = LocateIris.find_iris(Eye);
         UnWrapper uw = new UnWrapper();
         BufferedImage validate=uw.originalWithGuides(Eye,eyeData);
@@ -259,7 +260,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 			
 			hd = BitCode.hammingDistance(bc[0],bc[1]);
         	
-			if(hd<.10){  
+			if(hd<.33){  
 				
 				if(access ==true){
 				hamming_result.setText("Identity Verified as :" +id +": Hamming Distance "+hd);
@@ -321,14 +322,25 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
     * @return an ImageIcon of an eye chosen by the user (using JFileUser)
     */
 
-	private ImageIcon gtImage() {
+	private BufferedImage gtImage() {
         JFileChooser filedialog = new  JFileChooser();
         try{
-        	File f = new File(new File("./images/automatic/").getCanonicalPath());
+        	File f = new File(new File("./images/automatic/smalltest/").getCanonicalPath());
         	filedialog.setCurrentDirectory(f);
         }
         catch (IOException e) {}
         filedialog.showOpenDialog(this.getParent());
-        ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
-        return icon;    }
+        //System.out.println(filedialog.getSelectedFile().getPath());
+        BufferedImage bi = null;
+		try { 
+			File f = new File(filedialog.getSelectedFile().getPath());
+			bi = ImageIO.read(f);  
+		} catch (Exception e) {  
+			e.printStackTrace();  
+		} 
+		return bi;
+        //ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
+        //BufferedImage bi =new BufferedImage(filedialog.getSelectedFile().getPath());
+        //return icon;    
+    }
 	}

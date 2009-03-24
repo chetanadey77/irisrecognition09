@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -325,11 +326,11 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
     	
 		if (ev.getActionCommand()=="Load image"){
     	
-    	iconEye = gtImage();
-    	startTime=System.currentTimeMillis(); //calculate runtime
-        imageEye.setIcon(iconEye);
+    	Eye = gtImage();
+    	//startTime=System.currentTimeMillis(); //calculate runtime
+        //imageEye.setIcon(iconEye);
         eyeLoaded = true;
-        Eye.getGraphics().drawImage( iconEye.getImage(),0,0,null);
+        //Eye.getGraphics().drawImage( iconEye.getImage(),0,0,null);
         eyeData = LocateIris.find_iris(Eye);
         UnWrapper uw = new UnWrapper();
         BufferedImage validate=uw.originalWithGuides(Eye,eyeData);
@@ -676,17 +677,26 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
      * @return an ImageIcon of an eye chosen by the user (using JFileUser)
      */
 	
-	private ImageIcon gtImage() {
+	private BufferedImage gtImage() {
         JFileChooser filedialog = new  JFileChooser();
         try{
-        	File f = new File(new File("./images/automatic/").getCanonicalPath());
+        	File f = new File(new File("./images/automatic/smalltest/").getCanonicalPath());
         	filedialog.setCurrentDirectory(f);
         }
         catch (IOException e) {}
         filedialog.showOpenDialog(this.getParent());
-        
-        ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
-        return icon;    
-	}}
+        //System.out.println(filedialog.getSelectedFile().getPath());
+        BufferedImage bi = null;
+		try { 
+			File f = new File(filedialog.getSelectedFile().getPath());
+			bi = ImageIO.read(f);  
+		} catch (Exception e) {  
+			e.printStackTrace();  
+		} 
+		return bi;
+        //ImageIcon icon = new ImageIcon(filedialog.getSelectedFile().getPath());
+        //BufferedImage bi =new BufferedImage(filedialog.getSelectedFile().getPath());
+        //return icon;    
+    }}
 
 
