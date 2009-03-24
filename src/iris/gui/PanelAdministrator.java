@@ -267,17 +267,12 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	Eye = new BufferedImage(320,280,BufferedImage.TYPE_INT_RGB);
              	
              	
-                //set images to alternate squares of grey and white
-             	int square_size=10;
-             	int grey = 0xf0f0f0;
-             	int white = 0xffffff;
-             	int colour;
-             	for(int x =0;x<OriginalEye.getWidth();x++)
-             		for(int y=0;y<OriginalEye.getHeight();y++) 
-             		{
-             			colour=((x/square_size +y/square_size)%2==1)?grey:white;
-             			OriginalEye.setRGB(x,y,colour);
-             		}
+             	try {
+					OriginalEye = javax.imageio.ImageIO.read(new File("Gray_logo.gif"));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}  	
              
              
              	iconEye.setImage(OriginalEye);
