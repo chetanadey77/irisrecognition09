@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -28,7 +29,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -47,6 +50,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	static JLabel imageBitCode;
 	static JLabel recordsCount;
 	
+	static JTextArea output;
+	
 	
 	static JButton getimage;
 	static JButton deleteEntry;
@@ -56,6 +61,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	static JButton restore;
 	static JButton reset;
 	static JButton dbinfo;
+	static JButton refreshout;
 	
 	static ImageIcon iconEye;
 	static ImageIcon iconUnwrappedEye;
@@ -93,7 +99,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	public PanelAdministrator(int FRAME_WIDTH,int FRAME_HEIGHT) {
 		
 		
- 			
+			
               JPanel panelEyeImage;
               JPanel panelWhole;
               JPanel panelData;
@@ -198,7 +204,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
               
                
                 scrollpane = new JScrollPane(table);
-                scrollpane.setPreferredSize(new Dimension(300,300));
+                scrollpane.setPreferredSize(new Dimension(300,275));
                 scrollpane.setVisible(true);
                 
                 
@@ -236,6 +242,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	suspend = new JButton("Suspend Access");
              	reset = new JButton("Reset");
              	dbinfo = new JButton("Refresh Database details");
+             	refreshout  = new JButton("Clear History");
              
              	
              	
@@ -281,23 +288,40 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	panelButtons.add(restore);
              	panelEyeImage.add(reset);
              	
-             	
-             	
+             	GridLayout contents = new GridLayout();
+             	contents.setHgap(40);
              	panelWhole.setBackground(Color.WHITE);
-             	panelWhole.setLayout(new BorderLayout());
-             	panelWhole.add(panelEyeImage,BorderLayout.WEST);
-             	panelWhole.add(panelAdministrator,BorderLayout.SOUTH);
+             	panelWhole.setLayout(contents);
+             	panelWhole.add(panelEyeImage);
+             	panelWhole.add(scrollpane);
              	
+            // GridLayout overall = new GridLayout();
+             //overall.setVgap(10);
              background = new JPanel();
+             //background.setLayout(overall);
              background.setBackground(Color.WHITE);
-             background.setPreferredSize(new Dimension(FRAME_WIDTH,FRAME_HEIGHT));
+             background.setPreferredSize(new Dimension(FRAME_WIDTH-50,FRAME_HEIGHT-75));
+             background.setBorder(BorderFactory.createLineBorder(Color.BLACK));
              add(background);
              hamming_result.setEnabled(false);
              background.add(panelWhole);
-             background.add(hamming_result);
+            // background.add(scrollpane);
              background.add(panelButtons);
+             paneldbinfo.add(dbinfo);
+             paneldbinfo.add(refreshout);
              background.add(dbinfo);
-             background.add(scrollpane);
+             //background.add(hamming_result);
+             
+             output = new JTextArea(1, 10);
+             output.setEditable(false);
+             JScrollPane outputPane = new JScrollPane(output,
+                              ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                              ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+             outputPane.setPreferredSize(new Dimension(550,300));
+             background.add(outputPane);
+             
+             
+             
              background.setAutoscrolls(true);
              
              getimage.addActionListener(this);
@@ -366,13 +390,17 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		Boolean success;
     	databaseWrapper db = new databaseWrapper();
 		success = db.DeleteAll();
-		hamming_result.setEnabled(true);
+		output.setEnabled(true);
 		if(success == true){
-	    hamming_result.setText("All Entries Deleted");
+	    output.append("All Entries Deleted");
+	    output.append("\n");
 		}}
 				
-		else if(confirm == 1) hamming_result.setText("No Entries Deleted");
-		else if(confirm == -1) hamming_result.setText("Delete All Cancelled");
+		else if(confirm == 1){ output.append("No Entries Deleted");
+		output.append("\n");}
+		
+		else if(confirm == -1) {output.append("Delete All Cancelled");
+		output.append("\n");}
 		
     	
 		
@@ -389,14 +417,16 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		
 	else if (ev.getActionCommand()=="Add to Database"){
 		
-		hamming_result.setEnabled(true);
+		output.setEnabled(true);
 		
 		if(added == true){
-			hamming_result.setText("Already Added");
+			output.append("Already Added");
+			output.append("\n");
 			return;
 		}
 		if(eyeLoaded == false){
-			hamming_result.setText("No Image Loaded");
+			output.append("No Image Loaded");
+			output.append("\n");
 			return;
 		}
 		
@@ -409,13 +439,15 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
                 null,
                 "Write Text Here");
 		if(s.length()==0) {
-				hamming_result.setText("No ID Entered");
-				hamming_result.setEnabled(true);
+				output.append("No ID Entered");
+				output.append("\n");
+				output.setEnabled(true);
 				
 	}
 				else if (s.length()>=6) {
-				hamming_result.setText("ID too long");
-				hamming_result.setEnabled(true);
+				output.append("ID too long");
+				output.append("\n");
+				output.setEnabled(true);
 				}
 				else {
 					try {
@@ -423,7 +455,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						int size = db.getNumberRecords();
 						db.addId(s);
 						db.addLeft(s, bc[0]);
-						hamming_result.setText("Id '" + s + "' entered into database");
+						output.append("Id '" + s + "' entered into database");
+						output.append("\n");
 						String[] updated = new String[contents.length+1];
 						updated[contents.length] = s;
 						
@@ -445,7 +478,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						
 						e.printStackTrace();
 					} catch (SQLException e) {
-						hamming_result.setText("ID already in use");
+						output.append("ID already in use");
+						output.append("\n");
 						e.printStackTrace();
 						return;
 					} catch (IOException e) {
@@ -480,7 +514,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 				if(contents[i].contains(id)){
 					databaseWrapper db = new databaseWrapper();
 					db.DeleteOne(id);
-					hamming_result.setText("ID " + id + " deleted from database");
+					output.append("ID " + id + " deleted from database");
+					output.append("\n");
 					
 					for(;i<contents.length-1;i++){
 						
@@ -492,12 +527,15 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 					
 					}
 			
-				hamming_result.setText("ID not found");
+				else if(i==contents.length-1){
+				output.append("ID not found");
+				output.append("\n");}
 				
 			}
 			
 			}
-			else hamming_result.setText("ID too long");
+			else{ output.append("ID too long");
+			output.append("\n");}
 			} catch (DbException e) {
 			
 			e.printStackTrace();
@@ -510,12 +548,12 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	
 	else if (ev.getActionCommand()=="Reset"){
 	
-	hamming_result.setText("");
-	hamming_result.setEnabled(false);
+	//output.setText("");
+	//output.setEnabled(false);
 	iconEye.setImage(OriginalEye);
 	imageEye.setIcon(iconEye);
 	imageEye.repaint();
-	recordsCount.setText("");
+	
 	added = true;
 	
 	
@@ -525,7 +563,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		
 		
 		
-		hamming_result.setEnabled(true);
+		output.setEnabled(true);
 		
 	
 		try {
@@ -547,25 +585,31 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 					
 						databaseWrapper db = new databaseWrapper();
 						db.setAccess(id, false);
-						hamming_result.setText("ID " + id + " has access suspended");
+						output.append("ID " + id + " has access suspended");
+						output.append("\n");
 						found = true;
 					}
-		}	if(found == false) hamming_result.setText("ID not in database");
+		}	if(found == false) output.append("ID not in database");
 	
 			}
-			else hamming_result.setText("ID too long");
-		} catch (DbException e) {
+			else{ output.append("ID too long");
+			output.append("\n");}
+} catch (DbException e) {
 			
 			e.printStackTrace();
 		} catch (SQLException e) {
-			hamming_result.setText("Database Error");
+			output.append("Database Error");
+			output.append("\n");
 			e.printStackTrace();
-		}
+		}}
 		
 		
-	}
+		
+	
+			
+	
 	else if (ev.getActionCommand()=="Restore Access"){
-		hamming_result.setEnabled(true);
+		output.setEnabled(true);
 		
 		try {
 			String id = (String)JOptionPane.showInputDialog(
@@ -585,22 +629,28 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 					
 						databaseWrapper db = new databaseWrapper();
 						db.setAccess(id, true);
-						hamming_result.setText("ID " + id + " has access restored");
+						output.append("ID " + id + " has access restored");
+						output.append("\n");
 						break;
 					}
+					
+					else if(i==size-1){
 				
-					hamming_result.setText("ID not in database");
-				
+					output.append("ID not in database");
+					output.append("\n");
+				}
 				}
 				
 				}
-			else hamming_result.setText("ID too long");
+			else {output.append("ID too long");
+			output.append("\n");}
 			
 		} catch (DbException e) {
 			
 			e.printStackTrace();
 		} catch (SQLException e) {
-			hamming_result.setText("Database Error");
+			output.append("Database Error");
+			output.append("\n");
 			e.printStackTrace();
 		}}
 		
