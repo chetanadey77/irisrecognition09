@@ -6,19 +6,21 @@ img = imread(imname);
 %   Detailed explanation goes here
 [height,width] = size(img);
 z = zeros(height,width);
+
 if plotOn
     subplot(3,1,1);
     imshow(img);
+    title('Unwrapped iris')
     aviobj = avifile('example1.avi');
 end
 
 % constants
-ab_lowLim = 10;
-ab_upLim = 15;
+ab_lowLim = 8;
+ab_upLim = 14;
 ab_numSteps = 2;
 
-w_lowLim = 0.19;
-w_upLim  = 0.15;
+w_lowLim = 0.15;
+w_upLim  = 0.1;
 w_numSteps = 2;
 
 x0_numSteps = width-ab_lowLim*2;
@@ -56,15 +58,15 @@ for x0=x0K
         if plotOn
             subplot(3,1,2);
             imshow(z,[-160,160]);
+            title('Gabor wavelet')
             subplot(3,1,3);
-
-            plotbits(bits,width/2);
+            plotbits(bits,width/6);
+            title('Bitcode')
             pause(0.001);
             frame = getFrame(gcf);
             aviobj = addframe(aviobj,frame);
         end
     end
-
 
 end
 if plotOn

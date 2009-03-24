@@ -1,11 +1,11 @@
-function histplot(matchfile, notmatchfile, titleText )
+function histplot(matchfile, notmatchfile )
 
 M = dlmread(matchfile, '\n');
 N = dlmread(notmatchfile, '\n');
 lM = length(M);
 lN = length(N);
 
-x = 0:1:100;
+x = 0:0.1:100;
 m = hist(M,x);
 n = hist(N,x);
 
@@ -16,9 +16,8 @@ hold on
 grid on
 ylabel('Distribution')
 xlabel('Hamming distance')
-title(strcat('Normalised histogram:',' ',titleText));
+title('Normalised histogram')
 
-
-plot(x./100,m,'b',x./100,n,'r',[0.33 0.33], [0 0.25],'g--');
+plot(x,m,'b',x,n,'r',[33 33],[0 0.25],'g--');
 legend('Match', 'Not a match', 'Match limit');
 hold off
