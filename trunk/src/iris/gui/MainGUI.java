@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 /**
  * A class that creates an instance of MainFrame
  * and adds it to the EventQueue
@@ -52,6 +53,7 @@ class MainFrame extends JFrame
 
 	MainFrame()
 	{
+		
 		setTitle("Iris Recognition");
 		setSize(FRAME_WIDTH,FRAME_HEIGHT);
 		setBackground(Color.WHITE);
@@ -71,6 +73,8 @@ class MainFrame extends JFrame
 		tabbedMainFrame.addTab("Database Administration", null,panelAdminister,null);
 		tabbedMainFrame.setBounds(0, 0, FRAME_WIDTH,FRAME_HEIGHT);
 		tabbedMainFrame.setVisible(true);
+		
+			
 		
 	
 			
