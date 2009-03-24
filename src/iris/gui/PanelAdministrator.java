@@ -241,6 +241,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	getimage = new JButton("Load image");
              	deleteEntry = new JButton("Delete All");
              	addEntry = new JButton("Add to Database");
+             	addEntry.setEnabled(false);
              	deleteOne = new JButton("Delete Entry");
              	deleteOne.setEnabled(false);
              	restore = new JButton("Restore Access");
@@ -258,7 +259,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	deleteEntry.setSize(320, 30);
              	deleteEntry.setEnabled(true);
              	addEntry.setSize(320, 30);
-             	addEntry.setEnabled(true);
+             	
              	//deleteOne.setEnabled(true);
              	//restore.setEnabled(true);
              	//suspend.setEnabled(true);
@@ -351,7 +352,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		long startTime = 0;
     	
 		if (ev.getActionCommand()=="Load image"){
-    	
+			
+		addEntry.setEnabled(true);
     	Eye = gtImage();
     	//startTime=System.currentTimeMillis(); //calculate runtime
         //imageEye.setIcon(iconEye);
@@ -375,8 +377,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		iconBitCode.setImage(ValidateBitCode);
         imageBitCode.setIcon(iconBitCode);
         imageBitCode.repaint();
-        added = false
-        ;
+        added = false;
+       
         
 		}
 	
@@ -422,6 +424,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	else if (ev.getActionCommand()=="Add to Database"){
 		
 		output.setEnabled(true);
+		
 		
 		if(added == true){
 			output.append("Already Added");
@@ -494,7 +497,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 					}
 					
 					added = true;
-				
+					addEntry.setEnabled(false);
 				}
 	}
 		
@@ -560,6 +563,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	else if (ev.getActionCommand()=="Reset"){
 	
 		reset();
+		
 	
 	
 	}
@@ -587,11 +591,11 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						reset();
 						found = true;
 					}
-		}	if(found == false) output.append("ID not in database");
-	
+		}	if(found == false){ output.append("ID not in database");
+		output.append("\n");}
 			
 			
-			output.append("\n");
+			
 } catch (DbException e) {
 			
 			e.printStackTrace();

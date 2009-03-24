@@ -105,8 +105,8 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
              	OriginalEye = new BufferedImage(320,280,BufferedImage.TYPE_INT_RGB);
              	UnwrappedEye  = new BufferedImage(512,128,BufferedImage.TYPE_INT_RGB);
              	OriginalUnwrappedEye  = new BufferedImage(512,128,BufferedImage.TYPE_INT_RGB);
-             	ValidateBitCode = new BufferedImage(472,128,BufferedImage.TYPE_BYTE_GRAY);
-             	OriginalValidateBitCode = new BufferedImage(472,128,BufferedImage.TYPE_BYTE_GRAY);
+             	ValidateBitCode = new BufferedImage(475,128,BufferedImage.TYPE_BYTE_GRAY);
+             	OriginalValidateBitCode = new BufferedImage(475,128,BufferedImage.TYPE_BYTE_GRAY);
                
              
              //set logo as background on OriginalEye	
@@ -231,7 +231,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 		BitcodeGenerator b = new BitcodeGenerator();
 		bc[0] =  b.getFastBitcode(Eye,eyeData);
 		//System.out.println(bc[n].getBitcodeSize());
-		ValidateBitCode = bc[0].getBitCodeImage(472,128,32);
+		ValidateBitCode = bc[0].getBitCodeImage(475,128,32);
 		iconBitCode.setImage(ValidateBitCode);
         imageBitCode.setIcon(iconBitCode);
         imageBitCode.repaint();
