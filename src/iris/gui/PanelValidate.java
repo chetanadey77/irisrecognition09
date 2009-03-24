@@ -105,8 +105,8 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
              	OriginalEye = new BufferedImage(320,280,BufferedImage.TYPE_INT_RGB);
              	UnwrappedEye  = new BufferedImage(512,128,BufferedImage.TYPE_INT_RGB);
              	OriginalUnwrappedEye  = new BufferedImage(512,128,BufferedImage.TYPE_INT_RGB);
-             	ValidateBitCode = new BufferedImage(512,128,BufferedImage.TYPE_BYTE_GRAY);
-             	OriginalValidateBitCode = new BufferedImage(512,128,BufferedImage.TYPE_BYTE_GRAY);
+             	ValidateBitCode = new BufferedImage(472,128,BufferedImage.TYPE_BYTE_GRAY);
+             	OriginalValidateBitCode = new BufferedImage(472,128,BufferedImage.TYPE_BYTE_GRAY);
                
              
              //set logo as background on OriginalEye	
@@ -148,6 +148,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
              	imageEye.setIcon(iconEye);
              	imageUnwrappedEye.setIcon(iconUnwrappedEye);
              	imageBitCode.setIcon(iconBitCode);
+             
              	
              	panelEyeImage.setLayout(new BorderLayout());
              	panelEyeImage.setBackground(Color.WHITE);
@@ -168,6 +169,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
              	panelBitcode.setBackground(Color.WHITE);
              	panelBitcode.add(new JLabel("Bitcode"),BorderLayout.NORTH);
              	panelBitcode.add(imageBitCode,BorderLayout.SOUTH);
+             	
              	panelData.setLayout(new BorderLayout());
              	panelData.setBackground(Color.WHITE);
              	panelData.add(panelUnwrap,BorderLayout.NORTH);
@@ -175,7 +177,10 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
              	
              	
              	panelWhole.setBackground(Color.WHITE);
-             	panelWhole.setLayout(new BorderLayout());
+             	BorderLayout layout = new BorderLayout();
+             	layout.setHgap(10);
+             	panelWhole.setLayout(layout);
+             
              	panelWhole.add(panelEyeImage,BorderLayout.WEST);
              	panelWhole.add(panelData,BorderLayout.EAST);
              	panelWhole.add(panelValidate,BorderLayout.SOUTH);
@@ -260,16 +265,17 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 			
 			hd = BitCode.hammingDistance(bc[0],bc[1]);
         	
+			
 			if(hd<.33){  
 				
-				if(access ==true){
-				hamming_result.setText("Identity Verified as :" +id +": Hamming Distance "+hd);
+				if(access == true){
+				hamming_result.setText("Identity Verified as '" +id +"' with Hamming Distance: "+hd);
 				panelButtons.setBackground(Color.GREEN);
 				panelButtons.repaint();
 				break;
 				}
 				else if (access == false){
-				hamming_result.setText("Identity Verified as '" +id +"' : Hamming Distance: "+hd + " : WARNING: ID SUSPENDED");
+				hamming_result.setText("Identity Verified as '" +id +"' with Hamming Distance: "+hd +" : WARNING: ID SUSPENDED");
 				panelButtons.setBackground(Color.yellow);
 				panelButtons.repaint();
 				break;
