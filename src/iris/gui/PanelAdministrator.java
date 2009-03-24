@@ -259,9 +259,9 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              	deleteEntry.setEnabled(true);
              	addEntry.setSize(320, 30);
              	addEntry.setEnabled(true);
-             	deleteOne.setEnabled(true);
-             	restore.setEnabled(true);
-             	suspend.setEnabled(true);
+             	//deleteOne.setEnabled(true);
+             	//restore.setEnabled(true);
+             	//suspend.setEnabled(true);
              	
              	OriginalEye = new BufferedImage(320,280,BufferedImage.TYPE_INT_RGB);
              	Eye = new BufferedImage(320,280,BufferedImage.TYPE_INT_RGB);
@@ -310,7 +310,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
              background.setPreferredSize(new Dimension(FRAME_WIDTH-50,FRAME_HEIGHT-75));
              background.setBorder(BorderFactory.createLineBorder(Color.BLACK));
              add(background);
-             hamming_result.setEnabled(false);
+             
              background.add(panelWhole);
             // background.add(scrollpane);
              background.add(panelButtons);
@@ -388,9 +388,10 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
        else if (ev.getActionCommand()=="Delete All"){
        
        try {
-    	   int confirm = JOptionPane.showConfirmDialog(
+    	   Object[] options = {"Yes","No"};
+    	   int confirm = JOptionPane.showOptionDialog(
                    this,
-                   "Are you sure you wish to delete all records?");
+                   "Are you sure you wish to delete all records?",null,JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[1]);
         
     	if (confirm==0){
     	
@@ -466,6 +467,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						output.append("Id '" + s + "' entered into database");
 						output.append("\n");
 						this.updateTable();
+						reset();
 						String[] updated = new String[contents.length+1];
 						updated[contents.length] = s;
 						
@@ -503,10 +505,16 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		
 	else if (ev.getActionCommand()=="Delete Entry"){	
 	
+		if(selected==null)
+			return;
+		
 		try {
-			   int confirm = JOptionPane.showConfirmDialog(
+			  Object[] options = {"Yes","No"};
+	    	   int confirm = JOptionPane.showOptionDialog(
 	                   this,
-	                   "Are you sure you wish to delete " + selected + "?");
+	                   "Are you sure you wish to delete " + selected +"?",null,JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[1]);
+	        
+	    	
 	        
 	    	if (confirm==0){
 			
@@ -522,7 +530,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 					db.DeleteOne(selected);
 					output.append("ID " + selected + " deleted from database");
 					output.append("\n");
-					
+					reset();
 					
 					for(;i<contents.length-1;i++){
 						
@@ -541,7 +549,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 			}
 			
 			}
-			else{ output.append("ID too long");
+			else{ output.append("Delete Cancelled");
 			output.append("\n");
 			}
 			} catch (DbException e) {
@@ -556,13 +564,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	
 	else if (ev.getActionCommand()=="Reset"){
 	
-	//output.setText("");
-	//output.setEnabled(false);
-	iconEye.setImage(OriginalEye);
-	imageEye.setIcon(iconEye);
-	imageEye.repaint();
-	
-	added = true;
+		reset();
 	
 	
 	}
@@ -575,34 +577,26 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 		
 	
 		try {
-			String id = (String)JOptionPane.showInputDialog(
-	                this,
-	                "Enter ID to be suspended: ",
-	                "ID suspension",
-	                JOptionPane.PLAIN_MESSAGE,
-	                null,
-	                null,
-	                "Write ID Here");
-			if(id.length()<11){
 		int i;
 		int size = contents.length;
 		Boolean found = false;
 		for(i=0;i<size;i++){
 					
-					if(contents[i].contains(id)){
+					if(contents[i].contains(selected)){
 					
 						databaseWrapper db = new databaseWrapper();
-						db.setAccess(id, false);
-						output.append("ID " + id + " has access suspended");
+						db.setAccess(selected, false);
+						output.append("ID " + selected + " has access suspended");
 						output.append("\n");
 						this.updateTable();
+						reset();
 						found = true;
 					}
 		}	if(found == false) output.append("ID not in database");
 	
-			}
-			else{ output.append("ID too long");
-			output.append("\n");}
+			
+			
+			output.append("\n");
 } catch (DbException e) {
 			
 			e.printStackTrace();
@@ -619,28 +613,20 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 	
 	else if (ev.getActionCommand()=="Restore Access"){
 		output.setEnabled(true);
+			try{
 		
-		try {
-			String id = (String)JOptionPane.showInputDialog(
-	                this,
-	                "Enter ID to be restored: ",
-	                "ID restore",
-	                JOptionPane.PLAIN_MESSAGE,
-	                null,
-	                null,
-	                "Write ID Here");
-			if(id.length()<11){
 				int size = contents.length;
 				int i;
 				for(i=0;i<size;i++){
 					
-					if(contents[i].contains(id)){
+					if(contents[i].contains(selected)){
 					
 						databaseWrapper db = new databaseWrapper();
-						db.setAccess(id, true);
-						output.append("ID " + id + " has access restored");
+						db.setAccess(selected, true);
+						output.append("ID " + selected + " has access restored");
 						output.append("\n");
-						this.updateTable();
+						updateTable();
+						reset();
 						break;
 					}
 					
@@ -651,9 +637,8 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 				}
 				}
 				
-				}
-			else {output.append("ID too long");
-			output.append("\n");}
+	
+			
 			
 		} catch (DbException e) {
 			
@@ -786,7 +771,16 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 			
 		}}
 
-
+	private void reset(){
+	iconEye.setImage(OriginalEye);
+	imageEye.setIcon(iconEye);
+	imageEye.repaint();
+	deleteOne.setEnabled(false);
+	suspend.setEnabled(false);
+	restore.setEnabled(false);
+	added = true;
+	}
+	
 
 }
 
