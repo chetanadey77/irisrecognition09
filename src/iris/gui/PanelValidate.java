@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
@@ -263,12 +264,15 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 			System.out.println(Arrays.toString(testing));
 			
 			hd = BitCode.hammingDistance(bc[0],bc[1]);
+			
         	
 			
 			if(hd<.33){  
 				
 				if(access == true){
-				hamming_result.setText("Identity Verified as '" +id +"' with Hamming Distance: "+hd);
+				
+				DecimalFormat df = new DecimalFormat("#.###");
+				hamming_result.setText("Identity Verified as '" +df.format(hd) +"' with Hamming Distance: "+hd);
 
 				panelButtons.setBackground(Color.GREEN);
 				panelButtons.repaint();
