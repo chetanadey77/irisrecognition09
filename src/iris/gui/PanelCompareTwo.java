@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -55,7 +56,8 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
     
     static BitCode[] bc = new BitCode[2];
     static EyeDataType eyeData[] = new EyeDataType[2];
-  
+    
+    DecimalFormat _3dp = new DecimalFormat("0.000");
     
     
     static boolean[] eyeLoaded = new boolean[2];
@@ -223,7 +225,7 @@ public class PanelCompareTwo extends JPanel implements ActionListener{
 		if (eyeLoaded[1-n])
 		{
 			double hd = BitCode.hammingDistance(bc[0],bc[1]);
-        	hamming_result.setText("Hamming Distance "+hd);
+        	hamming_result.setText("Hamming Distance "+_3dp.format(hd));
         	hamming_result.setEnabled(true);
         }
     }
