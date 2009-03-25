@@ -272,7 +272,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 				if(access == true){
 				
 				DecimalFormat df = new DecimalFormat("#.###");
-				hamming_result.setText("Identity Verified as '" +df.format(hd) +"' with Hamming Distance: "+hd);
+				hamming_result.setText("Identity Verified as '" +id+"' with Hamming Distance: "+df.format(hd));
 
 				panelButtons.setBackground(Color.GREEN);
 				panelButtons.repaint();
