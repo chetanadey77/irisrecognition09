@@ -268,10 +268,10 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
         	
 			
 			if(hd<.33){  
-				
+				DecimalFormat df = new DecimalFormat("#.###");
 				if(access == true){
 				
-				DecimalFormat df = new DecimalFormat("#.###");
+				
 				hamming_result.setText("Identity Verified as '" +id+"' with Hamming Distance: "+df.format(hd));
 
 				panelButtons.setBackground(Color.GREEN);
@@ -280,7 +280,7 @@ public class PanelValidate extends javax.swing.JPanel implements ActionListener 
 				}
 				else if (access == false){
 
-				hamming_result.setText("Identity Verified as '" +id +"' with Hamming Distance: "+hd +" : WARNING: ID SUSPENDED");
+				hamming_result.setText("Identity Verified as '" +id +"' with Hamming Distance: "+df.format(hd) +" : WARNING: ID SUSPENDED");
 
 				panelButtons.setBackground(Color.yellow);
 				panelButtons.repaint();
