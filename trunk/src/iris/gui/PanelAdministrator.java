@@ -463,7 +463,7 @@ public class PanelAdministrator extends javax.swing.JPanel implements ActionList
 						int size = db.getNumberRecords();
 						db.addId(s);
 						db.addLeft(s, bc[0]);
-						output.append("Id '" + s + "' entered into database");
+						output.append("ID '" + s + "' entered into database");
 						output.append("\n");
 						this.updateTable();
 						reset();
